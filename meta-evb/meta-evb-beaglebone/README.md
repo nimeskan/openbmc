@@ -18,6 +18,14 @@ sensors/fans/GPIOs you attach over I2C or the headers.
 The root filesystem is a plain read-write ext4 partition. OpenBMC's A/B
 firmware update flow is not set up; update by rewriting the SD card.
 
+## Get a prebuilt image
+
+The `Build BeagleBone Black image` GitHub Actions workflow
+(`.github/workflows/build-beaglebone.yml`) builds the image and attaches it to
+a GitHub Release. Start it from the repository's **Actions** tab. A full build
+takes longer than one job may run, so the workflow resumes itself in follow-up
+runs until the image is done. Download the `.wic.xz` file from **Releases**.
+
 ## Build
 
 ```sh
