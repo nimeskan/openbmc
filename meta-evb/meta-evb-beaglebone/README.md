@@ -8,6 +8,9 @@ It reuses the Yocto reference BSP (`beaglebone-yocto` from `meta-yocto-bsp`)
 for the kernel, U-Boot, device trees and SD card layout, and builds the
 standard `obmc-phosphor-image` on top of it.
 
+**New to this?** The full beginner's guide, with diagrams and a local build
+script, is in [`beaglebone/`](../../beaglebone/README.md).
+
 ## What works / what doesn't
 
 The BeagleBone is not a server BMC chip, so there is no host-facing hardware

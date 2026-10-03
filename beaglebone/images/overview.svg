@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>From source code to a running BeagleBone</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="330" fill="#ffffff"/>
+  <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">From source code to a running BeagleBone</text>
+
+  <!-- 1 source -->
+  <rect x="20" y="60" width="170" height="120" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="105" y="85" text-anchor="middle" font-weight="bold" fill="#1d3b8a">1. Source code</text>
+  <text x="105" y="108" text-anchor="middle" font-size="12" fill="#333">github.com/</text>
+  <text x="105" y="124" text-anchor="middle" font-size="12" fill="#333">nimeskan/openbmc</text>
+  <text x="105" y="146" text-anchor="middle" font-size="12" fill="#333">BitBake + layers</text>
+  <text x="105" y="162" text-anchor="middle" font-size="12" fill="#333">+ BeagleBone layer</text>
+
+  <!-- 2 build -->
+  <rect x="225" y="60" width="200" height="120" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="325" y="85" text-anchor="middle" font-weight="bold" fill="#7a4d00">2. Build (BitBake)</text>
+  <text x="325" y="108" text-anchor="middle" font-size="12" fill="#333">GitHub Actions runner</text>
+  <text x="325" y="124" text-anchor="middle" font-size="12" fill="#333">or your Linux PC</text>
+  <text x="325" y="146" text-anchor="middle" font-size="12" fill="#333">downloads ~4 GB of sources,</text>
+  <text x="325" y="162" text-anchor="middle" font-size="12" fill="#333">compiles for hours</text>
+
+  <!-- 3 image -->
+  <rect x="460" y="60" width="160" height="120" rx="10" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+  <text x="540" y="85" text-anchor="middle" font-weight="bold" fill="#1d5c2f">3. Image file</text>
+  <text x="540" y="108" text-anchor="middle" font-size="12" fill="#333">obmc-phosphor-image-</text>
+  <text x="540" y="124" text-anchor="middle" font-size="12" fill="#333">evb-beaglebone</text>
+  <text x="540" y="140" text-anchor="middle" font-size="12" fill="#333">.rootfs.wic.xz</text>
+  <text x="540" y="162" text-anchor="middle" font-size="12" fill="#333">on GitHub Releases</text>
+
+  <!-- 4 sd card -->
+  <rect x="655" y="60" width="140" height="120" rx="10" fill="#f3e8fd" stroke="#8a4fd1" stroke-width="2"/>
+  <text x="725" y="85" text-anchor="middle" font-weight="bold" fill="#4f1d8a">4. microSD</text>
+  <text x="725" y="108" text-anchor="middle" font-size="12" fill="#333">written with</text>
+  <text x="725" y="124" text-anchor="middle" font-size="12" fill="#333">balenaEtcher</text>
+  <text x="725" y="146" text-anchor="middle" font-size="12" fill="#333">(or dd / bmaptool)</text>
+
+  <!-- 5 board -->
+  <rect x="830" y="60" width="150" height="120" rx="10" fill="#fde8e8" stroke="#c43c3c" stroke-width="2"/>
+  <text x="905" y="85" text-anchor="middle" font-weight="bold" fill="#7a1d1d">5. BeagleBone</text>
+  <text x="905" y="108" text-anchor="middle" font-size="12" fill="#333">boots U-Boot,</text>
+  <text x="905" y="124" text-anchor="middle" font-size="12" fill="#333">Linux, systemd,</text>
+  <text x="905" y="140" text-anchor="middle" font-size="12" fill="#333">OpenBMC services</text>
+
+  <line x1="190" y1="120" x2="223" y2="120" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="425" y1="120" x2="458" y2="120" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="620" y1="120" x2="653" y2="120" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="795" y1="120" x2="828" y2="120" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 6 user -->
+  <rect x="580" y="230" width="400" height="76" rx="10" fill="#f2f2f2" stroke="#777" stroke-width="2"/>
+  <text x="780" y="255" text-anchor="middle" font-weight="bold" fill="#222">6. You, over Ethernet</text>
+  <text x="780" y="277" text-anchor="middle" font-size="12" fill="#333">web UI https://&lt;board-ip&gt;/ · Redfish API · IPMI over LAN · SSH</text>
+  <text x="780" y="294" text-anchor="middle" font-size="12" fill="#333">login root / 0penBmc</text>
+  <line x1="905" y1="180" x2="905" y2="228" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+
+  <text x="20" y="250" font-size="12" fill="#555">Steps 1–3 happen once per build.</text>
+  <text x="20" y="268" font-size="12" fill="#555">Steps 4–6 happen on your desk.</text>
+</svg>

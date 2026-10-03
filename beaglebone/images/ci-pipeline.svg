@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>GitHub Actions build with automatic resume</title>
+  <defs>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="400" fill="#ffffff"/>
+  <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">GitHub Actions: one run can last 6 hours, so the build resumes itself</text>
+
+  <g font-size="12">
+    <rect x="20" y="60" width="150" height="90" rx="8" fill="#eeeeee" stroke="#666" stroke-width="2"/>
+    <text x="95" y="84" text-anchor="middle" font-weight="bold" fill="#222">Prepare runner</text>
+    <text x="95" y="104" text-anchor="middle" fill="#333">free disk space,</text>
+    <text x="95" y="120" text-anchor="middle" fill="#333">install packages,</text>
+    <text x="95" y="136" text-anchor="middle" fill="#333">check out repo</text>
+
+    <rect x="200" y="60" width="150" height="90" rx="8" fill="#f3e8fd" stroke="#8a4fd1" stroke-width="2"/>
+    <text x="275" y="84" text-anchor="middle" font-weight="bold" fill="#4f1d8a">Restore cache</text>
+    <text x="275" y="104" text-anchor="middle" fill="#333">sstate-cache from</text>
+    <text x="275" y="120" text-anchor="middle" fill="#333">the previous run</text>
+    <text x="275" y="136" text-anchor="middle" fill="#333">(empty on run 1)</text>
+
+    <rect x="380" y="60" width="160" height="90" rx="8" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+    <text x="460" y="84" text-anchor="middle" font-weight="bold" fill="#7a4d00">bitbake</text>
+    <text x="460" y="104" text-anchor="middle" fill="#333">reuses cached work,</text>
+    <text x="460" y="120" text-anchor="middle" fill="#333">builds the rest,</text>
+    <text x="460" y="136" text-anchor="middle" fill="#333">stopped at 4 h 50 m</text>
+
+    <rect x="570" y="60" width="150" height="90" rx="8" fill="#f3e8fd" stroke="#8a4fd1" stroke-width="2"/>
+    <text x="645" y="84" text-anchor="middle" font-weight="bold" fill="#4f1d8a">Save cache</text>
+    <text x="645" y="104" text-anchor="middle" fill="#333">upload sstate-cache</text>
+    <text x="645" y="120" text-anchor="middle" fill="#333">to GitHub's cache</text>
+    <text x="645" y="136" text-anchor="middle" fill="#333">storage</text>
+
+    <polygon points="840,60 920,105 840,150 760,105" fill="#ffffff" stroke="#222" stroke-width="2"/>
+    <text x="840" y="101" text-anchor="middle" font-weight="bold" fill="#222">image</text>
+    <text x="840" y="117" text-anchor="middle" font-weight="bold" fill="#222">done?</text>
+
+    <rect x="760" y="230" width="220" height="90" rx="8" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+    <text x="870" y="254" text-anchor="middle" font-weight="bold" fill="#1d5c2f">Publish GitHub Release</text>
+    <text x="870" y="274" text-anchor="middle" fill="#333">.wic.xz + .wic.bmap</text>
+    <text x="870" y="290" text-anchor="middle" fill="#333">+ SHA256SUMS</text>
+
+    <rect x="380" y="230" width="300" height="90" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+    <text x="530" y="254" text-anchor="middle" font-weight="bold" fill="#1d3b8a">Start the next run</text>
+    <text x="530" y="274" text-anchor="middle" fill="#333">gh workflow run … -f attempt=N+1</text>
+    <text x="530" y="290" text-anchor="middle" fill="#333">(gives up after 5 runs)</text>
+  </g>
+
+  <line x1="170" y1="105" x2="198" y2="105" stroke="#555" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="350" y1="105" x2="378" y2="105" stroke="#555" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="540" y1="105" x2="568" y2="105" stroke="#555" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="720" y1="105" x2="758" y2="105" stroke="#555" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="870" y1="140" x2="870" y2="228" stroke="#2f8f4a" stroke-width="2" marker-end="url(#b)"/>
+  <text x="880" y="190" font-size="13" font-weight="bold" fill="#2f8f4a">yes</text>
+  <path d="M800,128 C760,200 720,250 682,268" stroke="#4a6fd1" stroke-width="2" fill="none" marker-end="url(#b)"/>
+  <text x="735" y="200" font-size="13" font-weight="bold" fill="#4a6fd1">no</text>
+  <path d="M380,275 C120,275 95,220 95,152" stroke="#4a6fd1" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#b)"/>
+  <text x="140" y="300" font-size="12" fill="#4a6fd1">new run, fresh machine, same steps</text>
+
+  <text x="20" y="360" font-size="12" fill="#555">A real error (not the time limit) stops the chain and uploads the build logs as an artifact.</text>
+  <text x="20" y="380" font-size="12" fill="#555">Workflow file: .github/workflows/build-beaglebone.yml</text>
+</svg>

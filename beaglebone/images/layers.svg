@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>The layer stack used for the BeagleBone build</title>
+  <rect width="1000" height="520" fill="#ffffff"/>
+  <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Layers: each one adds or changes recipes and settings</text>
+  <text x="330" y="54" text-anchor="middle" font-size="12" fill="#555">Higher layers build on (and can override) lower ones</text>
+
+  <!-- stack, top to bottom -->
+  <rect x="40" y="70" width="580" height="58" rx="8" fill="#fde8e8" stroke="#c43c3c" stroke-width="2"/>
+  <text x="56" y="94" font-weight="bold" fill="#7a1d1d">meta-evb/meta-evb-beaglebone</text>
+  <text x="56" y="114" font-size="12" fill="#333">NEW. Machine evb-beaglebone.conf, build templates, README</text>
+
+  <rect x="40" y="136" width="580" height="50" rx="8" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="56" y="158" font-weight="bold" fill="#7a4d00">meta-evb</text>
+  <text x="56" y="176" font-size="12" fill="#333">Shared settings for OpenBMC evaluation boards (no managed host)</text>
+
+  <rect x="40" y="194" width="580" height="58" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="56" y="218" font-weight="bold" fill="#1d3b8a">meta-phosphor</text>
+  <text x="56" y="238" font-size="12" fill="#333">The OpenBMC software: bmcweb, phosphor-* services, IPMI, the image recipe</text>
+
+  <rect x="40" y="260" width="580" height="58" rx="8" fill="#f3e8fd" stroke="#8a4fd1" stroke-width="2"/>
+  <text x="56" y="284" font-weight="bold" fill="#4f1d8a">meta-yocto-bsp   (imported from Yocto's meta-yocto)</text>
+  <text x="56" y="304" font-size="12" fill="#333">BeagleBone hardware: beaglebone-yocto.conf, kernel config, SD card layout (.wks)</text>
+
+  <rect x="40" y="326" width="580" height="50" rx="8" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+  <text x="56" y="348" font-weight="bold" fill="#1d5c2f">meta-openembedded (meta-oe, meta-networking, meta-python)</text>
+  <text x="56" y="366" font-size="12" fill="#333">Extra libraries and tools OpenBMC needs</text>
+
+  <rect x="40" y="384" width="580" height="58" rx="8" fill="#eeeeee" stroke="#666" stroke-width="2"/>
+  <text x="56" y="408" font-weight="bold" fill="#222">meta   (OpenEmbedded-Core)</text>
+  <text x="56" y="428" font-size="12" fill="#333">Base recipes: compiler, glibc, Linux kernel, U-Boot, systemd, image classes</text>
+
+  <rect x="40" y="450" width="580" height="50" rx="8" fill="#ffffff" stroke="#222" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="56" y="472" font-weight="bold" fill="#222">bitbake</text>
+  <text x="56" y="490" font-size="12" fill="#333">The build engine that reads all the layers above and runs the tasks</text>
+
+  <!-- config side -->
+  <rect x="680" y="70" width="290" height="160" rx="8" fill="#fffbe6" stroke="#b39b00" stroke-width="2"/>
+  <text x="825" y="94" text-anchor="middle" font-weight="bold" fill="#5c4f00">build/conf/  (your build)</text>
+  <text x="696" y="122" font-size="13" font-weight="bold" fill="#222">bblayers.conf</text>
+  <text x="696" y="140" font-size="12" fill="#333">lists the layers on the left</text>
+  <text x="696" y="168" font-size="13" font-weight="bold" fill="#222">local.conf</text>
+  <text x="696" y="186" font-size="12" fill="#333">MACHINE = "evb-beaglebone"</text>
+  <text x="696" y="202" font-size="12" fill="#333">DISTRO = "openbmc-phosphor"</text>
+  <text x="696" y="218" font-size="12" fill="#333">INHERIT += "rm_work"</text>
+
+  <rect x="680" y="260" width="290" height="110" rx="8" fill="#ffffff" stroke="#777" stroke-width="2"/>
+  <text x="825" y="284" text-anchor="middle" font-weight="bold" fill="#222">Command</text>
+  <text x="825" y="312" text-anchor="middle" font-family="Courier New, monospace" font-size="13" fill="#222">bitbake obmc-phosphor-image</text>
+  <text x="825" y="340" text-anchor="middle" font-size="12" fill="#333">"build this image for this machine</text>
+  <text x="825" y="356" text-anchor="middle" font-size="12" fill="#333">with this distro"</text>
+
+  <path d="M680,150 C650,150 650,150 622,150" stroke="#b39b00" stroke-width="2" fill="none"/>
+  <path d="M825,232 L825,258" stroke="#777" stroke-width="2" fill="none"/>
+</svg>
