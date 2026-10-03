@@ -1,0 +1,2 @@
+Imported from https://git.yoctoproject.org/meta-yocto commit 49a2b44583968d321b3195bfd0cb2232dff13950 (meta-yocto-bsp only)
+Removed recipes-kernel/linux/linux-yocto_7.2.bbappend (no linux-yocto 7.2 recipe in this tree).
