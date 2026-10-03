@@ -408,7 +408,19 @@ get smaller runners. So:
 6. The workflow was started from the Actions tab
    ([run 1](https://github.com/nimeskan/openbmc/actions/runs/37139784327)).
 
-### Step 11: This guide and the local build script
+### Step 11: Fix the resume logic after the first cloud run
+
+[Run 1](https://github.com/nimeskan/openbmc/actions/runs/37139784327) built
+for 4 h 50 m and got through task 5,752 of 6,296 with **no build errors**,
+then saved 1.8 GB of sstate cache. When the time limit came, BitBake was sent
+Ctrl+C but hadn't exited 10 minutes later, so it was killed (exit code 137).
+The workflow only counted exit codes 124 and 130 as "time limit reached",
+so it treated 137 as a real failure and didn't start run 2.
+
+**Fix:** any non-zero exit after the full 290 minutes now counts as "time
+limit reached". Run 2 was then started by hand and picked up run 1's cache.
+
+### Step 12: This guide and the local build script
 
 `beaglebone/build-beaglebone.sh` does steps 6–9 on your own PC. It was tested
 in a fresh Ubuntu 24.04 environment as a new normal user: it cloned this
@@ -602,7 +614,7 @@ can take longer than that on 4 cores. So the workflow is built to resume:
 | Install host packages | The same package list as [step 6](#step-6-install-the-build-tools), then allows user namespaces (Ubuntu 24.04's AppArmor blocks them by default, and BitBake needs them). |
 | Checkout | Gets this repository. |
 | Restore build cache | Loads `sstate-cache/` saved by the previous run, if there is one. |
-| Build | `bitbake obmc-phosphor-image`, stopped cleanly after 4 h 50 m if it isn't done (with `timeout --signal=INT`, which lets BitBake finish its running tasks). |
+| Build | `bitbake obmc-phosphor-image`, stopped after 4 h 50 m if it isn't done. It first gets Ctrl+C (`timeout --signal=INT`) so it can finish running tasks; if it hasn't exited 10 minutes later, it's killed. Either way counts as "time limit reached", not as an error. |
 | Save build cache | Stores `sstate-cache/` in GitHub's cache storage (up to 10 GB per repository). |
 | Continue in a new run | If the build was stopped by the time limit, starts the workflow again with `attempt` + 1. It gives up after 5 runs. |
 | Collect image, Publish release | If the build finished: copies the `.wic.xz` and `.wic.bmap`, writes `SHA256SUMS`, and creates a GitHub Release named `beaglebone-<date>-<time>`. |
