@@ -48,7 +48,9 @@ Other files this guide talks about, elsewhere in the repository:
 
 * **Get the image:** open this repository's
   [Releases page](https://github.com/nimeskan/openbmc/releases) and download
-  `obmc-phosphor-image-evb-beaglebone.wic.xz`.
+  `obmc-phosphor-image-evb-beaglebone.wic.xz`. The first release is
+  [`beaglebone-20261004-0244`](https://github.com/nimeskan/openbmc/releases/tag/beaglebone-20261004-0244)
+  (39.6 MB download, 174 MB once written to the card).
 * **Write it to a microSD card** with [balenaEtcher](https://etcher.balena.io/).
 * **Boot:** put the card in the BeagleBone, hold the **S2** button, and plug
   in power. Plug in an Ethernet cable.
@@ -435,8 +437,16 @@ Plain Yocto names images `<image>-<machine>.rootfs.wic.xz`, but OpenBMC's
 `meta-phosphor/classes/image_types_phosphor.bbclass` sets
 `IMAGE_NAME_SUFFIX = ""`, so the real name is
 `obmc-phosphor-image-evb-beaglebone.wic.xz`. **Fix:** use that name in the
-workflow, the build script and these docs. Run 3 then rebuilt from the
-cache and published the release.
+workflow, the build script and these docs.
+[Run 3](https://github.com/nimeskan/openbmc/actions/runs/37171622914) restored
+run 2's cache, needed only 4 minutes of BitBake, and published release
+[`beaglebone-20261004-0244`](https://github.com/nimeskan/openbmc/releases/tag/beaglebone-20261004-0244).
+
+The released files were then checked: the checksums in `SHA256SUMS` match;
+the image has a 32 MB FAT boot partition (`MLO`, `u-boot.img`, `zImage`, the
+three `.dtb` files and `extlinux/extlinux.conf`) and a 141 MB ext4 root
+partition, which contains bmcweb, the web UI, the SSH server and i2c-tools.
+It hasn't been booted on a real board yet.
 
 ### Step 13: This guide and the local build script
 
