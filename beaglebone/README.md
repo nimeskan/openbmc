@@ -13,6 +13,7 @@ explained the first time it appears, and every command is shown.
 | [`README.md`](README.md) | This guide |
 | [`build-beaglebone.sh`](build-beaglebone.sh) | Script that sets up a Linux PC and builds the image locally |
 | [`images/`](images/) | Diagrams used in this guide |
+| [`redfish-i2c-sensor/`](redfish-i2c-sensor/README.md) | Follow-up guide: Redfish explained, and adding an I2C sensor all the way to the web UI |
 
 Other files this guide talks about, elsewhere in the repository:
 
