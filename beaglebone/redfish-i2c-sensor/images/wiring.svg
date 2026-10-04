@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 445" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <title>Wiring an I2C sensor to the BeagleBone Black P9 header</title>
+  <rect width="1000" height="445" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Wiring: BeagleBone Black header P9 → I2C sensor (bus I2C2 = /dev/i2c-2)</text>
+
+  <!-- board outline -->
+  <rect x="30" y="55" width="420" height="380" rx="14" fill="#2b2b2b"/>
+  <text x="240" y="82" text-anchor="middle" fill="#ddd" font-weight="bold">BeagleBone Black (top view, Ethernet jack at the top)</text>
+  <text x="240" y="100" text-anchor="middle" fill="#aaa" font-size="11">P9 is the double row of pins on the LEFT edge; pin 1 is next to the "P9" label</text>
+
+  <!-- header -->
+  <rect x="70" y="120" width="120" height="200" rx="4" fill="#111" stroke="#666"/>
+  <text x="130" y="140" text-anchor="middle" fill="#ddd" font-weight="bold">P9</text>
+  <g font-size="11">
+    <!-- rows: y start 160, step 22 -->
+    <circle cx="105" cy="160" r="7" fill="#4caf50"/><circle cx="155" cy="160" r="7" fill="#4caf50"/>
+    <text x="90" y="164" text-anchor="end" fill="#ddd">1</text><text x="170" y="164" fill="#ddd">2</text>
+    <circle cx="105" cy="182" r="7" fill="#e53935"/><circle cx="155" cy="182" r="7" fill="#e53935"/>
+    <text x="90" y="186" text-anchor="end" fill="#ddd">3</text><text x="170" y="186" fill="#ddd">4</text>
+    <circle cx="105" cy="204" r="7" fill="#555"/><circle cx="155" cy="204" r="7" fill="#555"/>
+    <text x="90" y="208" text-anchor="end" fill="#ddd">5</text><text x="170" y="208" fill="#ddd">6</text>
+    <text x="130" y="236" text-anchor="middle" fill="#888">⋮</text>
+    <circle cx="105" cy="260" r="7" fill="#555"/><circle cx="155" cy="260" r="7" fill="#555"/>
+    <text x="90" y="264" text-anchor="end" fill="#ddd">17</text><text x="170" y="264" fill="#ddd">18</text>
+    <circle cx="105" cy="282" r="7" fill="#fbc02d"/><circle cx="155" cy="282" r="7" fill="#1e88e5"/>
+    <text x="90" y="286" text-anchor="end" fill="#ddd">19</text><text x="170" y="286" fill="#ddd">20</text>
+    <circle cx="105" cy="304" r="7" fill="#555"/><circle cx="155" cy="304" r="7" fill="#555"/>
+    <text x="90" y="308" text-anchor="end" fill="#ddd">21</text><text x="170" y="308" fill="#ddd">22</text>
+    
+  </g>
+
+  <!-- legend on board -->
+  <g font-size="12">
+    <circle cx="225" cy="330" r="7" fill="#4caf50"/><text x="240" y="334" fill="#ddd">P9_1 / P9_2: GND</text>
+    <circle cx="225" cy="350" r="7" fill="#e53935"/><text x="240" y="354" fill="#ddd">P9_3 / P9_4: 3.3 V out</text>
+    <circle cx="225" cy="370" r="7" fill="#fbc02d"/><text x="240" y="374" fill="#ddd">P9_19: I2C2_SCL (clock)</text>
+    <circle cx="225" cy="390" r="7" fill="#1e88e5"/><text x="240" y="394" fill="#ddd">P9_20: I2C2_SDA (data)</text>
+  </g>
+
+  <!-- sensor board -->
+  <rect x="700" y="150" width="240" height="190" rx="10" fill="#1b5e20"/>
+  <text x="820" y="178" text-anchor="middle" fill="#fff" font-weight="bold">Sensor module</text>
+  <text x="820" y="196" text-anchor="middle" fill="#cde" font-size="11">SIM3 (or TMP75 / LM75 breakout)</text>
+  <rect x="790" y="215" width="60" height="45" rx="4" fill="#111"/>
+  <text x="820" y="242" text-anchor="middle" fill="#ccc" font-size="10">chip</text>
+  <g font-size="12">
+    <circle cx="715" cy="225" r="7" fill="#e53935"/><text x="728" y="229" fill="#fff">VCC (3.3 V)</text>
+    <circle cx="715" cy="255" r="7" fill="#4caf50"/><text x="728" y="259" fill="#fff">GND</text>
+    <circle cx="715" cy="285" r="7" fill="#fbc02d"/><text x="728" y="289" fill="#fff">SCL</text>
+    <circle cx="715" cy="315" r="7" fill="#1e88e5"/><text x="728" y="319" fill="#fff">SDA</text>
+  </g>
+  <text x="880" y="318" fill="#cde" font-size="11">addr 0x48</text>
+
+  <!-- wires (drawn over the legend text area, which now sits lower) -->
+  <path d="M162,182 C300,182 520,225 708,225" stroke="#e53935" stroke-width="3" fill="none"/>
+  <path d="M162,160 C300,160 520,255 708,255" stroke="#4caf50" stroke-width="3" fill="none"/>
+  <path d="M105,282 C105,272 120,271 140,271 L420,271 C560,271 600,285 708,285" stroke="#fbc02d" stroke-width="3" fill="none"/>
+  <path d="M162,304 C300,304 520,315 708,315" stroke="#1e88e5" stroke-width="3" fill="none"/>
+
+  <text x="480" y="372" font-size="12" fill="#c43c3c" font-weight="bold">3.3 V logic only. Never connect a 5 V signal to these</text>
+  <text x="480" y="390" font-size="12" fill="#c43c3c" font-weight="bold">pins. Wire with the board unpowered.</text>
+  <text x="480" y="414" font-size="11" fill="#555">I2C2 already has pull-up resistors and the cape ID EEPROMs</text>
+  <text x="480" y="430" font-size="11" fill="#555">at 0x54–0x57; give your sensor a different address.</text>
+</svg>

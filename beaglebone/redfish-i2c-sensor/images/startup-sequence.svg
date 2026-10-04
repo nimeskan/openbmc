@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="Helvetica, Arial, sans-serif" font-size="12">
+  <title>What happens at boot until the sensor shows up in Redfish</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker>
+  </defs>
+  <rect width="1000" height="600" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">At boot: how the sensor comes to exist (time runs downwards)</text>
+
+  <!-- lifelines -->
+  <g font-weight="bold" font-size="13">
+    <rect x="30" y="50" width="150" height="34" rx="6" fill="#eeeeee" stroke="#666"/><text x="105" y="72" text-anchor="middle" fill="#222">systemd</text>
+    <rect x="215" y="50" width="150" height="34" rx="6" fill="#fff4e0" stroke="#d48a00"/><text x="290" y="72" text-anchor="middle" fill="#7a4d00">entity-manager</text>
+    <rect x="400" y="50" width="150" height="34" rx="6" fill="#e6f6ea" stroke="#2f8f4a"/><text x="475" y="72" text-anchor="middle" fill="#1d5c2f">externalsensor</text>
+    <rect x="585" y="50" width="150" height="34" rx="6" fill="#fde8e8" stroke="#c43c3c"/><text x="660" y="72" text-anchor="middle" fill="#7a1d1d">sim3-poll.sh</text>
+    <rect x="770" y="50" width="200" height="34" rx="6" fill="#e8f0fe" stroke="#4a6fd1"/><text x="870" y="72" text-anchor="middle" fill="#1d3b8a">bmcweb + ObjectMapper</text>
+  </g>
+  <g stroke="#bbb" stroke-dasharray="4 4">
+    <line x1="105" y1="84" x2="105" y2="590"/><line x1="290" y1="84" x2="290" y2="590"/>
+    <line x1="475" y1="84" x2="475" y2="590"/><line x1="660" y1="84" x2="660" y2="590"/>
+    <line x1="870" y1="84" x2="870" y2="590"/>
+  </g>
+
+  <!-- 1 -->
+  <line x1="105" y1="110" x2="286" y2="110" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="112" y="104" fill="#222">① start</text>
+  <rect x="300" y="118" width="170" height="66" rx="4" fill="#fff" stroke="#d48a00"/>
+  <text x="306" y="134" fill="#222">② read every *.json in</text>
+  <text x="306" y="148" fill="#222">configurations/; "Probe":</text>
+  <text x="306" y="162" fill="#222">"TRUE" always matches, so</text>
+  <text x="306" y="176" fill="#222">this board "is present"</text>
+
+  <!-- 3 publish -->
+  <line x1="290" y1="212" x2="866" y2="212" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="300" y="205" fill="#222">③ publish on D-Bus:  …/inventory/system/board/BeagleBone_BMC  (Item.Board → a Redfish Chassis)</text>
+  <line x1="290" y1="240" x2="471" y2="240" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="300" y="233" fill="#222">…/BeagleBone_BMC/SIM3_Temperature</text>
+  <text x="300" y="256" fill="#555">(Configuration.ExternalSensor), same for Voltage</text>
+
+  <!-- 4 -->
+  <line x1="105" y1="288" x2="471" y2="288" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="112" y="281" fill="#222">④ start (after entity-manager)</text>
+  <rect x="482" y="296" width="178" height="80" rx="4" fill="#fff" stroke="#2f8f4a"/>
+  <text x="488" y="312" fill="#222">⑤ find Configuration.</text>
+  <text x="488" y="326" fill="#222">ExternalSensor objects; create</text>
+  <text x="488" y="340" fill="#222">sensors/temperature/SIM3_…</text>
+  <text x="488" y="354" fill="#222">with thresholds + association</text>
+  <text x="488" y="368" fill="#222">"chassis" → BeagleBone_BMC</text>
+  <line x1="475" y1="400" x2="866" y2="400" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="680" y="393" fill="#222">ObjectMapper indexes the new objects</text>
+
+  <!-- 6 -->
+  <line x1="105" y1="426" x2="656" y2="426" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="112" y="419" fill="#222">⑥ start sim3-poll.service</text>
+  <rect x="666" y="434" width="175" height="34" rx="4" fill="#fff" stroke="#c43c3c"/>
+  <text x="672" y="448" fill="#222">⑦ wait until both sensor</text>
+  <text x="672" y="462" fill="#222">objects exist</text>
+
+  <!-- 8 loop -->
+  <text x="530" y="486" text-anchor="middle" fill="#7a1d1d" font-weight="bold">loop every 2 s</text>
+  <rect x="380" y="492" width="300" height="46" rx="6" fill="#fff8f8" stroke="#c43c3c" stroke-dasharray="4 3"/>
+  <line x1="660" y1="514" x2="479" y2="514" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="488" y="508" fill="#222">⑧ busctl set-property … Value d 25</text>
+  <text x="488" y="530" fill="#555">(externalsensor checks thresholds)</text>
+
+  <!-- 9 request -->
+  <line x1="870" y1="566" x2="479" y2="566" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="560" y="559" fill="#222">⑨ on each Redfish request: read Value</text>
+  <text x="560" y="584" fill="#555">→ "Reading": 25.0 in the JSON reply</text>
+</svg>

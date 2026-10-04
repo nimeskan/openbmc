@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" font-family="Helvetica, Arial, sans-serif" font-size="12">
+  <title>The Redfish resource tree on this BMC</title>
+  <rect width="1000" height="420" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Redfish is a tree of JSON resources, each with its own URL</text>
+  <g stroke="#888" stroke-width="1.5" fill="none">
+    <path d="M140,95 L140,375"/>
+    <path d="M140,130 L180,130"/><path d="M140,180 L180,180"/><path d="M140,230 L180,230"/>
+    <path d="M140,280 L180,280"/><path d="M140,330 L180,330"/><path d="M140,375 L180,375"/>
+    <path d="M420,180 L460,180"/>
+    <path d="M700,180 L730,180 M730,180 L730,265 M730,222 L750,222 M730,265 L750,265"/>
+  </g>
+  <rect x="40" y="55" width="200" height="40" rx="6" fill="#4a6fd1"/>
+  <text x="140" y="73" text-anchor="middle" fill="#fff" font-weight="bold">/redfish/v1</text>
+  <text x="140" y="88" text-anchor="middle" fill="#dde" font-size="11">Service root</text>
+
+  <g>
+    <rect x="180" y="113" width="240" height="34" rx="5" fill="#e8f0fe" stroke="#4a6fd1"/>
+    <text x="190" y="134" fill="#222"><tspan font-weight="bold">Systems</tspan>/system — the managed computer</text>
+    <rect x="180" y="163" width="240" height="34" rx="5" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+    <text x="190" y="184" fill="#222"><tspan font-weight="bold">Chassis</tspan> — physical enclosures/boards</text>
+    <rect x="180" y="213" width="240" height="34" rx="5" fill="#e8f0fe" stroke="#4a6fd1"/>
+    <text x="190" y="234" fill="#222"><tspan font-weight="bold">Managers</tspan>/bmc — the BMC itself</text>
+    <rect x="180" y="263" width="240" height="34" rx="5" fill="#e8f0fe" stroke="#4a6fd1"/>
+    <text x="190" y="284" fill="#222"><tspan font-weight="bold">SessionService</tspan> — log in / out</text>
+    <rect x="180" y="313" width="240" height="34" rx="5" fill="#e8f0fe" stroke="#4a6fd1"/>
+    <text x="190" y="334" fill="#222"><tspan font-weight="bold">AccountService</tspan> — users, roles</text>
+    <rect x="180" y="358" width="240" height="34" rx="5" fill="#e8f0fe" stroke="#4a6fd1"/>
+    <text x="190" y="379" fill="#222"><tspan font-weight="bold">EventService</tspan>, UpdateService, …</text>
+  </g>
+
+  <rect x="460" y="163" width="240" height="34" rx="5" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+  <text x="470" y="184" fill="#222"><tspan font-weight="bold">BeagleBone_BMC</tspan> (JSON "Name")</text>
+
+  <rect x="750" y="205" width="230" height="34" rx="5" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+  <text x="760" y="226" fill="#222"><tspan font-weight="bold">Sensors</tspan> — collection</text>
+  <rect x="750" y="248" width="230" height="58" rx="5" fill="#fff" stroke="#2f8f4a"/>
+  <text x="760" y="266" fill="#222" font-size="11">temperature_SIM3_Temperature</text>
+  <text x="760" y="282" fill="#222" font-size="11">voltage_SIM3_Voltage</text>
+  <text x="760" y="298" fill="#555" font-size="11">ID = &lt;type&gt;_&lt;name&gt;</text>
+  <path d="M865,239 L865,248" stroke="#888" stroke-width="1.5"/>
+
+  <text x="460" y="250" fill="#555" font-size="11">Full URL of one sensor:</text>
+  <text x="460" y="268" fill="#222" font-family="Courier New, monospace" font-size="10.5">/redfish/v1/Chassis/BeagleBone_BMC/</text>
+  <text x="460" y="283" fill="#222" font-family="Courier New, monospace" font-size="10.5">Sensors/temperature_SIM3_Temperature</text>
+  <text x="460" y="330" fill="#555" font-size="11">Every resource has "@odata.id" (its own URL)</text>
+  <text x="460" y="346" fill="#555" font-size="11">and links to its children, so a client can</text>
+  <text x="460" y="362" fill="#555" font-size="11">start at /redfish/v1 and discover the rest.</text>
+</svg>

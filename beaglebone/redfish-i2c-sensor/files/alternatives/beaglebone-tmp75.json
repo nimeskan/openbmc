@@ -1,0 +1,33 @@
+{
+    "Exposes": [
+        {
+            "Address": "0x48",
+            "Bus": 2,
+            "Name": "Board Temp",
+            "Thresholds": [
+                {
+                    "Direction": "greater than",
+                    "Name": "upper critical",
+                    "Severity": 1,
+                    "Value": 70
+                },
+                {
+                    "Direction": "greater than",
+                    "Name": "upper non critical",
+                    "Severity": 0,
+                    "Value": 50
+                }
+            ],
+            "Type": "TMP75"
+        }
+    ],
+    "Name": "BeagleBone BMC",
+    "Probe": "TRUE",
+    "Type": "Board",
+    "xyz.openbmc_project.Inventory.Decorator.Asset": {
+        "Manufacturer": "BeagleBoard.org",
+        "Model": "BeagleBone Black",
+        "PartNumber": "BBONE-BLACK",
+        "SerialNumber": "0000"
+    }
+}

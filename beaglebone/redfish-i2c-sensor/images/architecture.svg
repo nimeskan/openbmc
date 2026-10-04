@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <title>How a sensor reading travels from the chip to your screen</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f8f4a"/></marker>
+  </defs>
+  <rect width="1000" height="700" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">How a sensor reading travels from the chip to your screen</text>
+
+  <!-- zones -->
+  <rect x="20" y="50" width="960" height="90" rx="10" fill="#f7f7f7" stroke="#bbb" stroke-dasharray="5 4"/>
+  <text x="34" y="70" font-weight="bold" fill="#555">YOUR PC / PHONE</text>
+  <rect x="20" y="155" width="960" height="430" rx="10" fill="#f4f8ff" stroke="#9db3e6" stroke-dasharray="5 4"/>
+  <text x="34" y="175" font-weight="bold" fill="#1d3b8a">THE BMC (BeagleBone running OpenBMC)</text>
+  <rect x="20" y="600" width="960" height="85" rx="10" fill="#fff8ee" stroke="#e0b46a" stroke-dasharray="5 4"/>
+  <text x="34" y="620" font-weight="bold" fill="#7a4d00">HARDWARE</text>
+
+  <!-- user side -->
+  <rect x="120" y="80" width="200" height="48" rx="8" fill="#fff" stroke="#777" stroke-width="2"/>
+  <text x="220" y="100" text-anchor="middle" font-weight="bold" fill="#222">Web UI in a browser</text>
+  <text x="220" y="117" text-anchor="middle" font-size="11" fill="#555">Hardware status → Sensors</text>
+  <rect x="400" y="80" width="200" height="48" rx="8" fill="#fff" stroke="#777" stroke-width="2"/>
+  <text x="500" y="100" text-anchor="middle" font-weight="bold" fill="#222">curl / watch-sensors.sh</text>
+  <text x="500" y="117" text-anchor="middle" font-size="11" fill="#555">any Redfish client</text>
+  <rect x="680" y="80" width="200" height="48" rx="8" fill="#fff" stroke="#777" stroke-width="2"/>
+  <text x="780" y="100" text-anchor="middle" font-weight="bold" fill="#222">Python / Postman / …</text>
+  <text x="780" y="117" text-anchor="middle" font-size="11" fill="#555">anything that speaks HTTPS</text>
+
+  <!-- bmcweb -->
+  <rect x="300" y="195" width="400" height="62" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="500" y="218" text-anchor="middle" font-weight="bold" fill="#1d3b8a">bmcweb  — the Redfish server (HTTPS, port 443)</text>
+  <text x="500" y="238" text-anchor="middle" font-size="11" fill="#333">turns D-Bus objects into Redfish JSON:</text>
+  <text x="500" y="252" text-anchor="middle" font-size="11" fill="#333">/redfish/v1/Chassis/BeagleBone_BMC/Sensors/temperature_SIM3_Temperature</text>
+  <line x1="220" y1="128" x2="380" y2="193" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="500" y1="128" x2="500" y2="193" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="780" y1="128" x2="620" y2="193" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <text x="508" y="166" font-size="11" fill="#555">HTTPS + JSON</text>
+
+  <!-- dbus bus -->
+  <rect x="40" y="290" width="920" height="34" rx="6" fill="#4a6fd1"/>
+  <text x="500" y="312" text-anchor="middle" font-weight="bold" fill="#ffffff">D-Bus system bus — every OpenBMC program publishes and reads "objects" here</text>
+  <line x1="500" y1="257" x2="500" y2="288" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- daemons -->
+  <rect x="40" y="360" width="200" height="96" rx="8" fill="#f3e8fd" stroke="#8a4fd1" stroke-width="2"/>
+  <text x="140" y="382" text-anchor="middle" font-weight="bold" fill="#4f1d8a">ObjectMapper</text>
+  <text x="140" y="400" text-anchor="middle" font-size="11" fill="#333">(phosphor-objmgr)</text>
+  <text x="140" y="418" text-anchor="middle" font-size="11" fill="#333">"phone book": who owns</text>
+  <text x="140" y="432" text-anchor="middle" font-size="11" fill="#333">which object; follows</text>
+  <text x="140" y="446" text-anchor="middle" font-size="11" fill="#333">associations</text>
+
+  <rect x="265" y="360" width="215" height="96" rx="8" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="372" y="382" text-anchor="middle" font-weight="bold" fill="#7a4d00">entity-manager</text>
+  <text x="372" y="402" text-anchor="middle" font-size="11" fill="#333">reads beaglebone-sim3.json,</text>
+  <text x="372" y="416" text-anchor="middle" font-size="11" fill="#333">publishes the Board (chassis)</text>
+  <text x="372" y="430" text-anchor="middle" font-size="11" fill="#333">and two "please create this</text>
+  <text x="372" y="444" text-anchor="middle" font-size="11" fill="#333">sensor" configuration objects</text>
+
+  <rect x="505" y="360" width="215" height="96" rx="8" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
+  <text x="612" y="382" text-anchor="middle" font-weight="bold" fill="#1d5c2f">externalsensor</text>
+  <text x="612" y="398" text-anchor="middle" font-size="11" fill="#333">(part of dbus-sensors)</text>
+  <text x="612" y="416" text-anchor="middle" font-size="11" fill="#333">creates the sensor objects,</text>
+  <text x="612" y="430" text-anchor="middle" font-size="11" fill="#333">checks thresholds, marks</text>
+  <text x="612" y="444" text-anchor="middle" font-size="11" fill="#333">stale readings unavailable</text>
+
+  <rect x="745" y="360" width="215" height="96" rx="8" fill="#fde8e8" stroke="#c43c3c" stroke-width="2"/>
+  <text x="852" y="382" text-anchor="middle" font-weight="bold" fill="#7a1d1d">sim3-poll.sh  (ours)</text>
+  <text x="852" y="402" text-anchor="middle" font-size="11" fill="#333">every 2 s: read 3 registers</text>
+  <text x="852" y="416" text-anchor="middle" font-size="11" fill="#333">with i2cget, convert, write</text>
+  <text x="852" y="430" text-anchor="middle" font-size="11" fill="#333">Value with busctl; log faults</text>
+  <text x="852" y="444" text-anchor="middle" font-size="11" fill="#333">to the event log</text>
+
+  <line x1="140" y1="358" x2="140" y2="326" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="372" y1="358" x2="372" y2="326" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="612" y1="358" x2="612" y2="326" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="852" y1="358" x2="852" y2="326" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- json file -->
+  <rect x="265" y="485" width="215" height="44" rx="6" fill="#fffbe6" stroke="#b39b00" stroke-width="1.5"/>
+  <text x="372" y="503" text-anchor="middle" font-size="11" font-family="Courier New, monospace" fill="#222">/usr/share/entity-manager/</text>
+  <text x="372" y="519" text-anchor="middle" font-size="11" font-family="Courier New, monospace" fill="#222">configurations/beaglebone-sim3.json</text>
+  <line x1="372" y1="485" x2="372" y2="458" stroke="#b39b00" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- kernel -->
+  <rect x="745" y="485" width="215" height="80" rx="8" fill="#eeeeee" stroke="#666" stroke-width="2"/>
+  <text x="852" y="507" text-anchor="middle" font-weight="bold" fill="#222">Linux kernel</text>
+  <text x="852" y="525" text-anchor="middle" font-size="11" fill="#333">omap_i2c driver for the</text>
+  <text x="852" y="539" text-anchor="middle" font-size="11" fill="#333">AM335x I2C2 controller;</text>
+  <text x="852" y="553" text-anchor="middle" font-size="11" font-family="Courier New, monospace" fill="#222">/dev/i2c-2</text>
+  <line x1="852" y1="483" x2="852" y2="458" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- hardware -->
+  <rect x="745" y="625" width="215" height="50" rx="8" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="852" y="645" text-anchor="middle" font-weight="bold" fill="#7a4d00">SIM3 chip at address 0x48</text>
+  <text x="852" y="663" text-anchor="middle" font-size="11" fill="#333">TEMP · VOLT · STATUS registers</text>
+  <line x1="852" y1="623" x2="852" y2="567" stroke="#555" stroke-width="2" marker-end="url(#a)"/>
+  <text x="842" y="598" text-anchor="end" font-size="11" fill="#555">I2C wires: SCL P9_19, SDA P9_20</text>
+
+  <rect x="40" y="625" width="680" height="50" rx="8" fill="#ffffff" stroke="#ccc"/>
+  <text x="56" y="645" font-size="12" fill="#333">Reading travels UP: chip → kernel → sim3-poll.sh → D-Bus → externalsensor's sensor object</text>
+  <text x="56" y="663" font-size="12" fill="#333">→ bmcweb (finds it via ObjectMapper) → Redfish JSON → your browser / script.</text>
+
+  <!-- green flow arrow -->
+  <path d="M960,520 C985,420 985,300 700,226" stroke="#2f8f4a" stroke-width="3" fill="none" stroke-dasharray="8 5" marker-end="url(#g)"/>
+</svg>

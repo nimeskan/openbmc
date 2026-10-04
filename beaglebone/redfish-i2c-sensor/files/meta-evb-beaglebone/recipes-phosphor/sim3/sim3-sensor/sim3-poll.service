@@ -1,0 +1,18 @@
+[Unit]
+Description=SIM3 I2C sensor poller (feeds dbus-sensors ExternalSensor)
+# The sensors this script writes to are created by externalsensor, which in
+# turn needs entity-manager. Start after them, and stop if they stop.
+Wants=xyz.openbmc_project.externalsensor.service
+After=xyz.openbmc_project.externalsensor.service
+After=xyz.openbmc_project.EntityManager.service
+
+[Service]
+# Optional settings file: SIM3_BUS, SIM3_ADDR, SIM3_INTERVAL, SIM3_SIMULATE.
+# The leading "-" means "it's fine if the file doesn't exist".
+EnvironmentFile=-/etc/default/sim3-poll
+ExecStart=/usr/libexec/sim3-sensor/sim3-poll.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
