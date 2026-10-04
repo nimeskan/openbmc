@@ -48,7 +48,7 @@ Other files this guide talks about, elsewhere in the repository:
 
 * **Get the image:** open this repository's
   [Releases page](https://github.com/nimeskan/openbmc/releases) and download
-  `obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz`.
+  `obmc-phosphor-image-evb-beaglebone.wic.xz`.
 * **Write it to a microSD card** with [balenaEtcher](https://etcher.balena.io/).
 * **Boot:** put the card in the BeagleBone, hold the **S2** button, and plug
   in power. Plug in an Ethernet cable.
@@ -166,7 +166,7 @@ D-Bus (a message bus). You talk to the BMC over the network with Redfish
 2. **Build.** BitBake runs on a big x86 Linux machine: a GitHub Actions
    runner, or your own PC. It downloads about 4 GB of source code and
    compiles everything, including the cross-compiler itself.
-3. **Image file.** The output is one compressed SD card image, about 50–100 MB.
+3. **Image file.** The output is one compressed SD card image, about 40 MB.
 4. **microSD card.** You write the image onto a card.
 5. **BeagleBone.** It boots from the card.
 6. **You** reach the BMC over the network.
@@ -421,7 +421,24 @@ so it treated 137 as a real failure and didn't start run 2.
 **Fix:** any non-zero exit after the full 290 minutes now counts as "time
 limit reached". Run 2 was then started by hand and picked up run 1's cache.
 
-### Step 12: This guide and the local build script
+### Step 12: The build succeeds; fix the image file name
+
+[Run 2](https://github.com/nimeskan/openbmc/actions/runs/37158804866)
+restored run 1's cache and **finished the build** in about 4 hours. The SD
+card image was 39.6 MB compressed. But the "Collect image" step failed:
+
+```
+cp: cannot stat '.../obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz': No such file or directory
+```
+
+Plain Yocto names images `<image>-<machine>.rootfs.wic.xz`, but OpenBMC's
+`meta-phosphor/classes/image_types_phosphor.bbclass` sets
+`IMAGE_NAME_SUFFIX = ""`, so the real name is
+`obmc-phosphor-image-evb-beaglebone.wic.xz`. **Fix:** use that name in the
+workflow, the build script and these docs. Run 3 then rebuilt from the
+cache and published the release.
+
+### Step 13: This guide and the local build script
 
 `beaglebone/build-beaglebone.sh` does steps 6–9 on your own PC. It was tested
 in a fresh Ubuntu 24.04 environment as a new normal user: it cloned this
@@ -623,7 +640,7 @@ can take longer than that on 4 cores. So the workflow is built to resume:
 
 The image is published as a **Release** rather than committed into the
 repository. Git keeps every version of every file forever, so committing a
-50–100 MB image on every build would make the repository bigger and slower
+40 MB image on every build would make the repository bigger and slower
 to clone each time. GitHub doesn't accept files over 100 MB in git anyway.
 Releases are made for downloadable binaries.
 
@@ -635,8 +652,8 @@ Files in `tmp/deploy/images/evb-beaglebone/` (or attached to the Release):
 
 | File | What it is |
 | --- | --- |
-| `obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz` | **The SD card image.** This is the one you flash. |
-| `obmc-phosphor-image-evb-beaglebone.rootfs.wic.bmap` | Block map, for faster writing with `bmaptool` |
+| `obmc-phosphor-image-evb-beaglebone.wic.xz` | **The SD card image.** This is the one you flash. |
+| `obmc-phosphor-image-evb-beaglebone.wic.bmap` | Block map, for faster writing with `bmaptool` |
 | `MLO`, `u-boot.img` | The bootloader (also inside the image) |
 | `zImage`, `am335x-*.dtb` | Kernel and device trees (also inside the image) |
 
@@ -702,13 +719,13 @@ which starts the OpenBMC services.
 **Linux, from the command line:**
 ```sh
 lsblk                       # find your card, e.g. /dev/sdb (check the size!)
-xzcat obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz | \
+xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | \
   sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
 ```
 or faster, with the block map:
 ```sh
 sudo apt-get install bmap-tools
-sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz /dev/sdX
+sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.wic.xz /dev/sdX
 ```
 ⚠ `dd` and `bmaptool` overwrite whatever device you name, without asking.
 Getting `/dev/sdX` wrong can erase your PC's own disk.
@@ -747,9 +764,9 @@ eMMC. When booted from SD, the SD card is `mmcblk0` and the eMMC is
 `mmcblk1`:
 
 ```sh
-scp obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz root@<board-ip>:/tmp/
+scp obmc-phosphor-image-evb-beaglebone.wic.xz root@<board-ip>:/tmp/
 ssh root@<board-ip>
-xzcat /tmp/obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
+xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
 poweroff
 ```
 Remove the SD card and power on without holding S2.

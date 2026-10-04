@@ -37,7 +37,7 @@ bitbake obmc-phosphor-image
 ```
 
 The image is written to
-`tmp/deploy/images/evb-beaglebone/obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz`.
+`tmp/deploy/images/evb-beaglebone/obmc-phosphor-image-evb-beaglebone.wic.xz`.
 `rm_work` is enabled in the template `local.conf` to keep disk usage down.
 
 ## Flash to an SD card
@@ -48,7 +48,7 @@ the `.wic.xz` file and the SD card; it decompresses on the fly.
 On Linux you can also use:
 
 ```sh
-xzcat obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz | sudo dd of=/dev/sdX bs=4M conv=fsync
+xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | sudo dd of=/dev/sdX bs=4M conv=fsync
 ```
 
 ## Boot
@@ -66,7 +66,7 @@ A 3.3 V USB serial cable on header J1 (115200 8N1) gives you the console.
 Boot from SD, copy the `.wic.xz` file to the board (e.g. with `scp`), then:
 
 ```sh
-xzcat obmc-phosphor-image-evb-beaglebone.rootfs.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
+xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
 ```
 
 Power off, remove the SD card, and power on without holding S2.

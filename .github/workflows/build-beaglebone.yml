@@ -133,8 +133,8 @@ jobs:
           deploy="$BUILD_DIR/tmp/deploy/images/$MACHINE"
           ls -la "$deploy"
           mkdir -p out
-          cp -L "$deploy/$IMAGE-$MACHINE.rootfs.wic.xz" out/
-          cp -L "$deploy/$IMAGE-$MACHINE.rootfs.wic.bmap" out/
+          cp -L "$deploy/$IMAGE-$MACHINE.wic.xz" out/
+          cp -L "$deploy/$IMAGE-$MACHINE.wic.bmap" out/
           (cd out && sha256sum * > SHA256SUMS)
           ls -la out
 

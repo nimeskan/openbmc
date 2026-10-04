@@ -29,7 +29,7 @@
   <text x="540" y="85" text-anchor="middle" font-weight="bold" fill="#1d5c2f">3. Image file</text>
   <text x="540" y="108" text-anchor="middle" font-size="12" fill="#333">obmc-phosphor-image-</text>
   <text x="540" y="124" text-anchor="middle" font-size="12" fill="#333">evb-beaglebone</text>
-  <text x="540" y="140" text-anchor="middle" font-size="12" fill="#333">.rootfs.wic.xz</text>
+  <text x="540" y="140" text-anchor="middle" font-size="12" fill="#333">.wic.xz</text>
   <text x="540" y="162" text-anchor="middle" font-size="12" fill="#333">on GitHub Releases</text>
 
   <!-- 4 sd card -->

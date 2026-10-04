@@ -464,8 +464,8 @@ step "Collect the SD card image"
 #   *.wic.xz    the complete SD card image, xz-compressed
 #   *.wic.bmap  a "block map" that lets bmaptool write the card faster
 DEPLOY_DIR="$BUILD_DIR/tmp/deploy/images/$MACHINE"
-WIC="$DEPLOY_DIR/$IMAGE-$MACHINE.rootfs.wic.xz"
-BMAP="$DEPLOY_DIR/$IMAGE-$MACHINE.rootfs.wic.bmap"
+WIC="$DEPLOY_DIR/$IMAGE-$MACHINE.wic.xz"
+BMAP="$DEPLOY_DIR/$IMAGE-$MACHINE.wic.bmap"
 [ -e "$WIC" ] || die "Expected image not found: $WIC"
 mkdir -p "$OUTPUT_DIR"
 cp -L "$WIC" "$OUTPUT_DIR/"
