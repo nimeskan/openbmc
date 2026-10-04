@@ -13,6 +13,7 @@ explained the first time it appears, and every command is shown.
 | [`README.md`](README.md) | This guide |
 | [`build-beaglebone.sh`](build-beaglebone.sh) | Script that sets up a Linux PC and builds the image locally |
 | [`images/`](images/) | Diagrams used in this guide |
+| [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md) | Reaching the board from a Windows PC: serial terminal, direct Ethernet cable (no network), web UI, Redfish, SSH |
 | [`redfish-i2c-sensor/`](redfish-i2c-sensor/README.md) | Follow-up guide: Redfish explained, and adding an I2C sensor all the way to the web UI |
 
 Other files this guide talks about, elsewhere in the repository:
@@ -784,6 +785,9 @@ Remove the SD card and power on without holding S2.
 ---
 
 ## 10. Using your BMC
+
+On a Windows PC, or with no router (just a cable between PC and board), see
+[connecting-from-a-windows-pc.md](connecting-from-a-windows-pc.md).
 
 * **Web UI:** `https://<board-ip>/`. Your browser warns about the
   certificate, because the BMC generates its own on first boot; accept it.
