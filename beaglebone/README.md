@@ -5,6 +5,8 @@ into an OpenBMC firmware image for the
 [BeagleBone Black](https://www.beagleboard.org/boards/beaglebone-black), and
 how you can do the same build yourself.
 
+**New here? Start with [START-HERE.md](START-HERE.md)**, which says which documents to read first.
+
 It's written for someone new to Linux, Yocto and OpenBMC. Every term is
 explained the first time it appears, and every command is shown.
 
