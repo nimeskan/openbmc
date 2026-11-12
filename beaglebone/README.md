@@ -16,6 +16,7 @@ explained the first time it appears, and every command is shown.
 | [`build-beaglebone.sh`](build-beaglebone.sh) | Script that sets up a Linux PC and builds the image locally |
 | [`images/`](images/) | Diagrams used in this guide |
 | [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md) | Reaching the board from a Windows PC: serial terminal, direct Ethernet cable (no network), web UI, Redfish, SSH |
+| [`connecting-from-an-ubuntu-pc.md`](connecting-from-an-ubuntu-pc.md) | The same for an Ubuntu PC: serial terminal, direct Ethernet cable with NetworkManager (Shared / Link-Local / Manual), web UI, Redfish, SSH |
 | [`redfish-i2c-sensor/`](redfish-i2c-sensor/README.md) | Follow-up guide: Redfish explained, and adding an I2C sensor all the way to the web UI |
 
 Other files this guide talks about, elsewhere in the repository:

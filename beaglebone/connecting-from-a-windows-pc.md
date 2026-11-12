@@ -2,7 +2,8 @@
 
 How to reach the BMC's terminal, web UI and Redfish API from a Windows 10 or
 Windows 11 PC, including **without any network**: just one cable between the
-PC and the board.
+PC and the board. (On Ubuntu? See
+[connecting-from-an-ubuntu-pc.md](connecting-from-an-ubuntu-pc.md).)
 
 There are three ways in:
 

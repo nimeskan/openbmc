@@ -11,6 +11,10 @@ what each one is for, and what you can leave for later.
   use at your first boot.
 * Covers the serial terminal with PuTTY, connecting with **one Ethernet cable
   and no router**, and using the web UI, Redfish and SSH from Windows.
+* **Using Ubuntu instead?** Read
+  [`connecting-from-an-ubuntu-pc.md`](connecting-from-an-ubuntu-pc.md): the same
+  steps for Ubuntu (serial with `picocom`, direct cable with NetworkManager).
+  Ubuntu needs one extra setting that Windows doesn't, explained there.
 
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
