@@ -16,6 +16,7 @@ explained the first time it appears, and every command is shown.
 | [`build-beaglebone.sh`](build-beaglebone.sh) | Script that sets up a Linux PC and builds the image locally |
 | [`images/`](images/) | Diagrams used in this guide |
 | [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md) | Reaching the board from a Windows PC: serial terminal, direct Ethernet cable (no network), web UI, Redfish, SSH |
+| [`flashing-the-sd-card-on-ubuntu.md`](flashing-the-sd-card-on-ubuntu.md) | Writing the image to an SD card on Ubuntu (`bmaptool` or `dd`), checking it, first boot, and optionally installing to the eMMC |
 | [`connecting-from-an-ubuntu-pc.md`](connecting-from-an-ubuntu-pc.md) | The same for an Ubuntu PC: serial terminal, direct Ethernet cable with NetworkManager (Shared / Link-Local / Manual), web UI, Redfish, SSH |
 | [`redfish-i2c-sensor/`](redfish-i2c-sensor/README.md) | Follow-up guide: Redfish explained, and adding an I2C sensor all the way to the web UI |
 
@@ -723,6 +724,9 @@ which starts the OpenBMC services.
   or similar) for header J1, so you can watch it boot.
 
 ### Write the card
+
+**On Ubuntu**, there's a step-by-step guide with the safety checks:
+[flashing-the-sd-card-on-ubuntu.md](flashing-the-sd-card-on-ubuntu.md).
 
 **Windows, macOS or Linux, with balenaEtcher** (easiest):
 1. Install [balenaEtcher](https://etcher.balena.io/).

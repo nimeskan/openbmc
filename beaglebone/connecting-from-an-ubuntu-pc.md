@@ -5,6 +5,9 @@ including **without any network**: just one Ethernet cable between the PC and
 the board. (On Windows? See
 [connecting-from-a-windows-pc.md](connecting-from-a-windows-pc.md).)
 
+Haven't written the image to a card yet? See
+[flashing-the-sd-card-on-ubuntu.md](flashing-the-sd-card-on-ubuntu.md).
+
 Written for **Ubuntu Desktop 22.04 / 24.04**, which uses NetworkManager for
 network settings. Ubuntu Server is covered briefly at the end.
 
