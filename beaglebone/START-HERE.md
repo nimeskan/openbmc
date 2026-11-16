@@ -5,6 +5,11 @@ what each one is for, and what you can leave for later.
 
 ## Read these, in this order
 
+> **New to all of this?** Read
+> [`description-of-tools.md`](description-of-tools.md) first. It explains every
+> tool and term (Yocto, BitBake, layers, recipes, booting…) with one kitchen
+> analogy, so the other documents make sense.
+
 ### 1. Connecting from a Windows PC: [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md)
 
 * The shortest and most practical. Read it first, because it's what you'll

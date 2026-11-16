@@ -15,6 +15,7 @@ explained the first time it appears, and every command is shown.
 | [`README.md`](README.md) | This guide |
 | [`build-beaglebone.sh`](build-beaglebone.sh) | Script that sets up a Linux PC and builds the image locally |
 | [`images/`](images/) | Diagrams used in this guide |
+| [`description-of-tools.md`](description-of-tools.md) | Every tool and piece explained with a kitchen analogy: Yocto, BitBake, layers, recipes, the build, the boot chain, OpenBMC |
 | [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md) | Reaching the board from a Windows PC: serial terminal, direct Ethernet cable (no network), web UI, Redfish, SSH |
 | [`flashing-the-sd-card-on-ubuntu.md`](flashing-the-sd-card-on-ubuntu.md) | Writing the image to an SD card on Ubuntu (`bmaptool` or `dd`), checking it, first boot, and optionally installing to the eMMC |
 | [`connecting-from-an-ubuntu-pc.md`](connecting-from-an-ubuntu-pc.md) | The same for an Ubuntu PC: serial terminal, direct Ethernet cable with NetworkManager (Shared / Link-Local / Manual), web UI, Redfish, SSH |
@@ -674,7 +675,7 @@ Files in `tmp/deploy/images/evb-beaglebone/` (or attached to the Release):
 
 ![SD card layout and boot](images/sdcard-boot.svg)
 
-The SD card layout comes from `meta-yocto-bsp/wic/beaglebone-yocto.wks`:
+The SD card layout comes from `meta-yocto-bsp/files/wic/beaglebone-yocto.wks`:
 
 ```
 part /boot --source bootimg_partition --fstype=vfat --label boot --active --align 4 --fixed-size 32 --sourceparams="loader=u-boot" --use-uuid
