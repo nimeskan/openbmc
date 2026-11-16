@@ -81,7 +81,7 @@ in**:
    lsblk -o NAME,SIZE,TYPE,TRAN,RM,MODEL,MOUNTPOINTS
    ```
 2. **Plug in the card**, wait a few seconds, run the same command again.
-3. The **new** disk is your card. For example:
+3. The **new** disk is your card. For example, with a **USB card reader**:
    ```
    NAME        SIZE TYPE TRAN RM MODEL        MOUNTPOINTS
    nvme0n1   476.9G disk nvme  0 Samsung SSD
@@ -90,9 +90,19 @@ in**:
    sdb        29.7G disk usb   1 SD/MMC       ← the new one: your card
    └─sdb1     29.7G part       1               /media/you/ABCD-1234
    ```
-   Here the card is **`/dev/sdb`**. Check that the **size matches your card**
-   and that it is **not** the disk with `/` or `/boot/efi` in the
-   MOUNTPOINTS column.
+   or with the PC's **built-in card slot**:
+   ```
+   NAME          SIZE TYPE TRAN RM MODEL       MOUNTPOINTS
+   nvme0n1     476.9G disk nvme  0 Samsung SSD
+   ├─nvme0n1p1   512M part       0              /boot/efi
+   └─nvme0n1p2   476G part       0              /
+   mmcblk0      29.7G disk       0             ← the new one: your card
+   └─mmcblk0p1  29.7G part       0              /media/you/ABCD-1234
+   ```
+   Here the card is **`/dev/sdb`** (USB reader) or **`/dev/mmcblk0`**
+   (built-in slot). Check that the **size matches your card** and that it is
+   **not** the disk with `/` or `/boot/efi` in the MOUNTPOINTS column. (For a
+   built-in slot, the TRAN column is usually empty and RM may show `0` or `1`.)
 
 How to recognise it:
 
@@ -104,18 +114,27 @@ How to recognise it:
 * Never use a name that has a number on the end (`sdb1`) or a `p` + number
   (`mmcblk0p1`): those are partitions. Use the whole disk (`sdb`, `mmcblk0`).
 
-Below, **replace `/dev/sdX`** with your card's name (for example `/dev/sdb`).
+Below, every command is shown twice. **Use the line for your setup** and
+replace the placeholder with your card's name from above:
+
+| Your card is in | Placeholder | Replace with, for example | Its partitions |
+| --- | --- | --- | --- |
+| A USB card reader | `/dev/sdX` | `/dev/sdb` | `sdb1`, `sdb2` |
+| The PC's built-in slot | `/dev/mmcblkN` | `/dev/mmcblk0` | `mmcblk0p1`, `mmcblk0p2` (note the `p`) |
 
 ## Step 4: Unmount the card
 
 Ubuntu usually mounts a card's partitions automatically. Unmount them first:
 
 ```sh
+# USB card reader:
 sudo umount /dev/sdX?*
+
+# Built-in card slot:
+sudo umount /dev/mmcblkNp*
 ```
 
-(For a built-in slot: `sudo umount /dev/mmcblk0p*`.) Errors such as
-`not mounted` are fine.
+Errors such as `not mounted` are fine.
 
 ## Step 5: Write the image
 
@@ -135,7 +154,12 @@ Then, in the folder with the downloaded files:
 
 ```sh
 cd ~/beaglebone-image
+
+# USB card reader:
 sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.wic.xz /dev/sdX
+
+# Built-in card slot:
+sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.wic.xz /dev/mmcblkN
 ```
 
 `bmaptool` finds the `.bmap` file by itself when it sits next to the image
@@ -146,8 +170,14 @@ with the matching name (it says `discovered bmap file …`). If you see
 
 ```sh
 cd ~/beaglebone-image
+
+# USB card reader:
 xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | \
   sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
+
+# Built-in card slot:
+xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | \
+  sudo dd of=/dev/mmcblkN bs=4M conv=fsync status=progress
 ```
 
 This unpacks the image on the fly and writes all of it. It prints progress and
@@ -164,23 +194,50 @@ tested Etcher on Ubuntu; if it won't start, use method A or B.
 ## Step 6: Finish and remove the card
 
 ```sh
+# USB card reader:
 sync
 sudo udisksctl power-off -b /dev/sdX
+
+# Built-in card slot:
+sync
+sudo umount /dev/mmcblkNp*      # in case Ubuntu mounted the new partitions
 ```
 
-`sync` makes sure everything has really been written; `udisksctl power-off`
-detaches the card so it's safe to pull out. (Or right-click the card in the
-Files app → **Eject** / **Safely Remove Drive**.)
+`sync` makes sure everything has really been written. For a USB reader,
+`udisksctl power-off` detaches the reader so it's safe to pull out. A
+built-in slot usually can't be "powered off" (`udisksctl` may refuse), so
+there, once it's synced and unmounted, you can simply take the card out. (Or,
+either way: right-click the card in the Files app → **Eject** / **Safely
+Remove Drive**.)
 
-To double-check before you pull it, plug it in again and run
-`lsblk -o NAME,SIZE,FSTYPE,LABEL /dev/sdX`. You should see two partitions:
+To double-check, put the card back in (Ubuntu may mount it again; that's
+fine) and run:
+
+```sh
+# USB card reader:
+lsblk -o NAME,SIZE,FSTYPE,LABEL /dev/sdX
+
+# Built-in card slot:
+lsblk -o NAME,SIZE,FSTYPE,LABEL /dev/mmcblkN
+```
+
+You should see two partitions:
 
 ```
+# USB card reader:
 NAME    SIZE FSTYPE LABEL
 sdb    29.7G
 ├─sdb1    32M vfat   boot
 └─sdb2 141.2M ext4   root
+
+# Built-in card slot:
+NAME          SIZE FSTYPE LABEL
+mmcblk0      29.7G
+├─mmcblk0p1    32M vfat   boot
+└─mmcblk0p2 141.2M ext4   root
 ```
+
+Unmount and remove it again before putting it in the BeagleBone.
 
 That's right: the image only uses about 173 MB, so a big card shows a small
 `root` partition and the rest unused. It does not mean the write failed.
@@ -221,8 +278,9 @@ board boots without a card.
    about 40 MB; the board's root partition has about 55 MB free, which is
    enough.)
 3. Log in to the board: `ssh root@evb-beaglebone.local`.
-4. **Confirm which device is the eMMC** before writing anything. When booted
-   from the card, the card is `mmcblk0` and the eMMC is `mmcblk1`:
+4. **Confirm which device is the eMMC** before writing anything. These
+   `mmcblk` names are the **board's** names, unrelated to what your PC called
+   the card. On the board, the card is `mmcblk0` and the eMMC is `mmcblk1`:
    ```sh
    cat /proc/partitions
    ```
@@ -247,8 +305,10 @@ board boots without a card.
 | Problem | What to try |
 | --- | --- |
 | `Permission denied` | Put `sudo` in front of the command that writes to `/dev/…` |
-| `Device or resource busy` / `is mounted` | The card is still mounted: repeat step 4 (`sudo umount /dev/sdX?*`) |
-| `No such file or directory` on `/dev/sdX` | The name is wrong or the card isn't detected: redo step 3; try another USB port or reader; `sudo dmesg \| tail` shows what Linux saw |
+| `Device or resource busy` / `is mounted` | The card is still mounted: repeat step 4 (`sudo umount /dev/sdX?*`, or `sudo umount /dev/mmcblkNp*` for the built-in slot) |
+| `No such file or directory` on `/dev/sdX` or `/dev/mmcblkN` | The name is wrong or the card isn't detected: redo step 3; try another USB port or reader, or re-seat the card in the slot; `sudo dmesg \| tail` shows what Linux saw |
+| Built-in slot: you used `/dev/mmcblk0p1` and the board doesn't boot | You wrote to a partition, not the whole card. Write again to `/dev/mmcblk0` (no `p1`) |
+| `udisksctl power-off` fails for the built-in slot | Normal for many built-in slots: after `sync` and `umount`, just remove the card |
 | The card doesn't appear in `lsblk` at all | Try another reader or card. If it's an SD adapter, check the **write-protect (lock) switch** on its side |
 | `Read-only file system` / write errors | Same: the adapter's lock switch is on, or the card is failing. Try another card |
 | `bmaptool: ERROR: bmap file not found` | The `.bmap` file must be in the same folder and named like the image, or add `--bmap obmc-phosphor-image-evb-beaglebone.wic.bmap` |
