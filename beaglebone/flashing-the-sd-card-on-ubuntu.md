@@ -277,9 +277,16 @@ board boots without a card.
 > (To go back to that later you'd flash BeagleBoard.org's own image.) The SD
 > card is untouched.
 
-1. Boot from the card (step 7) and connect, as in the
-   [Ubuntu connection guide](connecting-from-an-ubuntu-pc.md).
-2. From your PC, copy the image to the board's `/tmp`:
+1. Boot from the card (step 7).
+2. **Set up the network link between your PC and the board first.** The next
+   steps use `scp` and `ssh`, which work over Ethernet only; a UART (serial)
+   connection alone isn't enough. Follow section B of the
+   [Ubuntu connection guide](connecting-from-an-ubuntu-pc.md#b-direct-ethernet-cable-ubuntu--beaglebone-no-router)
+   ("Shared to other computers" is the easiest), then check that
+   `ssh root@evb-beaglebone.local` logs you in. The setup is saved on your PC,
+   so after switching to the eMMC you only run `nmcli connection up beaglebone`
+   again.
+3. From your PC, copy the image to the board's `/tmp`:
    ```sh
    scp ~/beaglebone-image/obmc-phosphor-image-evb-beaglebone.wic.xz \
        root@evb-beaglebone.local:/tmp/
@@ -287,8 +294,8 @@ board boots without a card.
    (`scp`, `xzcat` and `dd` are all in the image, which I checked. The image is
    about 40 MB; the board's root partition has about 55 MB free, which is
    enough.)
-3. Log in to the board: `ssh root@evb-beaglebone.local`.
-4. **Confirm which device is the eMMC** before writing anything. These
+4. Log in to the board: `ssh root@evb-beaglebone.local`.
+5. **Confirm which device is the eMMC** before writing anything. These
    `mmcblk` names are the **board's** names, unrelated to what your PC called
    the card. On the board, the card is `mmcblk0` and the eMMC is `mmcblk1`:
    ```sh
@@ -299,13 +306,13 @@ board boots without a card.
    `mmcblk0` is your card (its size, with `mmcblk0p1` and `mmcblk0p2`). If the
    sizes don't match that, stop and ask. The board has no `lsblk`, so use
    this command.
-5. Write it:
+6. Write it:
    ```sh
    xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
    sync
    poweroff
    ```
-6. When the LEDs go out, **remove the SD card** and power the board on
+7. When the LEDs go out, **remove the SD card** and power the board on
    **without** holding S2. It now boots from the eMMC.
 
 ---
