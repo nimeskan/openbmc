@@ -122,15 +122,25 @@ replace the placeholder with your card's name from above:
 | A USB card reader | `/dev/sdX` | `/dev/sdb` | `sdb1`, `sdb2` |
 | The PC's built-in slot | `/dev/mmcblkN` | `/dev/mmcblk0` | `mmcblk0p1`, `mmcblk0p2` (note the `p`) |
 
+> ⚠ **`X` and `N` are placeholders. Don't type them.** Replace the capital
+> **`X`** with your card's letter (`/dev/sdX` → `/dev/sdb`) and the capital
+> **`N`** with your card's number (`/dev/mmcblkN` → `/dev/mmcblk0`, and
+> `/dev/mmcblkNp*` → `/dev/mmcblk0p*`), using the name you found in step 3.
+> If you run a command with the letter `N` or `X` left in, it won't write to
+> your card: `dd` would instead create an ordinary file called `/dev/mmcblkN`
+> and seem to succeed. If that happened, delete that file with
+> `sudo rm /dev/mmcblkN` (or `/dev/sdX`) and run the command again with the
+> right name.
+
 ## Step 4: Unmount the card
 
 Ubuntu usually mounts a card's partitions automatically. Unmount them first:
 
 ```sh
-# USB card reader:
+# USB card reader (replace X with your letter, e.g. sdX -> sdb):
 sudo umount /dev/sdX?*
 
-# Built-in card slot:
+# Built-in card slot (replace N with your number, e.g. mmcblkN -> mmcblk0):
 sudo umount /dev/mmcblkNp*
 ```
 
@@ -155,10 +165,10 @@ Then, in the folder with the downloaded files:
 ```sh
 cd ~/beaglebone-image
 
-# USB card reader:
+# USB card reader (replace X with your letter, e.g. sdX -> sdb):
 sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.wic.xz /dev/sdX
 
-# Built-in card slot:
+# Built-in card slot (replace N with your number, e.g. mmcblkN -> mmcblk0):
 sudo bmaptool copy obmc-phosphor-image-evb-beaglebone.wic.xz /dev/mmcblkN
 ```
 
@@ -171,11 +181,11 @@ with the matching name (it says `discovered bmap file …`). If you see
 ```sh
 cd ~/beaglebone-image
 
-# USB card reader:
+# USB card reader (replace X with your letter, e.g. sdX -> sdb):
 xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | \
   sudo dd of=/dev/sdX bs=4M conv=fsync status=progress
 
-# Built-in card slot:
+# Built-in card slot (replace N with your number, e.g. mmcblkN -> mmcblk0):
 xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | \
   sudo dd of=/dev/mmcblkN bs=4M conv=fsync status=progress
 ```
@@ -194,11 +204,11 @@ tested Etcher on Ubuntu; if it won't start, use method A or B.
 ## Step 6: Finish and remove the card
 
 ```sh
-# USB card reader:
+# USB card reader (replace X with your letter, e.g. sdX -> sdb):
 sync
 sudo udisksctl power-off -b /dev/sdX
 
-# Built-in card slot:
+# Built-in card slot (replace N with your number, e.g. mmcblkN -> mmcblk0):
 sync
 sudo umount /dev/mmcblkNp*      # in case Ubuntu mounted the new partitions
 ```
@@ -214,10 +224,10 @@ To double-check, put the card back in (Ubuntu may mount it again; that's
 fine) and run:
 
 ```sh
-# USB card reader:
+# USB card reader (replace X with your letter, e.g. sdX -> sdb):
 lsblk -o NAME,SIZE,FSTYPE,LABEL /dev/sdX
 
-# Built-in card slot:
+# Built-in card slot (replace N with your number, e.g. mmcblkN -> mmcblk0):
 lsblk -o NAME,SIZE,FSTYPE,LABEL /dev/mmcblkN
 ```
 
