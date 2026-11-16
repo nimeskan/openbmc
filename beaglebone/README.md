@@ -785,10 +785,14 @@ eMMC. When booted from SD, the SD card is `mmcblk0` and the eMMC is
 ```sh
 scp obmc-phosphor-image-evb-beaglebone.wic.xz root@<board-ip>:/tmp/
 ssh root@<board-ip>
-xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
+xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=1M
+sync
 poweroff
 ```
-Remove the SD card and power on without holding S2.
+Remove the SD card and power on without holding S2. (The board's `dd` is the
+BusyBox version, which doesn't accept `conv=fsync`. The step-by-step version,
+with a check that the copy is correct, is in
+[flashing-the-sd-card-on-ubuntu.md](flashing-the-sd-card-on-ubuntu.md#optional-install-to-the-boards-built-in-emmc).)
 
 ---
 

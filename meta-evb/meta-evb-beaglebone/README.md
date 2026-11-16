@@ -66,7 +66,10 @@ A 3.3 V USB serial cable on header J1 (115200 8N1) gives you the console.
 Boot from SD, copy the `.wic.xz` file to the board (e.g. with `scp`), then:
 
 ```sh
-xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
+xzcat obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=1M
+sync
 ```
+
+(The board's `dd` is BusyBox's, which doesn't accept `conv=fsync`.)
 
 Power off, remove the SD card, and power on without holding S2.

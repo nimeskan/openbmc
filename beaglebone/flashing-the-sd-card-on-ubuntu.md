@@ -308,12 +308,32 @@ board boots without a card.
    this command.
 6. Write it:
    ```sh
-   xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=4M conv=fsync
+   xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | dd of=/dev/mmcblk1 bs=1M
    sync
+   ```
+   On the board, `dd` is the small **BusyBox** version, which doesn't accept
+   `conv=fsync` (that option only works on your PC). If you see
+   `BusyBox … multi-call binary. Usage: dd …`, `dd` refused the command and
+   **nothing was written**. When it works, it ends with a line like
+   `0+23032 records out`: the `0+` is normal when `dd` reads from a pipe.
+7. **Check the copy** (optional, recommended). These two commands must print
+   the same checksum:
+   ```sh
+   xzcat /tmp/obmc-phosphor-image-evb-beaglebone.wic.xz | md5sum
+   dd if=/dev/mmcblk1 bs=512 count=354710 | md5sum
+   ```
+   (354,710 × 512 bytes is the exact size of the unpacked image. The board's
+   `head` can't count bytes, so `dd` does it.) If they differ, run step 6
+   again.
+8. Shut down:
+   ```sh
    poweroff
    ```
-7. When the LEDs go out, **remove the SD card** and power the board on
-   **without** holding S2. It now boots from the eMMC.
+   When the LEDs go out, **remove the SD card** and power the board on
+   **without** holding S2. It now boots from the eMMC. Don't leave the SD card
+   in: it and the eMMC now hold identical partition IDs, and the board could
+   start the card's system instead. `cat /proc/partitions` shows the new eMMC
+   layout only after this reboot.
 
 ---
 
