@@ -337,6 +337,49 @@ board boots without a card.
 
 ---
 
+## After a restart: getting SSH back
+
+Once the network link is set up (step 2 of the eMMC section), getting SSH
+back after restarting the board or the PC is two commands, both run on the
+**Ubuntu PC**:
+
+```sh
+nmcli connection up beaglebone
+ssh root@evb-beaglebone.local
+```
+
+Nothing needs to run on the board: its network setup is built into the image
+and starts by itself.
+
+**When to run `nmcli connection up beaglebone`:**
+
+* **After restarting the PC:** always. The `beaglebone` profile was created
+  with `connection.autoconnect no`, so it stays off until you turn it on.
+* **After restarting the board:** usually. The cable's link drops while the
+  board reboots, NetworkManager closes the connection, and it doesn't reconnect
+  by itself. Running the command when it's already up does no harm.
+* Wait until the board has finished booting (about a minute). If you get
+  `no carrier` or `device not available`, the board isn't up yet or the cable
+  isn't connected.
+
+**What doesn't change:**
+
+* **SSH keys:** a normal reboot keeps the board's SSH identity, so there's no
+  warning. Only after **re-flashing** the SD card or eMMC do you need
+  `ssh-keygen -R evb-beaglebone.local` first.
+* **The address:** `evb-beaglebone.local` finds the board wherever it is. (It
+  usually gets the same `10.42.0.x` address anyway.)
+
+**Making it automatic: not recommended on a work laptop.** You could run
+`nmcli connection modify beaglebone connection.autoconnect yes`. But this
+profile ("Shared to other computers") makes your PC hand out IP addresses on
+its Ethernet port. If the laptop is ever plugged into an office network with
+that profile active, it could answer other machines' address requests and
+disturb the network. Typing `nmcli connection up beaglebone` when you need it
+is the safe habit.
+
+---
+
 ## Troubleshooting
 
 | Problem | What to try |
