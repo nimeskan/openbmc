@@ -335,6 +335,9 @@ board boots without a card.
    start the card's system instead. `cat /proc/partitions` shows the new eMMC
    layout only after this reboot.
 
+Want to use the rest of the eMMC (about 3.4 GB) for your own files? See
+[adding-a-data-partition-on-the-emmc.md](adding-a-data-partition-on-the-emmc.md).
+
 ---
 
 ## After a restart: getting SSH back

@@ -23,6 +23,10 @@ what each one is for, and what you can leave for later.
   steps for Ubuntu (serial with `picocom`, direct cable with NetworkManager).
   Ubuntu needs one extra setting that Windows doesn't, explained there.
 
+* **Running from the eMMC and want its unused space?**
+  [`adding-a-data-partition-on-the-emmc.md`](adding-a-data-partition-on-the-emmc.md)
+  adds a 3.4 GB data partition at `/data`.
+
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
 The long one. Read it in this order:
