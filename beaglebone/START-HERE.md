@@ -27,6 +27,9 @@ what each one is for, and what you can leave for later.
   [`adding-a-data-partition-on-the-emmc.md`](adding-a-data-partition-on-the-emmc.md)
   adds a 3.4 GB data partition at `/data`.
 
+* **Logged in to the web UI and wondering what everything means?**
+  [`web-ui-explained.md`](web-ui-explained.md) goes through it page by page.
+
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
 The long one. Read it in this order:
