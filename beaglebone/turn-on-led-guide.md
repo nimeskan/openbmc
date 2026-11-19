@@ -10,8 +10,9 @@ Nothing here changes the image or survives a reboot. It's all live
 experimenting.
 
 > **What was checked, and how.**
-> * **On our board:** the LED pin is on `gpiochip0`, and its pin-mux register
->   reads `0x27` (GPIO mode).
+> * **On our board:** the LED pin is on `gpiochip0`, its pin-mux register
+>   reads `0x27` (GPIO mode), and `gpioset --mode=wait gpiochip0 24=1` **lit
+>   USR3**.
 > * **Against our image's own files:** the device tree (`am335x-boneblack.dtb`)
 >   and the kernel settings.
 > * **Against source code:** libgpiod 1.6.5 and the Linux 6.18 GPIO driver.
@@ -216,8 +217,8 @@ gpioset --mode=wait gpiochip0 24=1
 | `gpiochip0` | The controller (from `gpiofind`) |
 | `24=1` | Pin 24 = value 1 (3.3 V). Several `pin=value` pairs can be given. |
 
-**Expected:** USR3 lights up, and the command doesn't return to the prompt
-while it holds the pin.
+**Result (tested on our board):** USR3 lights up, and the command doesn't
+return to the prompt while it holds the pin.
 
 The same thing without typing the controller and pin yourself:
 
