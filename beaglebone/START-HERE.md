@@ -35,6 +35,11 @@ what each one is for, and what you can leave for later.
   GPIO pin, and shows how to find any pin's controller, pin number and pin-mux
   register from the device tree.
 
+* **Want to write your own C program for the board?**
+  [`cross-compile-a-gpio-program.md`](cross-compile-a-gpio-program.md) builds
+  a GPIO blink program on Ubuntu two ways (with `<linux/gpio.h>` directly, and
+  with libgpiod 1.6), and copies it to the board.
+
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
 The long one. Read it in this order:
