@@ -12,7 +12,7 @@ experimenting.
 > **What was checked, and how.**
 > * **On our board:** the LED pin is on `gpiochip0`, its pin-mux register
 >   reads `0x27` (GPIO mode), and `gpioset --mode=wait gpiochip0 24=1` **lit
->   USR3**.
+>   USR3**. Lines 21, 22 and 23 lit USR0, USR1 and USR2 the same way.
 > * **Against our image's own files:** the device tree (`am335x-boneblack.dtb`)
 >   and the kernel settings.
 > * **Against source code:** libgpiod 1.6.5 and the Linux 6.18 GPIO driver.
@@ -79,28 +79,50 @@ gpiodetect
 * `gpiodetect` lists every GPIO controller Linux knows about. It's part of
   **libgpiod**, the standard Linux GPIO toolkit. (OpenBMC includes libgpiod's
   command-line tools, as part of its developer tools.)
-* Output format: `name [label] (number of pins)`. Expected, in some order:
+* Output format: `name [label] (number of pins)`. On our board:
 
   ```
-  gpiochip0 [gpio-32-63] (32 lines)
-  gpiochip1 [gpio-0-31] (32 lines)
+  gpiochip0 [gpio-0-31] (32 lines)
+  gpiochip1 [gpio-32-63] (32 lines)
   gpiochip2 [gpio-64-95] (32 lines)
   gpiochip3 [gpio-96-127] (32 lines)
   ```
 
-* **The label is what tells you which bank it is.** The GPIO driver
-  (`gpio-omap`) labels each bank with its overall pin range:
+* **Neither the number nor the label tells you which bank it is.** Both follow
+  the order in which the banks finish starting at boot:
+  * Linux gives the next free `gpiochipN` number to each bank as it starts.
+  * The GPIO driver (`gpio-omap`, function `omap_gpio_chip_init()`) builds
+    the label from a single counter that goes up 32 at a time as each bank
+    starts. So the first bank to start is always labelled `gpio-0-31`,
+    whichever bank it is.
+  * On our board, **bank 1 (GPIO1, the one with the LEDs) started first**, so
+    it got both `gpiochip0` **and** `gpio-0-31`. The LEDs are on
+    `gpiochip0`, lines 21–24 (tested).
+* **To see which hardware bank each one really is**, look at its address
+  (each bank's address is fixed in the chip):
 
-  | Label | Bank |
+  ```sh
+  for c in /sys/bus/gpio/devices/gpiochip*; do echo "$c -> $(readlink -f $c)"; done
+  ```
+
+  * `/sys/bus/gpio/devices/` has one entry per GPIO controller. Each is a
+    shortcut (symbolic link) to the controller's real folder.
+  * `readlink -f` prints where the shortcut really points. The folder for
+    the hardware is named after the bank's address:
+
+  | Address in the path | Bank |
   | --- | --- |
-  | `gpio-0-31` | GPIO0 |
-  | `gpio-32-63` | GPIO1 |
-  | `gpio-64-95` | GPIO2 |
-  | `gpio-96-127` | GPIO3 |
+  | `44e07000.gpio` | GPIO0 |
+  | `4804c000.gpio` | GPIO1 |
+  | `481ac000.gpio` | GPIO2 |
+  | `481ae000.gpio` | GPIO3 |
 
-* **The `gpiochipN` numbers are not fixed.** Linux numbers the controllers in
-  the order their drivers finish starting at boot. On our board, bank 1 came
-  out as `gpiochip0`. Don't hard-code `gpiochipN`: look it up, as in 2b.
+  Expected for our board: a line like
+  `/sys/bus/gpio/devices/gpiochip0 -> /sys/devices/platform/…/4804c000.gpio/gpiochip0`.
+  (The addresses are from the device tree. This command hasn't been run on
+  the board yet.)
+* In everyday use you don't need any of this: look a pin up by its name, as
+  in 2b. Never hard-code `gpiochipN` in scripts.
 
 ### 2b. Look the pin up by name
 
@@ -388,9 +410,9 @@ interconnect@48000000      ranges = <0x0  0x48000000 …>          → physical 
 
 * So bank 1's registers start at **`0x4804C000`**. The TRM's memory map
   agrees: GPIO1 is at 0x4804_C000.
-* On the board, `ls -l /sys/bus/gpio/devices/` should show each `gpiochipN`
-  under a folder named after its controller's address. For bank 1 that's
-  something like `4804c000.gpio`, a second way to tell the banks apart.
+* On the board, the `readlink` loop from section 2a shows which `gpiochipN`
+  sits under the folder named after this address (`4804c000.gpio`). That's
+  the reliable way to match a Linux controller number to a hardware bank.
 
 **d) Cross-check with the schematic.** The BeagleBone Black schematic shows
 USR3 wired to processor pin GPMC_A8, which is GPIO1_24 in mode 7. Same answer.
@@ -545,7 +567,9 @@ a different project:
 ## 9. Quick reference
 
 ```sh
-gpiodetect                                   # controllers and their banks (by label)
+gpiodetect                                   # controllers (number and label follow start-up order)
+for c in /sys/bus/gpio/devices/gpiochip*; do echo "$c -> $(readlink -f $c)"; done
+                                             # which hardware bank each is (address in the path)
 gpiofind "[usr3 led]"                        # -> gpiochip0 24 (on our board)
 gpioinfo gpiochip0 | grep led                # pin state and owner
 cat /sys/kernel/debug/pinctrl/44e10800*/pins | grep 44e10860   # pin mux via the kernel
