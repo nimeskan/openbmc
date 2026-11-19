@@ -30,6 +30,11 @@ what each one is for, and what you can leave for later.
 * **Logged in to the web UI and wondering what everything means?**
   [`web-ui-explained.md`](web-ui-explained.md) goes through it page by page.
 
+* **Want to drive hardware by hand?**
+  [`turn-on-led-guide.md`](turn-on-led-guide.md) turns on the USR3 LED as a
+  GPIO pin, and shows how to find any pin's controller, pin number and pin-mux
+  register from the device tree.
+
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
 The long one. Read it in this order:
