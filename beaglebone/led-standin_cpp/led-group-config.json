@@ -1,0 +1,38 @@
+{
+    "leds": [
+        {
+            "group": "enclosure_identify_blink",
+            "members": [
+                {
+                    "Name": "beaglebone_usr3_green",
+                    "Action": "Blink",
+                    "DutyOn": 50,
+                    "Period": 1000,
+                    "Priority": "Blink"
+                }
+            ]
+        },
+        {
+            "group": "enclosure_identify",
+            "members": [
+                {
+                    "Name": "beaglebone_usr3_green",
+                    "Action": "On",
+                    "Priority": "Blink"
+                }
+            ]
+        },
+        {
+            "group": "bmc_booted",
+            "members": [
+                {
+                    "Name": "beaglebone_heartbeat_green",
+                    "Action": "Blink",
+                    "DutyOn": 10,
+                    "Period": 1000,
+                    "Priority": "Blink"
+                }
+            ]
+        }
+    ]
+}

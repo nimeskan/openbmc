@@ -1,0 +1,15 @@
+[Unit]
+Description=BeagleBone LED stand-in (GPIO-backed xyz.openbmc_project.Led.Physical)
+Wants=xyz.openbmc_project.ObjectMapper.service
+After=xyz.openbmc_project.ObjectMapper.service
+Before=xyz.openbmc_project.LED.GroupManager.service obmc-led-group-start@bmc_booted.service
+
+[Service]
+Type=dbus
+BusName=xyz.openbmc_project.LED.GpioStandIn
+ExecStart=/usr/local/bin/bbb-led-standin
+ExecStartPost=/usr/bin/mapper wait /xyz/openbmc_project/led/physical/beaglebone_usr3_green
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

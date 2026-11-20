@@ -1,0 +1,13 @@
+[package]
+name = "bbb-led-standin-rs"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Stand-in for phosphor-led-sysfs: GPIO-backed xyz.openbmc_project.Led.Physical objects"
+
+[dependencies]
+gpiocdev = "0.8"                                         # GPIO (kernel GPIO interface v2)
+zbus = { version = "5", default-features = false, features = ["blocking-api", "async-io"] }  # D-Bus
+
+[profile.release]
+strip = true       # remove debugging information: smaller program

@@ -35,6 +35,13 @@ what each one is for, and what you can leave for later.
   GPIO pin, and shows how to find any pin's controller, pin number and pin-mux
   register from the device tree.
 
+* **Want the web UI's identify switch to blink a real LED?**
+  [`hook-up-identify-and-heartbeat-leds_cpp.md`](hook-up-identify-and-heartbeat-leds_cpp.md)
+  (C++) or
+  [`hook-up-identify-and-heartbeat-leds_rust.md`](hook-up-identify-and-heartbeat-leds_rust.md)
+  (Rust) wire USR3 to identify and USR0 to "BMC booted", live, with a small
+  stand-in program for the missing kernel LED driver.
+
 * **Want to write your own C program for the board?**
   [`cross-compile-a-gpio-program.md`](cross-compile-a-gpio-program.md) builds
   a GPIO blink program on Ubuntu two ways (with `<linux/gpio.h>` directly, and
