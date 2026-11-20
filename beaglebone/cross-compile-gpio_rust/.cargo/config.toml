@@ -1,0 +1,4 @@
+# When building for the BeagleBone's processor, use the ARM C cross-compiler
+# to do the final linking step (Rust's own compiler produces the ARM code).
+[target.armv7-unknown-linux-gnueabihf]
+linker = "arm-linux-gnueabihf-gcc"

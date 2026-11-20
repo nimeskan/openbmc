@@ -1,0 +1,21 @@
+[package]
+name = "gpio-blink-rust"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Blink a BeagleBone GPIO line from Rust, two ways"
+
+[dependencies]
+gpiocdev = "0.8"   # Path B: GPIO library written in Rust (kernel GPIO interface v2)
+libc = "0.2"       # Path A: raw C functions open(), ioctl(), close()
+
+[[bin]]
+name = "gpio-blink-uapi-rs"      # Path A
+path = "src/bin/gpio-blink-uapi-rs.rs"
+
+[[bin]]
+name = "gpio-blink-gpiocdev-rs"  # Path B
+path = "src/bin/gpio-blink-gpiocdev-rs.rs"
+
+[profile.release]
+strip = true       # remove debugging information: smaller program to copy

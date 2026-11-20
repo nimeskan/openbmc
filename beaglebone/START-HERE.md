@@ -39,7 +39,9 @@ what each one is for, and what you can leave for later.
   [`cross-compile-a-gpio-program.md`](cross-compile-a-gpio-program.md) builds
   a GPIO blink program on Ubuntu two ways (with `<linux/gpio.h>` directly, and
   with libgpiod 1.6), and copies it to the board. The C++ version is
-  [`cross-compile-a-gpio-program_cpp.md`](cross-compile-a-gpio-program_cpp.md).
+  [`cross-compile-a-gpio-program_cpp.md`](cross-compile-a-gpio-program_cpp.md),
+  and the Rust version is
+  [`cross-compile-a-gpio-program_rust.md`](cross-compile-a-gpio-program_rust.md).
 
 ### 2. Main BeagleBone guide: [`README.md`](README.md)
 
