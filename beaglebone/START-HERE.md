@@ -23,6 +23,11 @@ what each one is for, and what you can leave for later.
   steps for Ubuntu (serial with `picocom`, direct cable with NetworkManager).
   Ubuntu needs one extra setting that Windows doesn't, explained there.
 
+* **Want to connect with just a USB cable?**
+  [`connecting-over-usb-ncm.md`](connecting-over-usb-ncm.md) makes the
+  mini-USB port a USB network adapter, for SSH and the web UI from Linux or
+  Windows. It works alongside the Ethernet connection.
+
 * **Running from the eMMC and want its unused space?**
   [`adding-a-data-partition-on-the-emmc.md`](adding-a-data-partition-on-the-emmc.md)
   adds a 3.4 GB data partition at `/data`.

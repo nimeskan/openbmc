@@ -1,0 +1,29 @@
+# /etc/systemd/network/50-usb0.network - the USB network link (usb0) only.
+# The "50-" makes this file win over OpenBMC's default 60-... file for usb0.
+# It matches by NAME, so eth0 (the Ethernet port) is never affected.
+
+[Match]
+Name=usb0
+
+[Link]
+# Don't make the boot wait for this link (the USB cable may be unplugged).
+RequiredForOnline=no
+
+[Network]
+# The board's fixed address on the USB link.
+Address=192.168.7.2/24
+# Hand out addresses to the PC on the other end.
+DHCPServer=yes
+# No IPv4 link-local (169.254.x.x) or router advertisements on this link.
+LinkLocalAddressing=ipv6
+IPv6AcceptRA=no
+
+[DHCPServer]
+# Give the PC an address from 192.168.7.100 to 192.168.7.119.
+PoolOffset=100
+PoolSize=20
+# Don't offer the board as the PC's router, DNS or time server:
+# the PC keeps using its own network for the internet.
+EmitRouter=no
+EmitDNS=no
+EmitNTP=no

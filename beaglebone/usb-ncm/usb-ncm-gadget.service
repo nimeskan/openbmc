@@ -1,0 +1,11 @@
+[Unit]
+Description=USB network gadget (CDC-NCM) on the mini-USB port
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/sbin/modprobe g_ncm
+ExecStop=/sbin/modprobe -r g_ncm
+
+[Install]
+WantedBy=multi-user.target
