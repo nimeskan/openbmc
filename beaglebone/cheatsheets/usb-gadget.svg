@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1000" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>USB host, device and gadget cheat sheet</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1240" height="1000" fill="#ffffff"/>
+  <text x="620.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">USB: host, device and "gadget"</text>
+  <text x="620.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">USB is one-sided: the HOST is in charge, the DEVICE answers. Linux "gadget" = Linux acting as the device. Example: USB networking (g_ncm).</text>
+  <rect x="20" y="80" width="1200" height="96" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="102" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Our BeagleBone has both kinds of port</text>
+  <rect x="40" y="112" width="560" height="54" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="56" y="135" font-size="13.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">USB-A socket (USB1) = HOST</tspan><tspan>   the board is in charge:</tspan></text>
+  <text x="56" y="155" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">plug a memory stick, keyboard, USB-serial adapter INTO the board.  dr_mode = "host"</text>
+  <rect x="620" y="112" width="580" height="54" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="636" y="135" font-size="13.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Mini-USB (USB0) = DEVICE</tspan><tspan>   the PC is in charge:</tspan></text>
+  <text x="636" y="155" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">the board becomes a USB gadget for the PC (network, serial, disk).  dr_mode = "peripheral"</text>
+  <text x="300" y="202" font-size="16" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">PC  =  USB HOST</text>
+  <text x="940" y="202" font-size="16" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">BEAGLEBONE  =  USB DEVICE ("gadget")</text>
+  <rect x="80" y="218" width="440" height="64" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="300.0" y="240" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">Programs</text>
+  <text x="300.0" y="260" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">ssh root@192.168.7.2   browser   curl</text>
+  <rect x="80" y="300" width="440" height="64" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="300.0" y="322" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">Network stack</text>
+  <text x="300.0" y="342" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">new network adapter, gets 192.168.7.1xx by DHCP</text>
+  <rect x="80" y="382" width="440" height="64" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="300.0" y="404" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">Class driver (picks by USB class)</text>
+  <text x="300.0" y="424" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Linux: cdc_ncm      Windows: UsbNcm.sys</text>
+  <rect x="80" y="464" width="440" height="64" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="300.0" y="486" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">USB host core + host controller driver</text>
+  <text x="300.0" y="506" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">enumerates the device, reads its descriptors</text>
+  <rect x="80" y="546" width="440" height="64" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="300.0" y="568" font-size="15" font-weight="bold" fill="#333333" text-anchor="middle" xml:space="preserve">USB host controller (hardware)</text>
+  <text x="300.0" y="588" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">the PC's USB port</text>
+  <rect x="700" y="218" width="480" height="64" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="940.0" y="240" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Programs / daemons</text>
+  <text x="940.0" y="260" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">dropbear (SSH)   bmcweb (web UI)   avahi</text>
+  <rect x="700" y="300" width="480" height="64" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="940.0" y="322" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Network stack: interface usb0</text>
+  <text x="940.0" y="342" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">192.168.7.2 + DHCP server (systemd-networkd)</text>
+  <rect x="700" y="382" width="480" height="64" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="940.0" y="404" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">Gadget driver + function</text>
+  <text x="940.0" y="424" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">g_ncm (legacy) or configfs  →  usb_f_ncm, u_ether</text>
+  <rect x="700" y="464" width="480" height="64" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="940.0" y="486" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">libcomposite + UDC core (generic)</text>
+  <text x="940.0" y="506" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">assembles functions into one USB device</text>
+  <rect x="700" y="546" width="480" height="64" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="940.0" y="568" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">UDC driver: musb core + musb_dsps glue</text>
+  <text x="940.0" y="588" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Mentor MUSB controller, TI wrapper, CPPI DMA</text>
+  <rect x="700" y="628" width="480" height="64" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="940.0" y="650" font-size="15" font-weight="bold" fill="#333333" text-anchor="middle" xml:space="preserve">USB device controller (hardware)</text>
+  <text x="940.0" y="670" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">AM335x USB0 → mini-USB socket</text>
+  <path d="M 520 578 C 600 578, 620 660, 700 660" stroke="#444" stroke-width="5" fill="none"/>
+  <text x="560" y="640" font-size="13" font-weight="bold" fill="#444" text-anchor="middle" xml:space="preserve">USB cable</text>
+  <text x="610" y="456" font-size="12.5" font-weight="normal" fill="#555" text-anchor="middle" font-style="italic" xml:space="preserve">An ssh packet goes DOWN the</text>
+  <text x="610" y="474" font-size="12.5" font-weight="normal" fill="#555" text-anchor="middle" font-style="italic" xml:space="preserve">PC's stack, across the cable,</text>
+  <text x="610" y="492" font-size="12.5" font-weight="normal" fill="#555" text-anchor="middle" font-style="italic" xml:space="preserve">and UP the board's stack.</text>
+  <text x="610" y="512" font-size="12.5" font-weight="normal" fill="#555" text-anchor="middle" font-style="italic" xml:space="preserve">(Replies go the other way.)</text>
+  <rect x="20" y="732" width="400" height="250" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="32" y="754" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="start" xml:space="preserve">USB device classes (standard types)</text>
+  <text x="36" y="780" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CDC</text>
+  <text x="150" y="780" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Communications Device Class family</text>
+  <text x="36" y="806" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">NCM</text>
+  <text x="150" y="806" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">network adapter, modern</text>
+  <text x="36" y="832" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ECM</text>
+  <text x="150" y="832" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">network adapter, older/simple</text>
+  <text x="36" y="858" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">RNDIS</text>
+  <text x="150" y="858" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Microsoft network protocol (old)</text>
+  <text x="36" y="884" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ACM</text>
+  <text x="150" y="884" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">serial port (ttyGS0 / ttyACM0 / COM)</text>
+  <text x="36" y="910" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Mass storage</text>
+  <text x="150" y="910" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">a disk / memory stick</text>
+  <text x="36" y="936" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">HID</text>
+  <text x="150" y="936" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">keyboard, mouse</text>
+  <rect x="440" y="732" width="380" height="250" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="452" y="754" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">Two ways to build a gadget</text>
+  <text x="452" y="774" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Legacy module</tspan><tspan> (fixed device, one command)</tspan></text>
+  <text x="452" y="791" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   modprobe g_ncm</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   g_mass_storage  g_serial</tspan></text>
+  <text x="452" y="808" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   options in /etc/modprobe.d/</text>
+  <text x="452" y="825" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>   ✓ in our image: g_ncm, g_mass_storage</tspan></text>
+  <text x="452" y="842" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve"></text>
+  <text x="452" y="859" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">configfs</tspan><tspan> (build it from parts)</tspan></text>
+  <text x="452" y="876" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   mkdir /sys/kernel/config/usb_gadget/g1</tspan></text>
+  <text x="452" y="893" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   + write IDs, add functions (ncm, acm…),</text>
+  <text x="452" y="910" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   link them into a config, bind to the UDC</text>
+  <text x="452" y="927" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   ✗ not in our kernel yet (planned rebuild)</text>
+  <rect x="840" y="732" width="380" height="250" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="852" y="754" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Look at it on the board</text>
+  <text x="856" y="780" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">lsmod | grep g_</text>
+  <text x="868" y="796" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ gadget modules loaded</text>
+  <text x="856" y="818" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ls /sys/class/udc/</text>
+  <text x="868" y="834" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ musb-hdrc.0 = the port</text>
+  <text x="856" y="856" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">cat /sys/class/udc/*/state</text>
+  <text x="868" y="872" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ configured / not attached</text>
+  <text x="856" y="894" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ip addr show usb0</text>
+  <text x="868" y="910" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ the gadget's network side</text>
+  <text x="856" y="932" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">dmesg | grep -i musb</text>
+  <text x="868" y="948" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ controller messages</text>
+</svg>

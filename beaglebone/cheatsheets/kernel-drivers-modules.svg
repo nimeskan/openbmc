@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1030" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>Kernel, drivers and modules cheat sheet</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1240" height="1030" fill="#ffffff"/>
+  <text x="620.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Kernel, drivers and modules</text>
+  <text x="620.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">How a program reaches the hardware, which parts are built in, and which are loadable modules. Examples from our BeagleBone.</text>
+  <rect x="20" y="80" width="770" height="236" rx="12" fill="#e6f6ea" fill-opacity="0.45" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="32" y="100" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">USER SPACE  (programs; can't touch hardware directly)</text>
+  <rect x="40" y="110" width="230" height="74" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="155.0" y="132" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Programs</text>
+  <text x="155.0" y="152" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">gpioset  bmcweb  ssh</tspan></text>
+  <text x="155.0" y="169" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">your bbb-led-standin</tspan></text>
+  <rect x="290" y="110" width="230" height="74" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="405.0" y="132" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Daemons</text>
+  <text x="405.0" y="152" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">programs that run in the background</text>
+  <text x="405.0" y="169" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">systemd-networkd  phosphor-…</tspan></text>
+  <rect x="540" y="110" width="230" height="74" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="655.0" y="132" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Commands you type</text>
+  <text x="655.0" y="152" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">modprobe  ip  busctl  cat</tspan></text>
+  <text x="655.0" y="169" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">are programs too</text>
+  <rect x="40" y="206" width="730" height="64" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="405.0" y="228" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="middle" xml:space="preserve">Libraries  (shared code in /usr/lib/*.so)</text>
+  <text x="405.0" y="248" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">libc.so.6 (glibc)   libgpiod.so.2   libsystemd.so.0   libstdc++.so.6   libi2c.so.0</tspan></text>
+  <line x1="155" y1="184" x2="155" y2="204" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="405" y1="184" x2="405" y2="204" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="655" y1="184" x2="655" y2="204" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="32" y="298" font-size="12.5" font-weight="normal" fill="#1c5e2e" text-anchor="start" font-style="italic" xml:space="preserve">Runs as normal processes: a bug crashes one program, not the system.</text>
+  <line x1="20" y1="330" x2="790" y2="330" stroke="#d14a4a" stroke-width="3" stroke-dasharray="10,6"/>
+  <text x="32" y="352" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">SYSTEM CALLS:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">open() read() write() ioctl() socket()</tspan><tspan>  — the only way into the kernel</tspan></text>
+  <line x1="730" y1="270" x2="730" y2="408" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="380" width="770" height="420" rx="12" fill="#f3e8fd" fill-opacity="0.45" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="32" y="400" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">KERNEL SPACE  (one big program: zImage + loaded modules; full hardware access)</text>
+  <rect x="40" y="410" width="730" height="74" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="405.0" y="432" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">Interfaces the kernel offers to programs</text>
+  <text x="405.0" y="452" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/dev/gpiochip0  /dev/i2c-2  /dev/ttyS0</tspan><tspan>  (device files)    </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/sys/…</tspan><tspan>  (sysfs)    network sockets</tspan></text>
+  <line x1="405" y1="484" x2="405" y2="506" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="40" y="508" width="730" height="98" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="405.0" y="530" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">Subsystems  (generic: the same on every chip)</text>
+  <text x="405.0" y="550" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">gpiolib</tspan><tspan>     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">I2C core</tspan><tspan>     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">network stack</tspan><tspan>     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">USB gadget core</tspan><tspan>     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">hwmon</tspan></text>
+  <text x="405.0" y="567" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">LED class</tspan><tspan> (not in our kernel)     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">MTD/MMC block</tspan><tspan>     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">pin control</tspan></text>
+  <text x="405.0" y="584" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Each defines a standard "table of functions" that drivers fill in (e.g. struct gpio_chip).</text>
+  <line x1="405" y1="606" x2="405" y2="628" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="40" y="630" width="730" height="112" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="405.0" y="652" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">Drivers  (specific: know one chip's registers)</text>
+  <text x="405.0" y="672" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">gpio-omap</tspan><tspan>  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">i2c-omap</tspan><tspan>  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">cpsw</tspan><tspan> (Ethernet)  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">musb + musb_dsps</tspan><tspan> (USB)  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">tps65217</tspan><tspan> (PMIC)</tspan></text>
+  <text x="405.0" y="689" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-weight="bold">Built in (always there): </tspan><tspan>all of the above</tspan></text>
+  <text x="405.0" y="706" font-size="12.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-weight="bold">Modules (loaded on demand): </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">g_ncm.ko  u_ether.ko  libcomposite.ko  g_mass_storage.ko</tspan></text>
+  <text x="405.0" y="723" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">A bug here can crash or hang the whole board.</text>
+  <line x1="405" y1="742" x2="405" y2="822" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="415" y="782" font-size="12.5" font-weight="normal" fill="#555" text-anchor="start" xml:space="preserve">reads/writes hardware registers (e.g. 0x4804C194)</text>
+  <rect x="20" y="824" width="770" height="80" rx="12" fill="#ececec" stroke="#666" stroke-width="1.5"/>
+  <text x="32" y="844" font-size="13" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">HARDWARE</text>
+  <text x="405" y="870" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">AM335x processor blocks (GPIO banks, I2C controllers, USB, Ethernet MAC) + board chips (PMIC, EEPROM, LEDs)</text>
+  <text x="405" y="890" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">described to the kernel by the device tree: /boot/am335x-boneblack.dtb</text>
+  <rect x="810" y="80" width="410" height="154" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="822" y="102" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Three words</text>
+  <text x="822" y="122" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Kernel</tspan><tspan>: the core of Linux. Starts first (zImage),</tspan></text>
+  <text x="822" y="139" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">owns the hardware, runs every program.</text>
+  <text x="822" y="156" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Driver</tspan><tspan>: kernel code for one kind of hardware.</tspan></text>
+  <text x="822" y="173" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Module</tspan><tspan>: a driver (or other kernel code) kept in a</tspan></text>
+  <text x="822" y="190" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>separate </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">.ko</tspan><tspan> file, plugged into the RUNNING kernel</tspan></text>
+  <text x="822" y="207" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">when needed. Must match that exact kernel build.</text>
+  <rect x="810" y="246" width="410" height="154" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="822" y="268" font-size="15" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">Built in, module, or missing?</text>
+  <text x="822" y="288" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">CONFIG_X=y</tspan><tspan>   inside zImage, always active</tspan></text>
+  <text x="822" y="305" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">CONFIG_X=m</tspan><tspan>   a .ko in /lib/modules, load it</tspan></text>
+  <text x="822" y="322" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold"># CONFIG_X is not set</tspan><tspan>  absent: rebuild</tspan></text>
+  <text x="822" y="339" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Check on the board:</text>
+  <text x="822" y="356" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">zcat /proc/config.gz | grep USB_G_NCM</tspan></text>
+  <text x="822" y="373" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>→ </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">CONFIG_USB_G_NCM=m</tspan></text>
+  <rect x="810" y="412" width="410" height="212" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="822" y="434" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">Loading a module:  modprobe g_ncm</text>
+  <text x="822" y="454" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>1. reads </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/lib/modules/$(uname -r)/modules.dep</tspan></text>
+  <text x="822" y="471" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   → g_ncm needs u_ether, libcomposite, configfs</text>
+  <text x="822" y="488" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>2. reads options from </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/etc/modprobe.d/*.conf</tspan></text>
+  <text x="822" y="505" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>   e.g. </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">options g_ncm dev_addr=02:bb:…</tspan></text>
+  <text x="822" y="522" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">3. loads, in order:</text>
+  <text x="822" y="539" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   configfs → libcomposite → u_ether → g_ncm</tspan></text>
+  <text x="822" y="556" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>4. the module's init code runs (here: creates </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">usb0</tspan><tspan>)</tspan></text>
+  <text x="822" y="573" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Undo: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">modprobe -r g_ncm</tspan></text>
+  <text x="822" y="590" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>At boot: a service runs it (our image has no </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">modules-load</tspan><tspan>)</tspan></text>
+  <rect x="810" y="636" width="410" height="186" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="822" y="658" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">How a driver finds its hardware</text>
+  <text x="822" y="678" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Device tree node:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">compatible = "ti,omap4-gpio"</tspan></text>
+  <text x="822" y="695" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Driver's match table: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">{ "ti,omap4-gpio", … }</tspan></text>
+  <text x="822" y="712" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">      ↓ the kernel pairs them ("binding")</text>
+  <text x="822" y="729" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>driver's </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">probe()</tspan><tspan> runs: map registers, set up,</tspan></text>
+  <text x="822" y="746" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">register with its subsystem</text>
+  <text x="822" y="763" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">      ↓</text>
+  <text x="822" y="780" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/dev/gpiochip0</tspan><tspan> and </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/sys/bus/gpio/…</tspan><tspan> appear</tspan></text>
+  <text x="822" y="797" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>See bindings: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">ls /sys/bus/platform/drivers/</tspan></text>
+  <rect x="810" y="834" width="410" height="176" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="822" y="856" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Commands (on the board)</text>
+  <text x="822" y="880" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">lsmod</text>
+  <text x="1010" y="880" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">loaded modules</text>
+  <text x="822" y="898" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">modprobe X</text>
+  <text x="1010" y="898" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">load X (+ what it needs)</text>
+  <text x="822" y="916" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">modprobe -r X</text>
+  <text x="1010" y="916" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">unload X</text>
+  <text x="822" y="934" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">modinfo X</text>
+  <text x="1010" y="934" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">description, parameters</text>
+  <text x="822" y="952" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">dmesg</text>
+  <text x="1010" y="952" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">kernel messages</text>
+  <text x="822" y="970" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">uname -r</text>
+  <text x="1010" y="970" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">running kernel version</text>
+  <text x="822" y="988" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">zcat /proc/config.gz</text>
+  <text x="1010" y="988" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">how the kernel was built</text>
+</svg>

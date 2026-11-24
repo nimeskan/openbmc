@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1160" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>systemd cheat sheet: services, units, daemons</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1240" height="1160" fill="#ffffff"/>
+  <text x="620.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">systemd: units, services and daemons</text>
+  <text x="620.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">How programs get started at boot and kept running, and how you add your own. Examples from our BeagleBone.</text>
+  <rect x="20" y="84" width="276" height="62" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="158.0" y="106" font-size="15" font-weight="bold" fill="#7a4d00" text-anchor="middle" xml:space="preserve">Power on</text>
+  <text x="158.0" y="126" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">ROM → MLO → U-Boot</text>
+  <line x1="296" y1="115" x2="326" y2="115" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="328" y="84" width="276" height="62" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="466.0" y="106" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="middle" xml:space="preserve">Linux kernel</text>
+  <text x="466.0" y="126" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">zImage + device tree</text>
+  <line x1="604" y1="115" x2="634" y2="115" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="636" y="84" width="276" height="62" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="774.0" y="106" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="middle" xml:space="preserve">systemd</text>
+  <text x="774.0" y="126" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">the first program: PID 1</text>
+  <line x1="912" y1="115" x2="942" y2="115" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="944" y="84" width="276" height="62" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="1082.0" y="106" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="middle" xml:space="preserve">Units started</text>
+  <text x="1082.0" y="126" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">in dependency order</text>
+  <text x="20" y="172" font-size="13" font-weight="bold" fill="#4a6fd1" text-anchor="start" xml:space="preserve">WHERE UNIT FILES LIVE</text>
+  <rect x="20" y="182" width="400" height="78" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="204" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/usr/lib/systemd/system/</text>
+  <text x="32" y="224" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">The image's units (bmcweb.service, …).</text>
+  <text x="32" y="241" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Replaced by a re-flash. Don't edit.</text>
+  <rect x="20" y="272" width="400" height="96" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="32" y="294" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/systemd/system/</text>
+  <text x="32" y="314" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">YOUR units, and overrides: a file here with</text>
+  <text x="32" y="331" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">the same name replaces the image's one.</text>
+  <text x="32" y="348" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Drop-ins: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">X.service.d/*.conf</tspan><tspan> change only some lines</tspan></text>
+  <rect x="20" y="380" width="400" height="60" rx="10" fill="#fde8e8" stroke="#d14a4a" stroke-width="2"/>
+  <text x="32" y="402" font-size="15" font-weight="bold" fill="#7a1d1d" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/run/systemd/  (RAM)</text>
+  <text x="32" y="422" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Generated at run time. Ignore.</text>
+  <text x="20" y="466" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan>See the file systemd actually uses: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">systemctl cat bmcweb</tspan></text>
+  <text x="20" y="490" font-size="13" font-weight="bold" fill="#2e9a4b" text-anchor="start" xml:space="preserve">BOOT = REACHING TARGETS</text>
+  <rect x="20" y="502" width="400" height="42" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="32" y="521" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">sysinit.target</text>
+  <text x="32" y="539" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">mount file systems, udev, …</text>
+  <line x1="220.0" y1="544" x2="220.0" y2="559" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="560" width="400" height="42" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="32" y="579" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">sockets.target</text>
+  <text x="32" y="597" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">listen: dropbear.socket (22), bmcweb.socket (443)</text>
+  <line x1="220.0" y1="602" x2="220.0" y2="617" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="618" width="400" height="42" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="32" y="637" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">network.target</text>
+  <text x="32" y="655" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">systemd-networkd up</text>
+  <line x1="220.0" y1="660" x2="220.0" y2="675" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="676" width="400" height="42" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="32" y="695" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">multi-user.target</text>
+  <text x="32" y="713" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">"system is up": most services, incl. yours</text>
+  <line x1="220.0" y1="718" x2="220.0" y2="733" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="20" y="734" width="400" height="42" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="753" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(after multi-user)</text>
+  <text x="32" y="771" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">obmc-led-group-start@bmc_booted …</text>
+  <text x="20" y="804" font-size="12.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">A target is just a named milestone that groups units.</text>
+  <text x="440" y="172" font-size="13" font-weight="bold" fill="#8a4ad1" text-anchor="start" xml:space="preserve">KINDS OF UNIT  (file name ending)</text>
+  <rect x="440" y="182" width="380" height="172" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="452" y="204" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">.service  — run a program</text>
+  <text x="452" y="224" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Type=simple</tspan><tspan> / </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Type=dbus</tspan><tspan>: a long-running</tspan></text>
+  <text x="452" y="241" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">daemon</tspan><tspan>. systemd watches it, restarts it</tspan></text>
+  <text x="452" y="258" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>if </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Restart=on-failure</tspan><tspan>. e.g. bmcweb, our stand-in</tspan></text>
+  <text x="452" y="275" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Type=oneshot</tspan><tspan>: run a command, then done.</tspan></text>
+  <text x="452" y="292" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>With </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">RemainAfterExit=yes</tspan><tspan> it stays "active"</tspan></text>
+  <text x="452" y="309" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>so </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">stop</tspan><tspan> runs ExecStop. e.g. usb-ncm-gadget</tspan></text>
+  <rect x="440" y="366" width="380" height="116" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="452" y="388" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">.socket  — listen, start on demand</text>
+  <text x="452" y="408" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">systemd opens the port itself; the service</text>
+  <text x="452" y="425" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">starts when the first connection arrives.</text>
+  <text x="452" y="442" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">dropbear.socket</tspan><tspan> → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">dropbear@.service</tspan><tspan> (SSH)</tspan></text>
+  <text x="452" y="459" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">bmcweb.socket</tspan><tspan> → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">bmcweb.service</tspan><tspan> (HTTPS)</tspan></text>
+  <rect x="440" y="494" width="380" height="80" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="452" y="516" font-size="15" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">.target  — a milestone / group</text>
+  <text x="452" y="536" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">multi-user.target</tspan><tspan> = "fully booted"</tspan></text>
+  <text x="452" y="553" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Units say they belong to one (WantedBy=).</text>
+  <rect x="440" y="586" width="380" height="62" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="452" y="608" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Others you'll see</text>
+  <text x="452" y="628" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">.mount  .timer  .path  .device  .slice</tspan></text>
+  <rect x="440" y="660" width="380" height="130" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="452" y="682" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="start" xml:space="preserve">Daemon  (a word, not a unit type)</text>
+  <text x="452" y="702" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">A program that runs in the background,</text>
+  <text x="452" y="719" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">waiting to do work, for as long as the system</text>
+  <text x="452" y="736" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">runs: bmcweb, systemd-networkd, avahi-daemon,</text>
+  <text x="452" y="753" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">phosphor-ledmanager. Usually started by a</text>
+  <text x="452" y="770" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">.service unit. Its output goes to the journal.</text>
+  <rect x="440" y="802" width="380" height="140" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="452" y="824" font-size="15" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">start vs enable</text>
+  <text x="452" y="844" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">systemctl start X</tspan><tspan>  run it NOW (until reboot)</tspan></text>
+  <text x="452" y="861" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">systemctl enable X</tspan><tspan>  start it at every BOOT:</tspan></text>
+  <text x="452" y="878" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>   makes a link in </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">…/multi-user.target.wants/</tspan></text>
+  <text x="452" y="895" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">systemctl enable --now X</tspan><tspan>  both</tspan></text>
+  <text x="452" y="912" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">disable</tspan><tspan> removes the link; </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">stop</tspan><tspan> stops it now</tspan></text>
+  <text x="840" y="172" font-size="13" font-weight="bold" fill="#d48a00" text-anchor="start" xml:space="preserve">ANATOMY OF A UNIT FILE</text>
+  <rect x="840" y="182" width="380" height="458" rx="10" fill="#fbfbfb" stroke="#888" stroke-width="2"/>
+  <text x="852" y="206" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">[Unit]</text>
+  <text x="864" y="220" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ section: description + ordering</text>
+  <text x="852" y="237" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Description=BeagleBone LED stand-in</text>
+  <text x="864" y="251" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ shown in status and logs</text>
+  <text x="852" y="268" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Wants=…ObjectMapper.service</text>
+  <text x="864" y="282" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ also start that one</text>
+  <text x="852" y="299" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">After=…ObjectMapper.service</text>
+  <text x="864" y="313" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ but only after it</text>
+  <text x="852" y="330" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Before=…GroupManager.service</text>
+  <text x="864" y="344" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ and before this one</text>
+  <text x="852" y="378" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">[Service]</text>
+  <text x="864" y="392" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ section: how to run it</text>
+  <text x="852" y="409" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Type=dbus</text>
+  <text x="864" y="423" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ "started" = has claimed BusName</text>
+  <text x="852" y="440" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">BusName=xyz.openbmc_project.LED.GpioStandIn</text>
+  <text x="852" y="457" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ExecStart=/usr/local/bin/bbb-led-standin</text>
+  <text x="864" y="471" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ the program</text>
+  <text x="852" y="488" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ExecStartPost=/usr/bin/mapper wait …</text>
+  <text x="864" y="502" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ run after it starts</text>
+  <text x="852" y="519" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Restart=on-failure</text>
+  <text x="864" y="533" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ restart it if it crashes</text>
+  <text x="852" y="567" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">[Install]</text>
+  <text x="864" y="581" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ section: used by enable</text>
+  <text x="852" y="598" font-size="11.5" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">WantedBy=multi-user.target</text>
+  <text x="864" y="612" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ enable → start at boot</text>
+  <text x="852" y="660" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Wants/Requires = "start together".</text>
+  <text x="852" y="678" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">After/Before = "in this order". They're separate!</text>
+  <text x="852" y="696" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Change a unit file? Run  systemctl daemon-reload</text>
+  <rect x="840" y="722" width="380" height="262" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="852" y="744" font-size="15" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Everyday commands</text>
+  <text x="852" y="766" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl status X</text>
+  <text x="864" y="781" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ running? + last log lines</text>
+  <text x="852" y="800" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl start|stop|restart X</text>
+  <text x="852" y="819" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl enable|disable X</text>
+  <text x="852" y="838" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl daemon-reload</text>
+  <text x="864" y="853" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ after editing units</text>
+  <text x="852" y="872" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl list-units --type=service</text>
+  <text x="852" y="891" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl cat X</text>
+  <text x="864" y="906" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ the unit file in use</text>
+  <text x="852" y="925" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">journalctl -u X -b</text>
+  <text x="864" y="940" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ X's log, this boot</text>
+  <text x="852" y="959" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">journalctl -f</text>
+  <text x="864" y="974" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">↳ follow all logs live</text>
+  <rect x="20" y="1000" width="1200" height="140" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="1022" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Example: how our LED stand-in starts at every boot</text>
+  <text x="32" y="1047" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">1. </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">systemctl enable bbb-led-standin</tspan><tspan> created </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/etc/systemd/system/multi-user.target.wants/bbb-led-standin.service</tspan><tspan> (a link).</tspan></text>
+  <text x="32" y="1069" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">2. </tspan><tspan>At boot, systemd heads for multi-user.target, finds that link, and starts the unit after the object mapper (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">After=</tspan><tspan>).</tspan></text>
+  <text x="32" y="1091" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">3. </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Type=dbus</tspan><tspan>: it counts as started once the program claims its D-Bus name; then </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">ExecStartPost</tspan><tspan> waits for the mapper.</tspan></text>
+  <text x="32" y="1113" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">4. </tspan><tspan>Only then do units ordered after it run (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Before=</tspan><tspan> GroupManager, bmc_booted). Output → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">journalctl -u bbb-led-standin</tspan></text>
+</svg>

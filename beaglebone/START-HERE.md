@@ -9,6 +9,13 @@ what each one is for, and what you can leave for later.
 > [`description-of-tools.md`](description-of-tools.md) first. It explains every
 > tool and term (Yocto, BitBake, layers, recipes, booting…) with one kitchen
 > analogy, so the other documents make sense.
+>
+> **Cheat sheets:** [`cheatsheets/`](cheatsheets/README.md) has one-page
+> diagrams to keep open while you work:
+> * where things live in Linux;
+> * kernel, drivers and modules;
+> * systemd (units, services, daemons);
+> * USB host, device and gadget.
 
 ### 1. Connecting from a Windows PC: [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md)
 
