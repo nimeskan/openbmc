@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1282" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>GPIO toggle in C++: every layer</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1534" height="1282" fill="#ffffff"/>
+  <text x="767.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">GPIO toggle in C++: every layer</text>
+  <text x="767.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">What gpio-blink-uapi.cpp (Path A) and gpio-blink-gpiod.cpp (Path B) do at each layer, down to the USR3 LED on our BeagleBone</text>
+  <rect x="20" y="76" width="22" height="16" rx="3" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="50" y="89" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">your code</text>
+  <rect x="139" y="76" width="22" height="16" rx="3" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="169" y="89" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">libraries (not yours)</text>
+  <rect x="342" y="76" width="22" height="16" rx="3" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="372" y="89" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Linux kernel</text>
+  <rect x="482" y="76" width="22" height="16" rx="3" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="512" y="89" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">hardware</text>
+  <text x="1514" y="89" font-size="12.5" font-weight="normal" fill="#555" text-anchor="end" xml:space="preserve">Path A = &lt;linux/gpio.h&gt; directly (kernel interface v2)   Path B = libgpiod 1.6 (kernel interface v1)</text>
+  <rect x="218" y="104" width="320" height="34" rx="8" fill="#333"/>
+  <text x="378.0" y="126" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">1. Find the line by name</text>
+  <rect x="546" y="104" width="320" height="34" rx="8" fill="#333"/>
+  <text x="706.0" y="126" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">2. Reserve it as an output (start low)</text>
+  <rect x="874" y="104" width="320" height="34" rx="8" fill="#333"/>
+  <text x="1034.0" y="126" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">3. Toggle: set 1 / 0, sleep, repeat</text>
+  <rect x="1202" y="104" width="320" height="34" rx="8" fill="#333"/>
+  <text x="1362.0" y="126" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">4. Release (end, or Ctrl-C)</text>
+  <rect x="20" y="150" width="190" height="142.0" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="30" y="172" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Your code</text>
+  <text x="30" y="189" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Path A</text>
+  <text x="30" y="206" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">gpio-blink-uapi.cpp</text>
+  <rect x="218" y="150" width="320" height="142.0" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="228" y="170" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">find_line(name) returns</text>
+  <text x="228" y="185.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  std::optional&lt;FoundLine&gt;:</text>
+  <text x="228" y="201.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> Fd chip(::open(path));</text>
+  <text x="228" y="216.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> gpiochip_info info{};</text>
+  <text x="228" y="232.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> ::ioctl(GPIO_GET_CHIPINFO_IOCTL)</text>
+  <text x="228" y="247.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> gpio_v2_line_info line{};</text>
+  <text x="228" y="263.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> ::ioctl(GPIO_V2_GET_LINEINFO_IOCTL)</text>
+  <text x="228" y="278.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> match → {std::move(chip), path, i}</text>
+  <rect x="546" y="150" width="320" height="142.0" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="556" y="170" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">request_output(*found, 0):</text>
+  <text x="556" y="185.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> gpio_v2_line_request req{};</text>
+  <text x="556" y="201.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> (fields as in C)</text>
+  <text x="556" y="216.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> ::ioctl(GPIO_V2_GET_LINE_IOCTL)</text>
+  <text x="556" y="232.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  fail → throw std::system_error</text>
+  <text x="556" y="247.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> return Fd(req.fd);</text>
+  <text x="556" y="263.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">found.reset(); // closes the chip</text>
+  <rect x="874" y="150" width="320" height="142.0" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="884" y="170" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">set_value(line, 1):</text>
+  <text x="884" y="185.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> gpio_v2_line_values v{};</text>
+  <text x="884" y="201.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> ::ioctl(GPIO_V2_LINE_SET_VALUES_IOCTL)</text>
+  <text x="884" y="216.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  fail → throw std::system_error</text>
+  <text x="884" y="232.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">std::this_thread::sleep_for(half);</text>
+  <rect x="1202" y="150" width="320" height="142.0" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="1212" y="170" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">end of scope: ~Fd() → ::close(fd)</text>
+  <text x="1212" y="185.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">also runs during exception</text>
+  <text x="1212" y="201.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">unwinding: no path leaks it</text>
+  <rect x="20" y="300.0" width="190" height="64.5" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="30" y="322.0" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Your code</text>
+  <text x="30" y="339.0" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">Path B</text>
+  <text x="30" y="356.0" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">gpio-blink-gpiod.cpp</text>
+  <rect x="218" y="300.0" width="320" height="64.5" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="228" y="320.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpiod::line line =</text>
+  <text x="228" y="335.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  gpiod::find_line(name);</text>
+  <text x="228" y="351.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">if (!line) …   // not found</text>
+  <rect x="546" y="300.0" width="320" height="64.5" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="556" y="320.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">line.request({"gpio-blink-gpiod-cpp",</text>
+  <text x="556" y="335.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  gpiod::line_request::</text>
+  <text x="556" y="351.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">    DIRECTION_OUTPUT, 0}, 0);</text>
+  <rect x="874" y="300.0" width="320" height="64.5" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="884" y="320.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">line.set_value(1);</text>
+  <text x="884" y="335.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">std::this_thread::sleep_for(half);</text>
+  <text x="884" y="351.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">line.set_value(0);</text>
+  <rect x="1202" y="300.0" width="320" height="64.5" rx="8" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="1.5"/>
+  <text x="1212" y="320.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">line.release();</text>
+  <text x="1212" y="335.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">then ~line(): last copy of its</text>
+  <text x="1212" y="351.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">chip → chip closed automatically</text>
+  <rect x="20" y="372.5" width="190" height="126.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="30" y="394.5" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">C++ helpers</text>
+  <text x="30" y="411.5" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">A: libstdc++ +</text>
+  <text x="30" y="428.5" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">our Fd class</text>
+  <text x="30" y="445.5" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">B: libgpiodcxx</text>
+  <text x="30" y="462.5" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">(gpiod.hpp)</text>
+  <rect x="218" y="372.5" width="320" height="126.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="228" y="392.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">A: Fd destructor closes chips</text>
+  <text x="228" y="408.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   that weren't returned</text>
+  <text x="228" y="423.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">B: make_chip_iter() →</text>
+  <text x="228" y="439.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   chip::find_line() →</text>
+  <text x="228" y="454.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   ::gpiod_chip_find_line()</text>
+  <text x="228" y="470.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   wrapped in gpiod::line</text>
+  <text x="228" y="485.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   (holds shared_ptr&lt;gpiod_chip&gt;)</text>
+  <rect x="546" y="372.5" width="320" height="126.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="556" y="392.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">A: throw_errno() builds</text>
+  <text x="556" y="408.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   std::system_error(errno, …)</text>
+  <text x="556" y="423.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">B: line::request() →</text>
+  <text x="556" y="439.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   line_bulk({*this}).request() →</text>
+  <text x="556" y="454.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   ::gpiod_line_request_bulk()</text>
+  <text x="556" y="470.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   -1 → throw std::system_error</text>
+  <rect x="874" y="372.5" width="320" height="126.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="884" y="392.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">A: std::chrono durations;</text>
+  <text x="884" y="408.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   sleep_for retries on EINTR</text>
+  <text x="884" y="423.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">B: line::set_value() → temporary</text>
+  <text x="884" y="439.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   line_bulk (heap alloc per call)</text>
+  <text x="884" y="454.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   → ::gpiod_line_set_value_bulk()</text>
+  <rect x="1202" y="372.5" width="320" height="126.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="1212" y="392.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">B: line_bulk::release() →</text>
+  <text x="1212" y="408.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   ::gpiod_line_release_bulk()</text>
+  <text x="1212" y="423.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">shared_ptr count → 0 →</text>
+  <text x="1212" y="439.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">   ::gpiod_chip_close()</text>
+  <rect x="20" y="507.0" width="190" height="80.0" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="30" y="529.0" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">libgpiod 1.6 C</text>
+  <text x="30" y="546.0" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">(Path B only;</text>
+  <text x="30" y="563.0" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">under gpiod.hpp)</text>
+  <rect x="218" y="507.0" width="320" height="80.0" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="228" y="527.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">as in the C diagram:</text>
+  <text x="228" y="542.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> scandir("/dev"), sysfs check,</text>
+  <text x="228" y="558.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> open() + GPIO_GET_CHIPINFO_IOCTL,</text>
+  <text x="228" y="573.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> GPIO_GET_LINEINFO_IOCTL (v1)</text>
+  <rect x="546" y="507.0" width="320" height="80.0" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="556" y="527.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">struct gpiohandle_request (v1)</text>
+  <text x="556" y="542.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl(chip, GPIO_GET_LINEHANDLE_IOCTL)</text>
+  <rect x="874" y="507.0" width="320" height="80.0" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="884" y="527.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">struct gpiohandle_data</text>
+  <text x="884" y="542.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl(handle,</text>
+  <text x="884" y="558.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  GPIOHANDLE_SET_LINE_VALUES_IOCTL)</text>
+  <rect x="1202" y="507.0" width="320" height="80.0" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="1212" y="527.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">close(handle fd)</text>
+  <text x="1212" y="542.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">close(chip fd)</text>
+  <rect x="20" y="595.0" width="190" height="64.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="30" y="617.0" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">glibc</text>
+  <text x="30" y="634.0" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">(C library)</text>
+  <rect x="218" y="595.0" width="320" height="64.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="228" y="615.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">open() → openat (#322)</text>
+  <text x="228" y="630.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl() → ioctl (#54)</text>
+  <rect x="546" y="595.0" width="320" height="64.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="556" y="615.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl() → #54</text>
+  <text x="556" y="630.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> V2_GET_LINE 0xC250B407 (A)</text>
+  <text x="556" y="646.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> GET_LINEHANDLE 0xC16CB403 (B)</text>
+  <rect x="874" y="595.0" width="320" height="64.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="884" y="615.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl() → #54</text>
+  <text x="884" y="630.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> V2_SET_VALUES 0xC010B40F (A)</text>
+  <text x="884" y="646.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> SET_LINE_VALUES 0xC040B409 (B)</text>
+  <rect x="1202" y="595.0" width="320" height="64.5" rx="8" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="1.5"/>
+  <text x="1212" y="615.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">close() → close (#6)</text>
+  <line x1="20" y1="681.5" x2="1514" y2="681.5" stroke="#d14a4a" stroke-width="3" stroke-dasharray="10,6"/>
+  <rect x="457.0" y="670.5" width="620" height="22" fill="#fff"/>
+  <text x="767.0" y="686.5" font-size="13" font-weight="bold" fill="#d14a4a" text-anchor="middle" xml:space="preserve">SYSTEM CALL: the CPU switches from user space into the kernel (ARM "svc #0")</text>
+  <rect x="20" y="701.5" width="190" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="30" y="723.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">Kernel: VFS +</text>
+  <text x="30" y="740.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">GPIO char device</text>
+  <text x="30" y="757.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">(gpiolib-cdev)</text>
+  <rect x="218" y="701.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="228" y="721.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpio_chrdev_open()</text>
+  <text x="228" y="737.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpio_ioctl() → by code:</text>
+  <text x="228" y="752.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> chipinfo_get()</text>
+  <text x="228" y="768.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> lineinfo_get()    (v2)</text>
+  <text x="228" y="783.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> lineinfo_get_v1() (v1)</text>
+  <rect x="546" y="701.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="556" y="721.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpio_ioctl() → by code:</text>
+  <text x="556" y="737.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linereq_create()    (v2)</text>
+  <text x="556" y="752.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linehandle_create() (v1)</text>
+  <text x="556" y="768.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">both: gpiod_request_user()</text>
+  <text x="556" y="783.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">return NEW fd = "line handle"</text>
+  <rect x="874" y="701.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="884" y="721.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ioctl on the line handle:</text>
+  <text x="884" y="737.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linereq_ioctl() →</text>
+  <text x="884" y="752.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  linereq_set_values()  (v2)</text>
+  <text x="884" y="768.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linehandle_ioctl()     (v1)</text>
+  <rect x="1202" y="701.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="1212" y="721.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">close(handle) →</text>
+  <text x="1212" y="737.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linereq_release()    (v2)</text>
+  <text x="1212" y="752.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> linehandle_release() (v1)</text>
+  <text x="1212" y="768.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> → gpiod_free()</text>
+  <rect x="20" y="805.0" width="190" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="30" y="827.0" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">Kernel:</text>
+  <text x="30" y="844.0" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">gpiolib core</text>
+  <text x="30" y="861.0" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">(generic)</text>
+  <rect x="218" y="805.0" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="228" y="825.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">line names come from the</text>
+  <text x="228" y="840.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">device tree (gpio-line-names);</text>
+  <text x="228" y="856.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">owner shown if requested</text>
+  <rect x="546" y="805.0" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="556" y="825.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpiod_request_commit():</text>
+  <text x="556" y="840.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> mark REQUESTED (else EBUSY)</text>
+  <text x="556" y="856.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> → gc-&gt;request()</text>
+  <text x="556" y="871.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpiochip_direction_output()</text>
+  <text x="556" y="887.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> → gc-&gt;direction_output()</text>
+  <rect x="874" y="805.0" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="884" y="825.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">gpiod_set_array_value_complex()</text>
+  <text x="884" y="840.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ gpiochip_set_multiple()</text>
+  <text x="884" y="856.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ gc-&gt;set_multiple()</text>
+  <rect x="1202" y="805.0" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="1212" y="825.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">clear REQUESTED</text>
+  <text x="1212" y="840.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ gc-&gt;free()</text>
+  <rect x="20" y="908.5" width="190" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="30" y="930.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">Kernel:</text>
+  <text x="30" y="947.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">gpio-omap driver</text>
+  <text x="30" y="964.5" font-size="13" font-weight="bold" fill="#4b1d7a" text-anchor="start" xml:space="preserve">(TI-specific)</text>
+  <rect x="218" y="908.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="228" y="928.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">not involved</text>
+  <text x="228" y="944.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(no register access)</text>
+  <rect x="546" y="908.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="556" y="928.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">omap_gpio_request():</text>
+  <text x="556" y="944.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> bank clock on (pm_runtime)</text>
+  <text x="556" y="959.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">omap_gpio_output():</text>
+  <text x="556" y="975.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> write start value, then</text>
+  <text x="556" y="990.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> set direction = output</text>
+  <rect x="874" y="908.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="884" y="928.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">omap_gpio_set_multiple():</text>
+  <text x="884" y="944.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> read DATAOUT, change bit 24,</text>
+  <text x="884" y="959.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> write it back (spinlock held)</text>
+  <rect x="1202" y="908.5" width="320" height="95.5" rx="8" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="1.5"/>
+  <text x="1212" y="928.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">omap_gpio_free():</text>
+  <text x="1212" y="944.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> direction = INPUT</text>
+  <text x="1212" y="959.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"> bank clock may turn off</text>
+  <rect x="20" y="1012.0" width="190" height="80.0" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="30" y="1034.0" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Hardware:</text>
+  <text x="30" y="1051.0" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">GPIO1 registers</text>
+  <text x="30" y="1068.0" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">@ 0x4804C000</text>
+  <rect x="218" y="1012.0" width="320" height="80.0" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5" stroke-dasharray="5,4" fill-opacity="0.5"/>
+  <text x="228" y="1032.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">—</text>
+  <rect x="546" y="1012.0" width="320" height="80.0" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="556" y="1032.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CLEARDATAOUT 0x4804C190 ← 1&lt;&lt;24</text>
+  <text x="556" y="1047.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  (start value 0)</text>
+  <text x="556" y="1063.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">OE 0x4804C134: bit 24 → 0</text>
+  <text x="556" y="1078.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  (0 = output)</text>
+  <rect x="874" y="1012.0" width="320" height="80.0" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="884" y="1032.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">DATAOUT 0x4804C13C</text>
+  <text x="884" y="1047.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  bit 24 = 1  or  0</text>
+  <rect x="1202" y="1012.0" width="320" height="80.0" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="1212" y="1032.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">OE 0x4804C134: bit 24 → 1</text>
+  <text x="1212" y="1047.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  (1 = input)</text>
+  <rect x="20" y="1100.0" width="190" height="64.5" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="30" y="1122.0" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Pin GPIO1_24</text>
+  <text x="30" y="1139.0" font-size="13" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">→ USR3 LED</text>
+  <rect x="218" y="1100.0" width="320" height="64.5" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5" stroke-dasharray="5,4" fill-opacity="0.5"/>
+  <text x="228" y="1120.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">—</text>
+  <rect x="546" y="1100.0" width="320" height="64.5" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="556" y="1120.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">pin drives 0 V: LED off</text>
+  <text x="556" y="1135.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(pad mux 0x44E10860 = mode 7)</text>
+  <rect x="874" y="1100.0" width="320" height="64.5" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="884" y="1120.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">3.3 V: LED on / 0 V: LED off</text>
+  <text x="884" y="1135.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">pin stays an OUTPUT the</text>
+  <text x="884" y="1151.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">whole time: no glitch</text>
+  <rect x="1202" y="1100.0" width="320" height="64.5" rx="8" fill="#f2f2f2" stroke="#888888" stroke-width="1.5"/>
+  <text x="1212" y="1120.0" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">pin not driven; pad pull-down</text>
+  <text x="1212" y="1135.5" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">holds it at 0 V: LED off</text>
+  <text x="20" y="1182.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Same system calls, same kernel path as C: </tspan><tspan>C++ changes only the user-space layers (ownership, errors, types).</tspan></text>
+  <text x="20" y="1202.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Errors: </tspan><tspan>-1/errno from the kernel becomes </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">std::system_error</tspan><tspan>; while it propagates, destructors run (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">~Fd</tspan><tspan>, </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">~line</tspan><tspan>) and close the fds, so the line is released.</tspan></text>
+  <text x="20" y="1222.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Cost of Path B: </tspan><tspan>each </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">line.set_value()</tspan><tspan> builds a temporary line_bulk (one heap allocation); fine for an LED, noticeable in tight loops.</tspan></text>
+</svg>

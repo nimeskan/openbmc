@@ -57,6 +57,43 @@ when you zoom in, and they print well.
 
 ![USB: host, device and gadget](usb-gadget.svg)
 
+## 5. GPIO toggle, layer by layer: C and C++
+
+Two detailed diagrams of the example programs from
+[`cross-compile-a-gpio-program.md`](../cross-compile-a-gpio-program.md) and
+[`cross-compile-a-gpio-program_cpp.md`](../cross-compile-a-gpio-program_cpp.md).
+
+**Rows are the layers**, from your code down to the LED:
+* your code (Path A and Path B);
+* libgpiod, and on the C++ sheet the C++ helpers;
+* glibc;
+* the system call;
+* the kernel's GPIO character device, gpiolib and the `gpio-omap` driver;
+* the GPIO registers;
+* the pin.
+
+**Columns are the four phases**:
+1. find the line;
+2. reserve it as an output;
+3. toggle;
+4. release.
+
+Each cell names the real function, `ioctl` code, system call number or
+register involved. The functions and codes come from libgpiod 1.6.5 and
+Linux 6.18's source, and the request codes were printed by a program
+compiled for the board.
+
+* [`gpio-toggle-c-layers.svg`](gpio-toggle-c-layers.svg): `gpio-blink-uapi.c`
+  and `gpio-blink-gpiod.c`.
+* [`gpio-toggle-cpp-layers.svg`](gpio-toggle-cpp-layers.svg):
+  `gpio-blink-uapi.cpp` and `gpio-blink-gpiod.cpp`. The user-space rows show
+  what C++ adds: RAII, `std::optional`, exceptions, and libgpiodcxx's
+  wrappers. Everything from the system call down is identical to C.
+
+![GPIO toggle in C: every layer](gpio-toggle-c-layers.svg)
+
+![GPIO toggle in C++: every layer](gpio-toggle-cpp-layers.svg)
+
 ---
 
 ## Changing them
@@ -80,3 +117,4 @@ to write. They need only Python 3, with no extra packages.
 | `kernel.py` | `kernel-drivers-modules.svg` |
 | `systemd.py` | `systemd-units-services.svg` |
 | `usb.py` | `usb-gadget.svg` |
+| `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
