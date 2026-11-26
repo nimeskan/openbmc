@@ -56,6 +56,12 @@ rather than repeating them.
 
 ## 1. How it fits together
 
+> **Diagrams:**
+> * [`cheatsheets/leds-architecture.svg`](cheatsheets/leds-architecture.svg):
+>   every layer as a tree, and which unit starts what;
+> * [`cheatsheets/leds-sequences.svg`](cheatsheets/leds-sequences.svg):
+>   identify and boot, step by step.
+
 Exactly as in the C++ guide:
 * [Why a stand-in is needed](hook-up-identify-and-heartbeat-leds_cpp.md#1-why-a-stand-in-is-needed)
 * [How the pieces fit together](hook-up-identify-and-heartbeat-leds_cpp.md#2-how-the-pieces-fit-together)

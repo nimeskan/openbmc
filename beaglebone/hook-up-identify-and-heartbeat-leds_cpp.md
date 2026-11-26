@@ -97,6 +97,12 @@ rebuild you delete the stand-in, and nothing else changes
 
 ## 2. How the pieces fit together
 
+> **Diagrams:**
+> * [`cheatsheets/leds-architecture.svg`](cheatsheets/leds-architecture.svg):
+>   every layer as a tree, and which unit starts what;
+> * [`cheatsheets/leds-sequences.svg`](cheatsheets/leds-sequences.svg):
+>   identify and boot, step by step.
+
 ```
                          ┌─────────────────────────────────────────────┐
  Web UI / Redfish ──────►│ bmcweb                                      │  (standard)

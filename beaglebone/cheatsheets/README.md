@@ -94,6 +94,40 @@ compiled for the board.
 
 ![GPIO toggle in C++: every layer](gpio-toggle-cpp-layers.svg)
 
+## 6. Identify and heartbeat LEDs: how they're set up and how they work
+
+For the live LED setup in
+[`hook-up-identify-and-heartbeat-leds_cpp.md`](../hook-up-identify-and-heartbeat-leds_cpp.md)
+(and its [Rust version](../hook-up-identify-and-heartbeat-leds_rust.md)).
+
+* [`leds-architecture.svg`](leds-architecture.svg): **every layer as a
+  tree**:
+  * who asks for an LED (web UI, Redfish clients, the boot-time `bmc_booted`
+    unit, you);
+  * bmcweb;
+  * the D-Bus;
+  * phosphor-ledmanager with its three groups and the JSON file;
+  * the object mapper;
+  * the stand-in with its four LED objects;
+  * the kernel;
+  * the four LEDs.
+
+  The orange labels on the arrows are the exact "plugs": D-Bus names, object
+  paths, properties, files. On the right:
+  * which systemd unit starts what, and in what order;
+  * the files we added to the board;
+  * what changes after the image rebuild.
+* [`leds-sequences.svg`](leds-sequences.svg): **step by step**, as two
+  sequence diagrams:
+  * **A.** turning identify on from the web UI: from the HTTPS request
+    through the group, the mapper lookup and the property writes, down to the
+    blinking pin;
+  * **B.** what happens at every boot, ending with USR0's "BMC booted" flash.
+
+![Identify and heartbeat LEDs: architecture](leds-architecture.svg)
+
+![Identify and heartbeat LEDs: step by step](leds-sequences.svg)
+
 ---
 
 ## Changing them
@@ -117,4 +151,5 @@ to write. They need only Python 3, with no extra packages.
 | `kernel.py` | `kernel-drivers-modules.svg` |
 | `systemd.py` | `systemd-units-services.svg` |
 | `usb.py` | `usb-gadget.svg` |
+| `leds.py` | `leds-architecture.svg` and `leds-sequences.svg` (run as `python3 leds.py . ..`) |
 | `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
