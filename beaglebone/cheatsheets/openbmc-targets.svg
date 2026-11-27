@@ -1,0 +1,366 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1440" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>OpenBMC systemd targets cheat sheet</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1600" height="1440" fill="#ffffff"/>
+  <text x="800.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">OpenBMC targets: how host and chassis power are driven</text>
+  <text x="800.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">A request becomes a state-manager transition, the state manager starts a systemd TARGET, and every service hooked into that target runs. All names from our image.</text>
+  <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="50" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">outside the board / users</text>
+  <rect x="248.5" y="74" width="22" height="16" rx="3" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="278.5" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">standard OpenBMC (in the image)</text>
+  <rect x="518.4" y="74" width="22" height="16" rx="3" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="548.4" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">notes and reference</text>
+  <text x="705.5" y="87" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">T </tspan><tspan>= target (a milestone)     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">S </tspan><tspan>= service (does work)     </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">@0</tspan><tspan> = instance 0: the first chassis / host</tspan></text>
+  <text x="20" y="110" font-size="13" font-weight="bold" fill="#2a9d9d" text-anchor="start" xml:space="preserve">1. WHO ASKS</text>
+  <rect x="20" y="118" width="238" height="76" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="139.0" y="140" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="middle" xml:space="preserve">Web UI</text>
+  <text x="139.0" y="160" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Operations → Server power</text>
+  <text x="139.0" y="177" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">operations (buttons)</text>
+  <rect x="268" y="118" width="238" height="76" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="387.0" y="140" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="middle" xml:space="preserve">Redfish</text>
+  <text x="387.0" y="160" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">POST …/Systems/system/Actions/</text>
+  <text x="387.0" y="177" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">ComputerSystem.Reset {ResetType}</text>
+  <rect x="516" y="118" width="238" height="76" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="635.0" y="140" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="middle" xml:space="preserve">obmcutil (on the BMC)</text>
+  <text x="635.0" y="160" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">poweron  poweroff</text>
+  <text x="635.0" y="177" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">chassison  chassisoff  state</text>
+  <rect x="764" y="118" width="238" height="76" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="883.0" y="140" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="middle" xml:space="preserve">Other</text>
+  <text x="883.0" y="160" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">IPMI "chassis power …";</text>
+  <text x="883.0" y="177" font-size="12" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">power-restore policy at BMC boot</text>
+  <rect x="1020" y="118" width="560" height="196" rx="10" fill="#f6f6f6" stroke="#888" stroke-width="2"/>
+  <text x="1032" y="138" font-size="13" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">Redfish ResetType → D-Bus transition (bmcweb systems.hpp)</text>
+  <text x="1034" y="160" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">On / ForceOn</text>
+  <text x="1256" y="160" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.On</text>
+  <text x="1034" y="179" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">GracefulShutdown</text>
+  <text x="1256" y="179" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.Off</text>
+  <text x="1034" y="198" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ForceOff</text>
+  <text x="1256" y="198" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Chassis.Transition.Off</text>
+  <text x="1034" y="217" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">GracefulRestart</text>
+  <text x="1256" y="217" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.GracefulWarmReboot</text>
+  <text x="1034" y="236" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ForceRestart</text>
+  <text x="1256" y="236" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.ForceWarmReboot</text>
+  <text x="1034" y="255" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">PowerCycle</text>
+  <text x="1256" y="255" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.Reboot</text>
+  <text x="1034" y="274" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(obmcutil chassison/off)</text>
+  <text x="1256" y="274" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Chassis.Transition.On / Off</text>
+  <text x="1034" y="293" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(obmcutil poweron/off)</text>
+  <text x="1256" y="293" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ Host.Transition.On / Off</text>
+  <line x1="510" y1="196" x2="510" y2="326" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="520" y="264" font-size="11.5" font-weight="normal" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">set property  Requested…Transition</text>
+  <text x="520" y="280" font-size="11.5" font-weight="normal" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">on the state manager (over D-Bus)</text>
+  <text x="20" y="336" font-size="13" font-weight="bold" fill="#4a6fd1" text-anchor="start" xml:space="preserve">2. STATE MANAGERS (phosphor-state-manager) — turn a requested transition into a target, and a reached target into a state</text>
+  <rect x="20" y="346" width="560" height="252" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="368" font-size="13.5" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Host  /xyz/openbmc_project/state/host0</text>
+  <text x="32" y="386" font-size="12" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Host</text>
+  <text x="32" y="408" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">RequestedHostTransition</text>
+  <text x="32" y="425" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  On</text>
+  <text x="225" y="425" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-start@0.target</text>
+  <text x="32" y="442" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Off</text>
+  <text x="225" y="442" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-shutdown@0.target</text>
+  <text x="32" y="459" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Reboot</text>
+  <text x="225" y="459" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-reboot@0.target</text>
+  <text x="32" y="476" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  GracefulWarmReboot</text>
+  <text x="225" y="476" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-warm-reboot@0.target</text>
+  <text x="32" y="493" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  ForceWarmReboot</text>
+  <text x="225" y="493" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-force-warm-reboot@0.target</text>
+  <text x="32" y="510" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentHostState ← reached:</text>
+  <text x="32" y="527" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Running</text>
+  <text x="225" y="527" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-startmin@0.target</text>
+  <text x="32" y="544" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Off</text>
+  <text x="225" y="544" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-stop@0.target</text>
+  <text x="32" y="561" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Quiesced</text>
+  <text x="225" y="561" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-quiesce@0.target</text>
+  <text x="32" y="578" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  DiagnosticMode</text>
+  <text x="225" y="578" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-host-diagnostic-mode@0.target</text>
+  <rect x="590" y="346" width="530" height="252" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="602" y="368" font-size="13.5" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Chassis  …/state/chassis0</text>
+  <text x="602" y="386" font-size="12" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Chassis</text>
+  <text x="602" y="408" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">RequestedPowerTransition</text>
+  <text x="602" y="425" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  On</text>
+  <text x="795" y="425" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-poweron@0.target</text>
+  <text x="602" y="442" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Off</text>
+  <text x="795" y="442" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-hard-poweroff@0.target</text>
+  <text x="602" y="459" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  PowerCycle</text>
+  <text x="795" y="459" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-powercycle@0.target</text>
+  <text x="602" y="476" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentPowerState ← reached:</text>
+  <text x="602" y="493" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  On</text>
+  <text x="795" y="493" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-poweron@0.target</text>
+  <text x="602" y="510" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Off</text>
+  <text x="795" y="510" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-poweroff@0.target</text>
+  <text x="602" y="527" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Power lost while on:</text>
+  <text x="602" y="544" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <text x="795" y="544" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-chassis-blackout@0.target</text>
+  <rect x="1130" y="346" width="450" height="252" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1142" y="368" font-size="13.5" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">BMC  …/state/bmc0</text>
+  <text x="1142" y="386" font-size="12" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.BMC</text>
+  <text x="1142" y="408" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">RequestedBMCTransition</text>
+  <text x="1142" y="425" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  Reboot</text>
+  <text x="1300" y="425" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ reboot.target  (systemd)</text>
+  <text x="1142" y="442" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentBMCState Ready ← reached:</text>
+  <text x="1142" y="459" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <text x="1300" y="459" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ multi-user.target</text>
+  <text x="1142" y="476" font-size="12" font-weight="bold" fill="#1d3b8a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Quiesced (a critical service failed):</text>
+  <text x="1142" y="493" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <text x="1300" y="493" font-size="12" font-weight="normal" fill="#4b1d7a" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">→ obmc-bmc-service-quiesce@0.target</text>
+  <text x="20" y="620" font-size="12.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">They start a target with systemd's StartUnit (over D-Bus), and watch systemd's "job done" signals to update Current…State.</text>
+  <text x="20" y="638" font-size="13" font-weight="bold" fill="#4a6fd1" text-anchor="start" xml:space="preserve">3. WHAT EACH TARGET PULLS IN (our image's .requires/.wants folders, instance @0)</text>
+  <rect x="20" y="650" width="770" height="352" rx="10" fill="#fbfbfb" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="672" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">Power ON: Host.Transition.On  →  obmc-host-start@0.target</text>
+  <rect x="34" y="685" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="41" y="696" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="54" y="696" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-start@0.target</text>
+  <text x="233.2" y="696" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">Host On</text>
+  <line x1="41" y1="702" x2="41" y2="711" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="41" y1="711" x2="50" y2="711" stroke="#bbb" stroke-width="1.4"/>
+  <text x="54" y="715" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="104.8" y="704" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="111.8" y="715" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="124.8" y="715" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-startmin@0.target</text>
+  <text x="325.15" y="715" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">= host "Running" when reached</text>
+  <line x1="61" y1="721" x2="61" y2="730" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="61" y1="730" x2="70" y2="730" stroke="#bbb" stroke-width="1.4"/>
+  <text x="74" y="734" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="124.8" y="723" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="131.8" y="734" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="144.8" y="734" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-poweron@0.target</text>
+  <text x="359.25" y="734" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">chassis power on</text>
+  <line x1="81" y1="740" x2="81" y2="749" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="749" x2="90" y2="749" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="753" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="144.8" y="742" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="151.8" y="753" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="164.8" y="753" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-power-start@0.service</text>
+  <text x="358.1" y="753" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">THE power switch: setPowerState 1</text>
+  <line x1="81" y1="759" x2="81" y2="768" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="768" x2="90" y2="768" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="772" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="144.8" y="761" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="151.8" y="772" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="164.8" y="772" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-set-chassis-transition-to-on@0</text>
+  <line x1="81" y1="778" x2="81" y2="787" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="787" x2="90" y2="787" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="791" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="144.8" y="780" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="151.8" y="791" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="164.8" y="791" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-wait-poweron-blocks.service</text>
+  <line x1="81" y1="797" x2="81" y2="806" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="806" x2="90" y2="806" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="810" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="128.0" y="799" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="135.0" y="810" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="148.0" y="810" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-power-start-pre@0 → -start@0 → -on@0</text>
+  <text x="447.05" y="810" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">sync points</text>
+  <line x1="81" y1="816" x2="81" y2="825" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="825" x2="90" y2="825" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="829" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="128.0" y="818" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="135.0" y="829" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="148.0" y="829" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-led-group-start@power_on</text>
+  <text x="362.45" y="829" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">power LED group</text>
+  <line x1="81" y1="835" x2="81" y2="844" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="844" x2="90" y2="844" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="848" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="128.0" y="837" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="135.0" y="848" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="148.0" y="848" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-fan-control-init@0, fan-monitor-init</text>
+  <line x1="81" y1="854" x2="81" y2="863" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="863" x2="90" y2="863" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="867" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="128.0" y="856" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="135.0" y="867" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="148.0" y="867" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-create-chassis-poweron-log@0 …</text>
+  <line x1="81" y1="873" x2="81" y2="882" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="81" y1="882" x2="90" y2="882" stroke="#bbb" stroke-width="1.4"/>
+  <text x="94" y="886" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">on failure</text>
+  <rect x="156.0" y="875" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="163.0" y="886" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="176.0" y="886" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-poweroff@0.target</text>
+  <line x1="61" y1="892" x2="61" y2="901" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="61" y1="901" x2="70" y2="901" stroke="#bbb" stroke-width="1.4"/>
+  <text x="74" y="905" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="108.0" y="894" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="115.0" y="905" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="128.0" y="905" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-start-pre@0 → -starting@0 → -started@0</text>
+  <text x="476.4" y="905" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">sync points</text>
+  <line x1="61" y1="911" x2="61" y2="920" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="61" y1="920" x2="70" y2="920" stroke="#bbb" stroke-width="1.4"/>
+  <text x="74" y="924" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="108.0" y="913" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="115.0" y="924" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="128.0" y="924" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-set-host-transition-to-running@0</text>
+  <line x1="61" y1="930" x2="61" y2="939" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="61" y1="939" x2="70" y2="939" stroke="#bbb" stroke-width="1.4"/>
+  <text x="74" y="943" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="108.0" y="932" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="115.0" y="943" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="128.0" y="943" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-enable-host-watchdog@0, phosphor-watchdog@poweron</text>
+  <line x1="41" y1="949" x2="41" y2="958" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="41" y1="958" x2="50" y2="958" stroke="#bbb" stroke-width="1.4"/>
+  <text x="54" y="962" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="104.8" y="951" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="111.8" y="962" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="124.8" y="962" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-reset-host-reboot-attempts@0</text>
+  <line x1="41" y1="968" x2="41" y2="977" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="41" y1="977" x2="50" y2="977" stroke="#bbb" stroke-width="1.4"/>
+  <text x="54" y="981" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">on failure</text>
+  <rect x="116.0" y="970" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="123.0" y="981" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="136.0" y="981" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-quiesce@0.target</text>
+  <rect x="800" y="650" width="780" height="390" rx="10" fill="#fbfbfb" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="812" y="672" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">Power OFF / reboot</text>
+  <rect x="814" y="685" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="821" y="696" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="834" y="696" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-shutdown@0.target</text>
+  <text x="1034.35" y="696" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">Host Off (graceful)</text>
+  <line x1="821" y1="702" x2="821" y2="711" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="711" x2="830" y2="711" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="715" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="704" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="891.8" y="715" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="904.8" y="715" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Ipmi.Internal.SoftPowerOff</text>
+  <text x="1239.1" y="715" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">ask the OS to shut down</text>
+  <line x1="821" y1="721" x2="821" y2="730" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="730" x2="830" y2="730" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="734" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="723" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="891.8" y="734" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="904.8" y="734" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-stop@0.target</text>
+  <text x="1076.95" y="734" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">= host "Off" when reached</text>
+  <line x1="841" y1="740" x2="841" y2="749" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="749" x2="850" y2="749" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="753" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="888.0" y="742" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="895.0" y="753" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="908.0" y="753" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-stop-pre@0 → -stopping@0 → -stopped@0</text>
+  <text x="1249.35" y="753" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">sync points</text>
+  <line x1="841" y1="759" x2="841" y2="768" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="768" x2="850" y2="768" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="772" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="888.0" y="761" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="895.0" y="772" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="908.0" y="772" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-set-host-transition-to-off@0</text>
+  <line x1="821" y1="778" x2="821" y2="787" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="787" x2="830" y2="787" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="791" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="780" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="891.8" y="791" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="904.8" y="791" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-poweroff@0.target</text>
+  <text x="1126.3" y="791" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">= chassis "Off"</text>
+  <line x1="841" y1="797" x2="841" y2="806" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="806" x2="850" y2="806" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="810" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="904.8" y="799" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="911.8" y="810" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="924.8" y="810" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-power-stop@0.service</text>
+  <text x="1111.05" y="810" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">THE power switch: setPowerState 0</text>
+  <line x1="841" y1="816" x2="841" y2="825" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="825" x2="850" y2="825" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="829" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="904.8" y="818" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="911.8" y="829" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="924.8" y="829" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-powered-off@0, phosphor-set-chassis-…-to-off@0</text>
+  <line x1="841" y1="835" x2="841" y2="844" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="844" x2="850" y2="844" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="848" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="904.8" y="837" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="911.8" y="848" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="924.8" y="848" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-stop@0.target</text>
+  <line x1="841" y1="854" x2="841" y2="863" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="863" x2="850" y2="863" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="867" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="888.0" y="856" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="895.0" y="867" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="908.0" y="867" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-power-stop-pre@0 → -stop@0 → -off@0</text>
+  <text x="1200.0" y="867" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">sync points</text>
+  <line x1="841" y1="873" x2="841" y2="882" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="841" y1="882" x2="850" y2="882" stroke="#bbb" stroke-width="1.4"/>
+  <text x="854" y="886" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">wants</text>
+  <rect x="888.0" y="875" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="895.0" y="886" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="908.0" y="886" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-led-group-stop@power_on, phosphor-clear-one-time@0</text>
+  <line x1="821" y1="892" x2="821" y2="901" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="901" x2="830" y2="901" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="905" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">on failure</text>
+  <rect x="896.0" y="894" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="903.0" y="905" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="916.0" y="905" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-poweroff@0.target</text>
+  <text x="814" y="924" font-size="11.8" font-weight="normal" fill="#666" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <rect x="814" y="932" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="821" y="943" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="834" y="943" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-hard-poweroff@0.target</text>
+  <text x="1090.75" y="943" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">Chassis Off (ForceOff)</text>
+  <line x1="821" y1="949" x2="821" y2="958" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="958" x2="830" y2="958" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="962" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="951" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="891.8" y="962" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="904.8" y="962" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-chassis-poweroff@0.target</text>
+  <text x="1126.3" y="962" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">no OS shutdown</text>
+  <rect x="814" y="970" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="821" y="981" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="834" y="981" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-reboot@0.target</text>
+  <text x="1020.25" y="981" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">Host Reboot / PowerCycle</text>
+  <line x1="821" y1="987" x2="821" y2="996" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="996" x2="830" y2="996" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="1000" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="989" width="14" height="14" rx="3" fill="#4b1d7a"/>
+  <text x="891.8" y="1000" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">T</text>
+  <text x="904.8" y="1000" font-size="11.8" font-weight="bold" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmc-host-shutdown@0.target</text>
+  <line x1="821" y1="1006" x2="821" y2="1015" stroke="#bbb" stroke-width="1.4"/>
+  <line x1="821" y1="1015" x2="830" y2="1015" stroke="#bbb" stroke-width="1.4"/>
+  <text x="834" y="1019" font-size="11" font-weight="normal" fill="#888" text-anchor="start" font-style="italic" xml:space="preserve">requires</text>
+  <rect x="884.8" y="1008" width="14" height="14" rx="3" fill="#1c5e2e"/>
+  <text x="891.8" y="1019" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">S</text>
+  <text x="904.8" y="1019" font-size="11.8" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">phosphor-reboot-host@0.service</text>
+  <text x="1126.3" y="1019" font-size="11.2" font-weight="normal" fill="#7a4d00" text-anchor="start" font-style="italic" xml:space="preserve">waits 5 s, then starts host-startmin@0</text>
+  <rect x="20" y="1058" width="520" height="238" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="1080" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">How to read the target files</text>
+  <text x="32" y="1103" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Requires=</tspan><tspan>  must succeed (or this target fails)</tspan></text>
+  <text x="32" y="1123" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Wants=</tspan><tspan>     start it too, failure is OK</tspan></text>
+  <text x="32" y="1143" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">After= / Before=</tspan><tspan>  order only, no "start"</tspan></text>
+  <text x="32" y="1163" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">Conflicts=</tspan><tspan>  starting one stops the other:</tspan></text>
+  <text x="32" y="1183" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">     poweron ⟷ poweroff, host-startmin ⟷ host-stop</text>
+  <text x="32" y="1203" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">OnFailure=</tspan><tspan>  fallback if it fails (e.g. → poweroff)</tspan></text>
+  <text x="32" y="1223" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">…-pre / -starting / -started</tspan><tspan>  empty "sync point"</tspan></text>
+  <text x="32" y="1243" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   targets: hook a service in at the right moment with</text>
+  <text x="32" y="1263" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   WantedBy=obmc-host-starting@0.target</tspan><tspan> + Before/After</tspan></text>
+  <text x="32" y="1283" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" font-weight="bold">@%i</tspan><tspan> templates: one file serves chassis0, chassis1 …</tspan></text>
+  <rect x="550" y="1058" width="520" height="238" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="562" y="1080" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Other OpenBMC targets in our image</text>
+  <text x="562" y="1103" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">host-warm-reboot / -force-warm-reboot</tspan><tspan>: reboot w/o power cycle</tspan></text>
+  <text x="562" y="1123" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">host-quiesce / -graceful-quiesce</tspan><tspan>: hold, collect info</tspan></text>
+  <text x="562" y="1143" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">host-crash / host-timeout</tspan><tspan> (watchdog) → quiesce</tspan></text>
+  <text x="562" y="1163" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">host-diagnostic-mode</tspan><tspan>: diagnostic collection</tspan></text>
+  <text x="562" y="1183" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">chassis-powercycle</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   chassis-blackout</tspan><tspan>: power lost</tspan></text>
+  <text x="562" y="1203" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">chassis-powerreset / host-reset</tspan><tspan>: BMC rebooted while the</tspan></text>
+  <text x="562" y="1223" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">    host was on: re-detect, don't power it off</text>
+  <text x="562" y="1243" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">chassis-powered-off</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">   bmc-service-quiesce</tspan></text>
+  <text x="562" y="1263" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">fan-control-ready@0</tspan><tspan> (fan control + monitor)  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">fans-ready</tspan></text>
+  <text x="562" y="1283" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">All names start with obmc- and end with .target.</text>
+  <rect x="1080" y="1058" width="500" height="238" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="1092" y="1080" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">On our BeagleBone</text>
+  <text x="1092" y="1103" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">No host, and nothing implements the power switch</text>
+  <text x="1092" y="1123" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>(</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">org.openbmc.control.Power</tspan><tspan> on </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/org/openbmc/control/power0</tspan><tspan>)</tspan></text>
+  <text x="1092" y="1143" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>→ </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">obmc-power-start@0.service</tspan><tspan> should fail, so</tspan></text>
+  <text x="1092" y="1163" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">chassis-poweron fails → OnFailure → chassis-poweroff</tspan></text>
+  <text x="1092" y="1183" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">and "Server power operations" ends up Off (not tested).</text>
+  <text x="1092" y="1203" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">A real board adds a power-control program (e.g.</text>
+  <text x="1092" y="1223" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">x86-power-control, phosphor-power-sequencer) or its</text>
+  <text x="1092" y="1243" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan>own services </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">WantedBy=obmc-chassis-poweron@0.target</tspan></text>
+  <text x="1092" y="1263" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">that drive the power-enable GPIOs.</text>
+  <rect x="20" y="1310" width="1560" height="108" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="1332" font-size="14" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">Commands (on the board)</text>
+  <text x="34" y="1356" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmcutil state</text>
+  <text x="154.39999999999998" y="1356" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">BMC, chassis, host states</text>
+  <text x="814" y="1356" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">obmcutil poweron | poweroff | chassisoff</text>
+  <text x="1132.0" y="1356" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">request a transition</text>
+  <text x="34" y="1378" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl list-units 'obmc-*'</text>
+  <text x="268.4" y="1378" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">targets/services now active</text>
+  <text x="814" y="1378" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl list-dependencies obmc-host-start@0.target</text>
+  <text x="1223.2" y="1378" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">the tree above, live</text>
+  <text x="34" y="1400" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemctl cat obmc-chassis-poweron@0.target</text>
+  <text x="374.8" y="1400" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">one target file</text>
+  <text x="814" y="1400" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">journalctl -b | grep -i target</text>
+  <text x="1056.0" y="1400" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">when targets were reached</text>
+</svg>

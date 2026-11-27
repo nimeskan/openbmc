@@ -128,6 +128,29 @@ For the live LED setup in
 
 ![Identify and heartbeat LEDs: step by step](leds-sequences.svg)
 
+## 7. OpenBMC targets: how host and chassis power are driven
+
+[`openbmc-targets.svg`](openbmc-targets.svg): how a power request becomes
+systemd activity, top to bottom:
+1. **Who asks:** the web UI, Redfish `ComputerSystem.Reset` (with a table of
+   each `ResetType` → D-Bus transition, from bmcweb's source), `obmcutil`,
+   IPMI, and the power-restore policy.
+2. **The state managers (Host, Chassis, BMC):** which target each requested
+   transition starts, and which reached target sets each current state (from
+   phosphor-state-manager's source at our image's version).
+3. **The trees of what `obmc-host-start@0.target` (power on) and the power
+   off and reboot targets pull in:** from our image's `.requires`/`.wants`
+   folders, with targets and services marked, and the "sync point" chains
+   (`-pre` → `-starting` → `-started`).
+4. **Reference:**
+   * how to read `Requires=` / `Wants=` / `Conflicts=` / `OnFailure=`;
+   * the other OpenBMC targets;
+   * what happens on our BeagleBone, which has nothing implementing the power
+     switch;
+   * commands.
+
+![OpenBMC targets](openbmc-targets.svg)
+
 ---
 
 ## Changing them
@@ -152,4 +175,5 @@ to write. They need only Python 3, with no extra packages.
 | `systemd.py` | `systemd-units-services.svg` |
 | `usb.py` | `usb-gadget.svg` |
 | `leds.py` | `leds-architecture.svg` and `leds-sequences.svg` (run as `python3 leds.py . ..`) |
+| `targets.py` | `openbmc-targets.svg` (run as `python3 targets.py . ..`) |
 | `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
