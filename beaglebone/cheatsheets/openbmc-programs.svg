@@ -1,0 +1,287 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1448" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>What each OpenBMC program does</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1600" height="1448" fill="#ffffff"/>
+  <text x="800.0" y="34" font-size="23" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">What each OpenBMC program does: what it watches, what it publishes, what it changes</text>
+  <text x="800.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">One card per program running on our BeagleBone. File paths and object paths come from the programs themselves (strings in our image's binaries) and their unit files.</text>
+  <rect x="20" y="78" width="14" height="14" rx="3" fill="#2a6f9e"/>
+  <text x="42" y="90" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">WATCHES / READS: its inputs</text>
+  <rect x="260.3" y="78" width="14" height="14" rx="3" fill="#7a4d00"/>
+  <text x="282.3" y="90" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">PUBLISHES on D-Bus: objects others can read/set</text>
+  <rect x="638.6" y="78" width="14" height="14" rx="3" fill="#2e7d32"/>
+  <text x="660.6" y="90" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">CHANGES / WRITES: its effects</text>
+  <text x="1580" y="90" font-size="12.5" font-weight="normal" fill="#555" text-anchor="end" font-style="italic" xml:space="preserve">the second line of each card = the D-Bus name it claims</text>
+  <rect x="20" y="128" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="148" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">bmcweb</text>
+  <text x="32" y="165" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(no well-known name: a client only)</text>
+  <text x="32" y="183" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">web server: the Redfish API + the web UI files</text>
+  <rect x="30" y="191" width="6" height="44" rx="2" fill="#2a6f9e"/>
+  <text x="42" y="202" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">HTTPS on port 443; your login</text>
+  <text x="42" y="216" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">certs /etc/ssl/certs/https/server.pem</text>
+  <text x="42" y="230" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">web UI files /usr/share/www/</text>
+  <rect x="30" y="241" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="42" y="252" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">nothing of its own: it ASKS the others</text>
+  <text x="42" y="266" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(see "D-Bus calls it makes")</text>
+  <rect x="30" y="277" width="6" height="44" rx="2" fill="#2e7d32"/>
+  <text x="42" y="288" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Get/Set properties + call methods on</text>
+  <text x="42" y="302" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">every other program, then answers</text>
+  <text x="42" y="316" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">with Redfish JSON</text>
+  <rect x="412" y="128" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="424" y="148" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">ipmid + netipmid</text>
+  <text x="424" y="165" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Control.Host</text>
+  <text x="424" y="183" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">the older IPMI protocol (ipmitool)</text>
+  <rect x="422" y="191" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="434" y="202" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">netipmid: UDP port 623 from the network</text>
+  <text x="434" y="216" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ipmid: host's KCS/BT interface (none here)</text>
+  <rect x="422" y="227" width="6" height="16" rx="2" fill="#7a4d00"/>
+  <text x="434" y="238" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/Ipmi …</text>
+  <rect x="422" y="249" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="434" y="260" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">turns IPMI commands into the same</text>
+  <text x="434" y="274" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">D-Bus calls (power, sensors, users)</text>
+  <rect x="804" y="128" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="816" y="148" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">object mapper (mapperx)</text>
+  <text x="816" y="165" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.ObjectMapper</text>
+  <text x="816" y="183" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">the directory of everything on D-Bus</text>
+  <rect x="814" y="191" width="6" height="44" rx="2" fill="#2a6f9e"/>
+  <text x="826" y="202" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">every program appearing/leaving the bus</text>
+  <text x="826" y="216" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(NameOwnerChanged, InterfacesAdded),</text>
+  <text x="826" y="230" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">then asks each one to describe itself</text>
+  <rect x="814" y="241" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="826" y="252" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/object_mapper</text>
+  <text x="826" y="266" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">GetObject, GetSubTree, GetAncestors</text>
+  <rect x="814" y="277" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="826" y="288" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">nothing on disk (memory only)</text>
+  <text x="826" y="302" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">answers "who owns path X?"</text>
+  <rect x="1196" y="128" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1208" y="148" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">host state manager</text>
+  <text x="1208" y="165" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Host0</text>
+  <text x="1208" y="183" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">is the server's OS off / running / quiesced?</text>
+  <rect x="1206" y="191" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="1218" y="202" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemd: which obmc-host-*@0 targets</text>
+  <text x="1218" y="216" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">finished (startmin → Running, stop → Off)</text>
+  <rect x="1206" y="227" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="1218" y="238" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/state/host0</text>
+  <text x="1218" y="252" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentHostState, RequestedHostTransition</text>
+  <rect x="1206" y="263" width="6" height="44" rx="2" fill="#2e7d32"/>
+  <text x="1218" y="274" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">starts obmc-host-start/-shutdown/-reboot</text>
+  <text x="1218" y="288" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-state-manager/</text>
+  <text x="1218" y="302" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  (last requested transition)</text>
+  <rect x="20" y="362" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="382" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">chassis state manager</text>
+  <text x="32" y="399" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Chassis0</text>
+  <text x="32" y="417" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">is the chassis (power supply) on or off?</text>
+  <rect x="30" y="425" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="42" y="436" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemd: obmc-chassis-poweron/-poweroff</text>
+  <text x="42" y="450" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">targets finishing</text>
+  <rect x="30" y="461" width="6" height="44" rx="2" fill="#7a4d00"/>
+  <text x="42" y="472" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/state/chassis0</text>
+  <text x="42" y="486" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentPowerState, RequestedPowerTransition</text>
+  <text x="42" y="500" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">LastStateChangeTime, POH counter</text>
+  <rect x="30" y="511" width="6" height="44" rx="2" fill="#2e7d32"/>
+  <text x="42" y="522" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">starts obmc-chassis-* targets</text>
+  <text x="42" y="536" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-state-manager/</text>
+  <text x="42" y="550" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  chassis0-POHCounter, -StateChangeTime</text>
+  <rect x="412" y="362" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="424" y="382" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">BMC state manager</text>
+  <text x="424" y="399" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.BMC</text>
+  <text x="424" y="417" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">is the BMC itself ready? why did it last reboot?</text>
+  <rect x="422" y="425" width="6" height="44" rx="2" fill="#2a6f9e"/>
+  <text x="434" y="436" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">multi-user.target reached → Ready</text>
+  <text x="434" y="450" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/sys/class/watchdog/watchdog0/bootstatus</text>
+  <text x="434" y="464" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/run/boot-device</text>
+  <rect x="422" y="475" width="6" height="44" rx="2" fill="#7a4d00"/>
+  <text x="434" y="486" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/state/bmc0</text>
+  <text x="434" y="500" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentBMCState, RequestedBMCTransition</text>
+  <text x="434" y="514" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">LastRebootCause</text>
+  <rect x="422" y="525" width="6" height="16" rx="2" fill="#2e7d32"/>
+  <text x="434" y="536" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Reboot request → starts reboot.target</text>
+  <rect x="804" y="362" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="816" y="382" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">LED group manager</text>
+  <text x="816" y="399" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.LED.GroupManager</text>
+  <text x="816" y="417" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">LED GROUPS: identify, booted, fault …</text>
+  <rect x="814" y="425" width="6" height="44" rx="2" fill="#2a6f9e"/>
+  <text x="826" y="436" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/phosphor-led-manager/</text>
+  <text x="826" y="450" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  led-group-config.json (at start)</text>
+  <text x="826" y="464" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Set Asserted from bmcweb, units, you</text>
+  <rect x="814" y="475" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="826" y="486" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/led/groups/&lt;name&gt;</text>
+  <text x="826" y="500" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Asserted (b)</text>
+  <rect x="814" y="511" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="826" y="522" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Set State/DutyOn/Period on each member</text>
+  <text x="826" y="536" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">LED's owner (found via the mapper)</text>
+  <rect x="1196" y="362" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1208" y="382" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">LED controller (phosphor-led-sysfs)</text>
+  <text x="1208" y="399" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.LED.Controller</text>
+  <text x="1208" y="417" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">PHYSICAL LEDs from the kernel</text>
+  <rect x="1206" y="425" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="1218" y="436" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/sys/class/leds/&lt;name&gt; (udev tells it</text>
+  <text x="1218" y="450" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">when the kernel creates an LED)</text>
+  <rect x="1206" y="461" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="1218" y="472" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/led/physical/&lt;name&gt;</text>
+  <text x="1218" y="486" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">State, DutyOn, Period, Color</text>
+  <rect x="1206" y="497" width="6" height="44" rx="2" fill="#2e7d32"/>
+  <text x="1218" y="508" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">brightness / trigger files in</text>
+  <text x="1218" y="522" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/sys/class/leds/&lt;name&gt;/</text>
+  <text x="1218" y="536" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(idle on our kernel; our stand-in instead)</text>
+  <rect x="20" y="596" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="616" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">log manager (phosphor-logging)</text>
+  <text x="32" y="633" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Logging</text>
+  <text x="32" y="651" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">the event log</text>
+  <rect x="30" y="659" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="42" y="670" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">programs asking to log an event</text>
+  <text x="42" y="684" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(Create method, or their log calls)</text>
+  <rect x="30" y="695" width="6" height="44" rx="2" fill="#7a4d00"/>
+  <text x="42" y="706" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/logging/entry/&lt;N&gt;</text>
+  <text x="42" y="720" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Message, Severity, Timestamp, Resolved</text>
+  <text x="42" y="734" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">DeleteAll</text>
+  <rect x="30" y="745" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="42" y="756" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">each entry saved in</text>
+  <text x="42" y="770" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-logging/</text>
+  <rect x="412" y="596" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="424" y="616" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">network manager (phosphor-networkd)</text>
+  <text x="424" y="633" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Network</text>
+  <text x="424" y="651" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">network settings for the web UI / Redfish</text>
+  <rect x="422" y="659" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="434" y="670" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">the kernel's interfaces + addresses</text>
+  <text x="434" y="684" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">systemd-networkd's state</text>
+  <rect x="422" y="695" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="434" y="706" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/network/eth0 …</text>
+  <text x="434" y="720" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">IP addresses, DHCP, MAC, DNS, hostname</text>
+  <rect x="422" y="731" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="434" y="742" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">.network files in /etc/systemd/network/</text>
+  <text x="434" y="756" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">then tells systemd-networkd to reload</text>
+  <rect x="804" y="596" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="816" y="616" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">user manager</text>
+  <text x="816" y="633" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.User.Manager</text>
+  <text x="816" y="651" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">BMC user accounts, roles, password rules</text>
+  <rect x="814" y="659" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="826" y="670" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/passwd, /etc/login.defs</text>
+  <text x="826" y="684" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/security/*.conf (lockout, quality)</text>
+  <rect x="814" y="695" width="6" height="44" rx="2" fill="#7a4d00"/>
+  <text x="826" y="706" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/user/&lt;name&gt;</text>
+  <text x="826" y="720" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">UserPrivilege, UserGroups, UserEnabled</text>
+  <text x="826" y="734" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CreateUser method</text>
+  <rect x="814" y="745" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="826" y="756" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">user accounts (/etc/passwd, group, shadow)</text>
+  <text x="826" y="770" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">PAM rule files; /var/lib/usr_mgr.conf</text>
+  <rect x="1196" y="596" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1208" y="616" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">settings manager</text>
+  <text x="1208" y="633" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Settings</text>
+  <text x="1208" y="651" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">stores settings other programs read</text>
+  <rect x="1206" y="659" width="6" height="16" rx="2" fill="#2a6f9e"/>
+  <text x="1218" y="670" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">its saved file at start-up</text>
+  <rect x="1206" y="681" width="6" height="44" rx="2" fill="#7a4d00"/>
+  <text x="1218" y="692" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/control/host0/…</text>
+  <text x="1218" y="706" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  power_restore_policy, boot, auto_reboot</text>
+  <text x="1218" y="720" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/time/sync_method</text>
+  <rect x="1206" y="731" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="1218" y="742" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-settings-manager/</text>
+  <text x="1218" y="756" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  settings (every change)</text>
+  <rect x="20" y="830" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="850" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">inventory manager</text>
+  <text x="32" y="867" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Inventory.Manager</text>
+  <text x="32" y="885" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">the parts list (FRUs): model, serial …</text>
+  <rect x="30" y="893" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="42" y="904" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">other programs (FRU readers) calling</text>
+  <text x="42" y="918" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">its Notify method to add/update items</text>
+  <rect x="30" y="929" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="42" y="940" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/inventory/…</text>
+  <text x="42" y="954" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Model, SerialNumber, Present …</text>
+  <rect x="30" y="965" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="42" y="976" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-inventory-manager/</text>
+  <text x="42" y="990" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(nearly empty on our board)</text>
+  <rect x="412" y="830" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="424" y="850" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">time manager</text>
+  <text x="424" y="867" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Time.Manager</text>
+  <text x="424" y="885" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">BMC clock: NTP or manual</text>
+  <rect x="422" y="893" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="434" y="904" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">setting /xyz/…/time/sync_method</text>
+  <text x="434" y="918" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(NTP or Manual)</text>
+  <rect x="422" y="929" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="434" y="940" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/time/bmc</text>
+  <text x="434" y="954" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Elapsed (the current time)</text>
+  <rect x="422" y="965" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="434" y="976" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">asks systemd-timedated (D-Bus):</text>
+  <text x="434" y="990" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">SetNTP / SetTime</text>
+  <rect x="804" y="830" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="816" y="850" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">software manager</text>
+  <text x="816" y="867" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Software.Manager</text>
+  <text x="816" y="885" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">firmware versions + updates</text>
+  <rect x="814" y="893" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="826" y="904" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/os-release (running version)</text>
+  <text x="826" y="918" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">uploaded images in /tmp/images</text>
+  <rect x="814" y="929" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="826" y="940" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/software/&lt;id&gt;</text>
+  <text x="826" y="954" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Version, Purpose, Activation</text>
+  <rect x="814" y="965" width="6" height="44" rx="2" fill="#2e7d32"/>
+  <text x="826" y="976" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-bmc-code-mgmt/</text>
+  <text x="826" y="990" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">writes flash on flash-chip boards</text>
+  <text x="826" y="1004" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(not our SD/eMMC layout)</text>
+  <rect x="1196" y="830" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1208" y="850" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">dump manager</text>
+  <text x="1208" y="867" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Dump.Manager</text>
+  <text x="1208" y="885" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">debug "black box" snapshots</text>
+  <rect x="1206" y="893" width="6" height="16" rx="2" fill="#2a6f9e"/>
+  <text x="1218" y="904" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CreateDump requests (web UI, Redfish)</text>
+  <rect x="1206" y="915" width="6" height="16" rx="2" fill="#7a4d00"/>
+  <text x="1218" y="926" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/dump/bmc/entry/&lt;N&gt;</text>
+  <rect x="1206" y="937" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="1218" y="948" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/phosphor-debug-collector/dumps</text>
+  <text x="1218" y="962" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(archives of logs + state)</text>
+  <rect x="20" y="1064" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="32" y="1084" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">health monitor</text>
+  <text x="32" y="1101" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.HealthMon</text>
+  <text x="32" y="1119" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">the BMC's own CPU / memory / storage use</text>
+  <rect x="30" y="1127" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="42" y="1138" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/proc/stat, /proc/meminfo, disk usage</text>
+  <text x="42" y="1152" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/etc/healthMon/bmc_health_config.json</text>
+  <rect x="30" y="1163" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="42" y="1174" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/metric/bmc/…</text>
+  <text x="42" y="1188" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CPU_User, Memory_Free, Storage_RW …</text>
+  <rect x="30" y="1199" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="42" y="1210" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">nothing on disk; values + thresholds</text>
+  <text x="42" y="1224" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">on D-Bus</text>
+  <rect x="412" y="1064" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="424" y="1084" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">telemetry</text>
+  <text x="424" y="1101" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Telemetry</text>
+  <text x="424" y="1119" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">Redfish metric reports + triggers</text>
+  <rect x="422" y="1127" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="434" y="1138" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">sensor values from D-Bus</text>
+  <text x="434" y="1152" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(…/sensors/…), on a schedule</text>
+  <rect x="422" y="1163" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="434" y="1174" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/Telemetry/Reports/…</text>
+  <text x="434" y="1188" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/Telemetry/Triggers/…</text>
+  <rect x="422" y="1199" width="6" height="16" rx="2" fill="#2e7d32"/>
+  <text x="434" y="1210" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/var/lib/telemetry/Reports, Triggers</text>
+  <rect x="804" y="1064" width="384" height="222" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="816" y="1084" font-size="14" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-hwmon (sensors)</text>
+  <text x="816" y="1101" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.Hwmon-&lt;id&gt;…</text>
+  <text x="816" y="1119" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">sensors from kernel hwmon drivers</text>
+  <rect x="814" y="1127" width="6" height="30" rx="2" fill="#2a6f9e"/>
+  <text x="826" y="1138" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/sys/class/hwmon/hwmonN/*_input</text>
+  <text x="826" y="1152" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">per-device config in /etc/default/obmc/hwmon/</text>
+  <rect x="814" y="1163" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="826" y="1174" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/sensors/&lt;type&gt;/&lt;name&gt;</text>
+  <text x="826" y="1188" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Value, thresholds</text>
+  <rect x="814" y="1199" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="826" y="1210" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">nothing on disk</text>
+  <text x="826" y="1224" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(IDLE here: no sensors configured)</text>
+  <rect x="1196" y="1064" width="384" height="222" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="1208" y="1084" font-size="14" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">bbb-led-standin (ours)</text>
+  <text x="1208" y="1101" font-size="10.8" font-weight="normal" fill="#555" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.LED.GpioStandIn</text>
+  <text x="1208" y="1119" font-size="12.2" font-weight="normal" fill="#222" text-anchor="start" font-style="italic" xml:space="preserve">stand-in for the LED controller</text>
+  <rect x="1206" y="1127" width="6" height="16" rx="2" fill="#2a6f9e"/>
+  <text x="1218" y="1138" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Set calls from the LED group manager</text>
+  <rect x="1206" y="1149" width="6" height="30" rx="2" fill="#7a4d00"/>
+  <text x="1218" y="1160" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/led/physical/beaglebone_*</text>
+  <text x="1218" y="1174" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">State, DutyOn, Period, Color</text>
+  <rect x="1206" y="1185" width="6" height="30" rx="2" fill="#2e7d32"/>
+  <text x="1218" y="1196" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">GPIO lines "[usr0 led]" … "[usr3 led]"</text>
+  <text x="1218" y="1210" font-size="10.9" font-weight="normal" fill="#222" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">through /dev/gpiochip0</text>
+  <rect x="20" y="1304" width="1560" height="126" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="32" y="1326" font-size="15" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">How they fit together (read a card, then follow the arrows in your head)</text>
+  <text x="32" y="1350" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>From outside, requests arrive through bmcweb (web/Redfish), IPMI, or you over SSH (busctl, obmcutil). They become D-Bus calls to the program that owns that job.</tspan></text>
+  <text x="32" y="1371" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Programs find each other through the </tspan><tspan font-weight="bold">object mapper</tspan><tspan>, then talk directly (via dbus-broker). None of them stores anything in D-Bus itself.</tspan></text>
+  <text x="32" y="1392" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Power on/off is done by </tspan><tspan font-weight="bold">systemd targets</tspan><tspan> that the state managers start (see the targets cheat sheet); the state managers then report the result.</tspan></text>
+  <text x="32" y="1413" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Anything that must survive a reboot is in that program's own file (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/var/lib/…</tspan><tspan> or </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/etc/…</tspan><tspan>).  Try: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl tree &lt;name&gt;</tspan><tspan> and </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl introspect &lt;name&gt; &lt;path&gt;</tspan><tspan> for any card.</tspan></text>
+</svg>

@@ -24,6 +24,38 @@ like**:
 
 ![Inside the BMC](openbmc-inside.svg)
 
+## 0a. What D-Bus physically is (and is not)
+
+[`dbus-explained.svg`](dbus-explained.svg): for anyone picturing D-Bus as a
+file or a message board. It isn't one:
+* **The picture:** separate programs, each holding its own objects in its
+  own memory, connected through one socket to **dbus-broker**, a router that
+  holds only connections, a name table, subscriptions and a security policy.
+* **The only "file"**, `/run/dbus/system_bus_socket`, is just an address.
+  Saved data lives in each program's own files.
+* **One question followed step by step:** bmcweb asks for `CurrentHostState`.
+* **The four kinds of message**, and a list of common misconceptions.
+
+![What D-Bus physically is](dbus-explained.svg)
+
+## 0b. What each OpenBMC program does
+
+[`openbmc-programs.svg`](openbmc-programs.svg): **one card per program**
+running on our BeagleBone. Each card gives its job and its D-Bus name, plus:
+* what it **watches or reads**: its inputs, files and signals;
+* what it **publishes** on D-Bus: its objects and properties;
+* what it **changes or writes**: its effects, including files saved on the
+  eMMC.
+
+The programs covered: bmcweb, IPMI, the object mapper, the host / chassis /
+BMC state managers, the LED group manager and LED controller (plus our
+stand-in), logging, network, users, settings, inventory, time, software,
+dump, health monitor, telemetry and hwmon. File and object paths come from
+the programs themselves (strings in our image's binaries) and their unit
+files.
+
+![What each OpenBMC program does](openbmc-programs.svg)
+
 ## 1. Where things live in Linux
 
 [`linux-folders.svg`](linux-folders.svg): every important folder:
@@ -193,5 +225,6 @@ to write. They need only Python 3, with no extra packages.
 | `usb.py` | `usb-gadget.svg` |
 | `leds.py` | `leds-architecture.svg` and `leds-sequences.svg` (run as `python3 leds.py . ..`) |
 | `inside.py` | `openbmc-inside.svg` (run as `python3 inside.py . ..`) |
+| `dbus_programs.py` | `dbus-explained.svg` and `openbmc-programs.svg` (run as `python3 dbus_programs.py . ..`) |
 | `targets.py` | `openbmc-targets.svg` (run as `python3 targets.py . ..`) |
 | `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
