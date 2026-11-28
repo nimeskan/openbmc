@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1440" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1686" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>OpenBMC systemd targets cheat sheet</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1600" height="1440" fill="#ffffff"/>
+  <rect width="1600" height="1686" fill="#ffffff"/>
   <text x="800.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">OpenBMC targets: how host and chassis power are driven</text>
   <text x="800.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">A request becomes a state-manager transition, the state manager starts a systemd TARGET, and every service hooked into that target runs. All names from our image.</text>
   <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
@@ -363,4 +363,33 @@
   <text x="374.8" y="1400" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">one target file</text>
   <text x="814" y="1400" font-size="12" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">journalctl -b | grep -i target</text>
   <text x="1056.0" y="1400" font-size="11.5" font-weight="normal" fill="#2e7d32" text-anchor="start" font-style="italic" xml:space="preserve">when targets were reached</text>
+
+  <g id="glossary" data-orig-h="1440">
+  <rect x="20" y="1446" width="1560.0" height="226.25" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1468" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1490" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">host</tspan> — the main server computer the BMC looks after: its CPUs and operating</text>
+  <text x="42.0" y="1505.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">system. Our BeagleBone has no host</text>
+  <text x="32.0" y="1528.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">chassis</tspan> — the server's box and main power supply; "chassis on" = the main power</text>
+  <text x="42.0" y="1544.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">rails are on</text>
+  <text x="32.0" y="1567.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">BMC</tspan> — the management controller itself (our BeagleBone): it stays powered while</text>
+  <text x="42.0" y="1583.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">the host is off</text>
+  <text x="32.0" y="1606.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">transition</tspan> — a requested change: On, Off, Reboot, PowerCycle …</text>
+  <text x="32.0" y="1629.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">target</tspan> — systemd milestone that groups units; "starting" it starts everything</text>
+  <text x="42.0" y="1645.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hooked into it</text>
+  <text x="557.3333333333333" y="1490" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">graceful vs force</tspan> — graceful = ask the operating system to shut down first;</text>
+  <text x="567.3333333333333" y="1505.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">force = cut or cycle power at once</text>
+  <text x="557.3333333333333" y="1528.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">soft power off</tspan> — asking the host's operating system to shut itself down (via</text>
+  <text x="567.3333333333333" y="1544.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">IPMI or PLDM messages)</text>
+  <text x="557.3333333333333" y="1567.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">warm reboot</tspan> — restart the host's operating system without switching chassis</text>
+  <text x="567.3333333333333" y="1583.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">power off</text>
+  <text x="557.3333333333333" y="1606.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">quiesce</tspan> — stop and HOLD the host in a safe state (no automatic reboot) so</text>
+  <text x="567.3333333333333" y="1621.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">people can collect debug information</text>
+  <text x="1082.6666666666665" y="1490" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">watchdog</tspan> — timer the host must keep resetting; if it stops, the host is assumed</text>
+  <text x="1092.6666666666665" y="1505.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hung (host-timeout)</text>
+  <text x="1082.6666666666665" y="1528.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">blackout</tspan> — chassis power was lost unexpectedly (e.g. mains power cut)</text>
+  <text x="1082.6666666666665" y="1552.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">IPMI / KCS</tspan> — IPMI = older management protocol (ipmitool); KCS = the host-to-BMC</text>
+  <text x="1092.6666666666665" y="1567.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hardware channel it uses</text>
+  <text x="1082.6666666666665" y="1590.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">POH</tspan> — power-on hours: a counter of how long the chassis has been powered</text>
+  <text x="1082.6666666666665" y="1614.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">@0</tspan> — instance number: chassis 0 / host 0 (a server can have several)</text>
+  </g><!-- /glossary -->
 </svg>

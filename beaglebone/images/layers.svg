@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 743" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>The layer stack used for the BeagleBone build</title>
-  <rect width="1000" height="520" fill="#ffffff"/>
+  <rect width="1000" height="743" fill="#ffffff"/>
   <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Layers: each one adds or changes recipes and settings</text>
   <text x="330" y="54" text-anchor="middle" font-size="12" fill="#555">Higher layers build on (and can override) lower ones</text>
 
@@ -51,4 +51,23 @@
 
   <path d="M680,150 C650,150 650,150 622,150" stroke="#b39b00" stroke-width="2" fill="none"/>
   <path d="M825,232 L825,258" stroke="#777" stroke-width="2" fill="none"/>
+
+  <g id="glossary" data-orig-h="520">
+  <rect x="20" y="526" width="960.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="548" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="570" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">layer</tspan> — a folder of recipes and settings (meta-…); higher layers can add</text>
+  <text x="42.0" y="585.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">to or override lower ones</text>
+  <text x="32.0" y="608.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">recipe (.bb)</tspan> — instructions for fetching, building and packaging one</text>
+  <text x="42.0" y="624.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">piece of software</text>
+  <text x="32.0" y="647.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">machine / distro</tspan> — which board to build for (evb-beaglebone) / which OS</text>
+  <text x="42.0" y="663.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">flavour and policies (openbmc-phosphor)</text>
+  <text x="32.0" y="686.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">image recipe</tspan> — the recipe that lists everything to put on the card</text>
+  <text x="42.0" y="701.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(obmc-phosphor-image)</text>
+  <text x="520.0" y="570" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">bblayers.conf / local.conf</tspan> — your build's list of layers / your build's</text>
+  <text x="530.0" y="585.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">settings</text>
+  <text x="520.0" y="608.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">rm_work</tspan> — setting that deletes each recipe's temporary build files when</text>
+  <text x="530.0" y="624.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">done, to save disk space</text>
+  <text x="520.0" y="647.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">OpenEmbedded-Core</tspan> — the base set of recipes shared by all Yocto-based</text>
+  <text x="530.0" y="663.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">builds</text>
+  </g><!-- /glossary -->
 </svg>

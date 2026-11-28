@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="Helvetica, Arial, sans-serif" font-size="12">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 746" font-family="Helvetica, Arial, sans-serif" font-size="12">
   <title>What happens at boot until the sensor shows up in Redfish</title>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker>
   </defs>
-  <rect width="1000" height="600" fill="#ffffff"/>
+  <rect width="1000" height="746" fill="#ffffff"/>
   <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">At boot: how the sensor comes to exist (time runs downwards)</text>
 
   <!-- lifelines -->
@@ -66,4 +66,17 @@
   <line x1="870" y1="566" x2="479" y2="566" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
   <text x="560" y="559" fill="#222">⑨ on each Redfish request: read Value</text>
   <text x="560" y="584" fill="#555">→ "Reading": 25.0 in the JSON reply</text>
+
+  <g id="glossary" data-orig-h="600">
+  <rect x="20" y="606" width="960.0" height="125.5" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="628" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="650" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Probe</tspan> — entity-manager rule deciding whether a JSON board description</text>
+  <text x="42.0" y="665.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">applies ("TRUE" = always)</text>
+  <text x="32.0" y="688.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Configuration.ExternalSensor</tspan> — D-Bus object entity-manager publishes</text>
+  <text x="42.0" y="704.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">describing a sensor for externalsensor to create</text>
+  <text x="520.0" y="650" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">association "chassis"</tspan> — link from the sensor to its board, so Redfish</text>
+  <text x="530.0" y="665.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">lists it under that chassis</text>
+  <text x="520.0" y="688.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">busctl set-property … Value d 25</tspan> — writes the sensor value 25 (d =</text>
+  <text x="530.0" y="704.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">double, a floating-point number)</text>
+  </g><!-- /glossary -->
 </svg>

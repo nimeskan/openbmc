@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Helvetica, Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 884" font-family="Helvetica, Arial, sans-serif" font-size="13">
   <title>How a sensor reading travels from the chip to your screen</title>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
     <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f8f4a"/></marker>
   </defs>
-  <rect width="1000" height="700" fill="#ffffff"/>
+  <rect width="1000" height="884" fill="#ffffff"/>
   <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">How a sensor reading travels from the chip to your screen</text>
 
   <!-- zones -->
@@ -51,6 +51,7 @@
 
   <rect x="265" y="360" width="215" height="96" rx="8" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
   <text x="372" y="382" text-anchor="middle" font-weight="bold" fill="#7a4d00">entity-manager</text>
+  <rect x="410" y="352" width="64" height="16" rx="4" fill="#c43c3c"/><text x="442" y="364" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">PLANNED</text>
   <text x="372" y="402" text-anchor="middle" font-size="11" fill="#333">reads beaglebone-sim3.json,</text>
   <text x="372" y="416" text-anchor="middle" font-size="11" fill="#333">publishes the Board (chassis)</text>
   <text x="372" y="430" text-anchor="middle" font-size="11" fill="#333">and two "please create this</text>
@@ -58,6 +59,7 @@
 
   <rect x="505" y="360" width="215" height="96" rx="8" fill="#e6f6ea" stroke="#2f8f4a" stroke-width="2"/>
   <text x="612" y="382" text-anchor="middle" font-weight="bold" fill="#1d5c2f">externalsensor</text>
+  <rect x="650" y="352" width="64" height="16" rx="4" fill="#c43c3c"/><text x="682" y="364" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">PLANNED</text>
   <text x="612" y="398" text-anchor="middle" font-size="11" fill="#333">(part of dbus-sensors)</text>
   <text x="612" y="416" text-anchor="middle" font-size="11" fill="#333">creates the sensor objects,</text>
   <text x="612" y="430" text-anchor="middle" font-size="11" fill="#333">checks thresholds, marks</text>
@@ -102,4 +104,20 @@
 
   <!-- green flow arrow -->
   <path d="M960,520 C985,420 985,300 700,226" stroke="#2f8f4a" stroke-width="3" fill="none" stroke-dasharray="8 5" marker-end="url(#g)"/>
+
+  <g id="glossary" data-orig-h="700">
+  <rect x="20" y="706" width="960.0" height="164.25" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="728" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="750" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">PLANNED, not in our image yet</tspan> — entity-manager and externalsensor</text>
+  <text x="42.0" y="765.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(dbus-sensors) come with the planned rebuild; the rest exists today</text>
+  <text x="32.0" y="788.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">entity-manager</tspan> — reads JSON board descriptions and publishes what</text>
+  <text x="42.0" y="804.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hardware is present on D-Bus</text>
+  <text x="32.0" y="827.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">externalsensor</tspan> — dbus-sensors program that hosts sensors whose values</text>
+  <text x="42.0" y="843.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">another program writes</text>
+  <text x="520.0" y="750" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">association</tspan> — a D-Bus link between objects (sensor ↔ chassis) that the</text>
+  <text x="530.0" y="765.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">mapper indexes</text>
+  <text x="520.0" y="788.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">i2cget / busctl</tspan> — command-line tools: read an I2C register / call or set</text>
+  <text x="530.0" y="804.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">things on D-Bus</text>
+  <text x="520.0" y="827.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Redfish JSON</tspan> — the web API's answer format: names and values in braces</text>
+  </g><!-- /glossary -->
 </svg>

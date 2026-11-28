@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1448" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1671" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>What each OpenBMC program does</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1600" height="1448" fill="#ffffff"/>
+  <rect width="1600" height="1671" fill="#ffffff"/>
   <text x="800.0" y="34" font-size="23" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">What each OpenBMC program does: what it watches, what it publishes, what it changes</text>
   <text x="800.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">One card per program running on our BeagleBone. File paths and object paths come from the programs themselves (strings in our image's binaries) and their unit files.</text>
   <rect x="20" y="78" width="14" height="14" rx="3" fill="#2a6f9e"/>
@@ -284,4 +284,30 @@
   <text x="32" y="1371" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Programs find each other through the </tspan><tspan font-weight="bold">object mapper</tspan><tspan>, then talk directly (via dbus-broker). None of them stores anything in D-Bus itself.</tspan></text>
   <text x="32" y="1392" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Power on/off is done by </tspan><tspan font-weight="bold">systemd targets</tspan><tspan> that the state managers start (see the targets cheat sheet); the state managers then report the result.</tspan></text>
   <text x="32" y="1413" font-size="12.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan>Anything that must survive a reboot is in that program's own file (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/var/lib/…</tspan><tspan> or </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">/etc/…</tspan><tspan>).  Try: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl tree &lt;name&gt;</tspan><tspan> and </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl introspect &lt;name&gt; &lt;path&gt;</tspan><tspan> for any card.</tspan></text>
+
+  <g id="glossary" data-orig-h="1448">
+  <rect x="20" y="1454" width="1560.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1476" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1498" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">FRU</tspan> — field-replaceable unit: a swappable part (fan, power supply, board) with</text>
+  <text x="42.0" y="1513.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">an ID memory</text>
+  <text x="32.0" y="1536.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">KCS / BT</tspan> — hardware channels between the host and the BMC used by IPMI (our</text>
+  <text x="42.0" y="1552.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">board has none)</text>
+  <text x="32.0" y="1575.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">introspect</tspan> — ask a program to describe its objects; the mapper does this to</text>
+  <text x="42.0" y="1591.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">build its directory</text>
+  <text x="32.0" y="1614.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">quiesced</tspan> — host stopped and held in a safe state for debugging, without</text>
+  <text x="42.0" y="1629.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">automatic reboot</text>
+  <text x="557.3333333333333" y="1498" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">POH</tspan> — power-on hours counter</text>
+  <text x="557.3333333333333" y="1521.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">PAM</tspan> — Linux's pluggable login system: rule files for password quality, lockout,</text>
+  <text x="567.3333333333333" y="1536.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">history</text>
+  <text x="557.3333333333333" y="1560.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">udev</tspan> — program that reacts to the kernel finding devices; tells</text>
+  <text x="567.3333333333333" y="1575.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">phosphor-led-sysfs about new LEDs</text>
+  <text x="557.3333333333333" y="1598.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">NTP</tspan> — network time protocol: setting the clock from a time server</text>
+  <text x="1082.6666666666665" y="1498" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">flash</tspan> — the memory chip most BMCs boot from; our BeagleBone uses an SD card /</text>
+  <text x="1092.6666666666665" y="1513.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">eMMC instead</text>
+  <text x="1082.6666666666665" y="1536.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">hwmon / sensor / threshold</tspan> — kernel sensor framework; a measured value on</text>
+  <text x="1092.6666666666665" y="1552.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">D-Bus; warning/critical limits on it</text>
+  <text x="1082.6666666666665" y="1575.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">dump</tspan> — an archive of logs and state collected for debugging</text>
+  <text x="1082.6666666666665" y="1598.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">metric report</tspan> — Redfish telemetry: sensor values sampled on a schedule, with</text>
+  <text x="1092.6666666666665" y="1614.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">min/max/average</text>
+  </g><!-- /glossary -->
 </svg>

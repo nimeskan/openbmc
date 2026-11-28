@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1240" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1525" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>Linux folders cheat sheet: what lives where (on our BeagleBone OpenBMC image)</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1240" height="1240" fill="#ffffff"/>
+  <rect width="1240" height="1525" fill="#ffffff"/>
   <text x="620.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Where things live in Linux</text>
   <text x="620.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">Our BeagleBone OpenBMC image. Colours tell you where a folder really is, and what survives a reboot or a re-flash.</text>
   <rect x="30" y="80" width="22" height="16" rx="3" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
@@ -149,4 +149,30 @@
   <text x="844" y="1166" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">The SD card is /dev/mmcblk0 (same layout).</text>
   <text x="844" y="1192" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">See the partitions with:</text>
   <text x="844" y="1210" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">cat /proc/partitions</tspan><tspan>   and   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">df -h</tspan></text>
+
+  <g id="glossary" data-orig-h="1240">
+  <rect x="20" y="1246" width="1200.0" height="265.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1268" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1290" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">partition</tspan> — a separate, separately formatted section of a disk; our eMMC has p1 (/boot), p2</text>
+  <text x="42.0" y="1305.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(/) and optionally p3 (/data)</text>
+  <text x="32.0" y="1328.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">file system (ext4, FAT)</tspan> — the format files are stored in on a partition. ext4 = Linux's</text>
+  <text x="42.0" y="1344.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">usual one; FAT = a simple one U-Boot can read</text>
+  <text x="32.0" y="1367.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">mount</tspan> — attach a partition (or a pretend file system) to a folder so its files appear there.</text>
+  <text x="42.0" y="1383.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">`mount` lists them; /etc/fstab says what to mount at boot</text>
+  <text x="32.0" y="1406.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">symlink ("shortcut")</tspan> — a file that points to another path, e.g. /lib → /usr/lib. ls -l shows</text>
+  <text x="42.0" y="1421.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">it with an arrow</text>
+  <text x="32.0" y="1445.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">tmpfs</tspan> — a file system kept in RAM: fast, but empty after every reboot (/run, /tmp)</text>
+  <text x="32.0" y="1468.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">daemon / service</tspan> — a program that runs in the background (bmcweb, the LED manager …),</text>
+  <text x="42.0" y="1483.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">started by systemd</text>
+  <text x="640.0" y="1290" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">unit file</tspan> — systemd's small text file describing one service or target (see the systemd</text>
+  <text x="650.0" y="1305.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">sheet)</text>
+  <text x="640.0" y="1328.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">kernel module (.ko)</tspan> — a piece of kernel code (often a driver) loaded into the running kernel</text>
+  <text x="650.0" y="1344.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">when needed</text>
+  <text x="640.0" y="1367.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">device file (/dev)</tspan> — a special file that stands for a driver; programs open it to talk to</text>
+  <text x="650.0" y="1383.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hardware</text>
+  <text x="640.0" y="1406.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">PID</tspan> — process ID: the number Linux gives each running program</text>
+  <text x="640.0" y="1429.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">re-flash</tspan> — writing the whole image onto the eMMC again: replaces everything on p1 and p2</text>
+  <text x="640.0" y="1452.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">MLO / U-Boot / zImage / .dtb</tspan> — boot-loader stages, the compressed kernel, and the board's</text>
+  <text x="650.0" y="1468.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hardware description (see the SD card boot diagram)</text>
+  </g><!-- /glossary -->
 </svg>

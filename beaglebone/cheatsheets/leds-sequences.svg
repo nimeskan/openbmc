@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1790" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1982" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>Identify and heartbeat LEDs: how they work, step by step</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1500" height="1790" fill="#ffffff"/>
+  <rect width="1500" height="1982" fill="#ffffff"/>
   <text x="750.0" y="34" font-size="23" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Identify and heartbeat LEDs: how they work, step by step</text>
   <text x="750.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">Arrows are messages (HTTPS, D-Bus, or system calls); white boxes are work done inside one program. Numbers give the order.</text>
   <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
@@ -206,4 +206,26 @@
   <text x="1180.0" y="1723" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle" xml:space="preserve">14</text>
   <text x="1196.0" y="1723" font-size="12" font-weight="bold" fill="#333" xml:space="preserve" style="paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round">DATAOUT bit 21</text>
   <text x="1196.0" y="1749" font-size="11.5" font-weight="normal" fill="#7a4d00" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve" style="paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round">USR0: short flash every second</text>
+
+  <g id="glossary" data-orig-h="1790">
+  <rect x="20" y="1796" width="1460.0" height="172.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1818" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1840" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Properties.Set</tspan> — the standard D-Bus method to change a property on</text>
+  <text x="42.0" y="1855.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">another program's object</text>
+  <text x="32.0" y="1878.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">GetObject</tspan> — object-mapper method: "which program owns this object path?"</text>
+  <text x="32.0" y="1902.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Asserted</tspan> — an LED group's on/off property</text>
+  <text x="32.0" y="1925.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">DutyOn / Period</tspan> — blink settings: % of each cycle the LED is on; cycle</text>
+  <text x="42.0" y="1940.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">length in ms</text>
+  <text x="524.0" y="1840" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">introspect</tspan> — ask a program to describe its objects (the mapper does this</text>
+  <text x="534.0" y="1855.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">for every new name)</text>
+  <text x="524.0" y="1878.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">mapper wait</tspan> — command that waits until the mapper knows an object (used</text>
+  <text x="534.0" y="1894.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">so start-up happens in the right order)</text>
+  <text x="524.0" y="1917.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">multi-user.target</tspan> — systemd's "system is fully up" milestone; bmc_booted</text>
+  <text x="534.0" y="1933.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">is asserted right after it</text>
+  <text x="1016.0" y="1840" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">ioctl SET_VALUES</tspan> — the GPIO system call that changes the level of lines</text>
+  <text x="1026.0" y="1855.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">the program holds</text>
+  <text x="1016.0" y="1878.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">DATAOUT</tspan> — the GPIO1 register holding the output levels (bit 21 = USR0,</text>
+  <text x="1026.0" y="1894.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">bit 24 = USR3)</text>
+  <text x="1016.0" y="1917.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">HTTP 2xx</tspan> — success status codes (200 OK, 204 No Content)</text>
+  </g><!-- /glossary -->
 </svg>

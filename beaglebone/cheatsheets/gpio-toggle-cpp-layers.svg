@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1282" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1505" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>GPIO toggle in C++: every layer</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1534" height="1282" fill="#ffffff"/>
+  <rect width="1534" height="1505" fill="#ffffff"/>
   <text x="767.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">GPIO toggle in C++: every layer</text>
   <text x="767.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">What gpio-blink-uapi.cpp (Path A) and gpio-blink-gpiod.cpp (Path B) do at each layer, down to the USR3 LED on our BeagleBone</text>
   <rect x="20" y="76" width="22" height="16" rx="3" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
@@ -245,4 +245,29 @@
   <text x="20" y="1182.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Same system calls, same kernel path as C: </tspan><tspan>C++ changes only the user-space layers (ownership, errors, types).</tspan></text>
   <text x="20" y="1202.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Errors: </tspan><tspan>-1/errno from the kernel becomes </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">std::system_error</tspan><tspan>; while it propagates, destructors run (</tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">~Fd</tspan><tspan>, </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">~line</tspan><tspan>) and close the fds, so the line is released.</tspan></text>
   <text x="20" y="1222.5" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Cost of Path B: </tspan><tspan>each </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">line.set_value()</tspan><tspan> builds a temporary line_bulk (one heap allocation); fine for an LED, noticeable in tight loops.</tspan></text>
+
+  <g id="glossary" data-orig-h="1282">
+  <rect x="20" y="1288" width="1494.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1310" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1332" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">RAII</tspan> — C++ rule: an object owns a resource and its destructor releases it</text>
+  <text x="42.0" y="1347.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(Fd closes its fd automatically)</text>
+  <text x="32.0" y="1370.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">destructor (~Fd)</tspan> — function C++ runs automatically when an object goes out</text>
+  <text x="42.0" y="1386.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">of scope, even during an exception</text>
+  <text x="32.0" y="1409.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">exception</tspan> — C++ error that jumps to the nearest catch, cleaning up objects</text>
+  <text x="42.0" y="1425.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">on the way; here std::system_error carries errno</text>
+  <text x="535.3333333333333" y="1332" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">std::optional</tspan> — a value that may be missing (find_line returns "nothing" if</text>
+  <text x="545.3333333333333" y="1347.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">the line isn't found)</text>
+  <text x="535.3333333333333" y="1370.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">shared_ptr</tspan> — reference-counted owner; libgpiod's chip is closed when the</text>
+  <text x="545.3333333333333" y="1386.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">last copy goes away</text>
+  <text x="535.3333333333333" y="1409.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">libgpiodcxx</tspan> — libgpiod's C++ part (gpiod.hpp): classes wrapping the C</text>
+  <text x="545.3333333333333" y="1425.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">library</text>
+  <text x="1038.6666666666665" y="1332" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">file descriptor / line handle</tspan> — as in the C sheet: open() returns an fd;</text>
+  <text x="1048.6666666666665" y="1347.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">reserving lines returns a new fd that owns them</text>
+  <text x="1038.6666666666665" y="1370.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">ioctl / syscall / v1 / v2</tspan> — as in the C sheet: the request codes and system</text>
+  <text x="1048.6666666666665" y="1386.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">calls are identical in C++</text>
+  <text x="1038.6666666666665" y="1409.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">pm_runtime / spinlock</tspan> — kernel power management (clock on while used) and a</text>
+  <text x="1048.6666666666665" y="1425.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">lock protecting registers</text>
+  <text x="1038.6666666666665" y="1448.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">OE / DATAOUT / pad mux</tspan> — GPIO1 direction and value registers, and the</text>
+  <text x="1048.6666666666665" y="1463.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">pin-function register (mode 7 = GPIO)</text>
+  </g><!-- /glossary -->
 </svg>

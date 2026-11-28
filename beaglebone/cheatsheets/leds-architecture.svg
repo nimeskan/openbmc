@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1236" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1459" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>Identify and heartbeat LEDs: architecture</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1500" height="1236" fill="#ffffff"/>
+  <rect width="1500" height="1459" fill="#ffffff"/>
   <text x="750.0" y="34" font-size="23" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Identify and heartbeat LEDs: every layer and how they plug together</text>
   <text x="750.0" y="58" font-size="13.5" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">Our BeagleBone with the LED stand-in (C++ or Rust version). Labels on arrows (orange) are the exact "plugs": D-Bus names, paths, properties, files.</text>
   <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
@@ -219,4 +219,29 @@
   <text x="1062" y="1150" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">"xyz.openbmc_project.LED.Controller".</text>
   <text x="1062" y="1169" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">JSON config, groups, bmcweb: unchanged.</text>
   <text x="1062" y="1188" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Optional: let the kernel heartbeat own USR0.</text>
+
+  <g id="glossary" data-orig-h="1236">
+  <rect x="20" y="1242" width="1460.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1264" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1286" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">LED group</tspan> — a named situation (identify, BMC booted …) listing which LEDs</text>
+  <text x="42.0" y="1301.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">do what; turning it on = Asserted = true</text>
+  <text x="32.0" y="1324.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">physical LED object</tspan> — one real LED on D-Bus, with State (Off/On/Blink),</text>
+  <text x="42.0" y="1340.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">DutyOn (%) and Period (ms)</text>
+  <text x="32.0" y="1363.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Priority</tspan> — which state wins when two active groups want the same LED</text>
+  <text x="42.0" y="1379.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">differently</text>
+  <text x="524.0" y="1286" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">object mapper</tspan> — OpenBMC's directory of which program owns which D-Bus</text>
+  <text x="534.0" y="1301.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">object (GetObject answers "who serves X?")</text>
+  <text x="524.0" y="1324.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">bus name</tspan> — the name a program claims on D-Bus, e.g.</text>
+  <text x="534.0" y="1340.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">xyz.openbmc_project.LED.GroupManager</text>
+  <text x="524.0" y="1363.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">stand-in</tspan> — our temporary program doing phosphor-led-sysfs's job until the</text>
+  <text x="534.0" y="1379.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">kernel has an LED driver</text>
+  <text x="1016.0" y="1286" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Type=dbus</tspan> — a systemd unit counts as "started" once its program has</text>
+  <text x="1026.0" y="1301.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">claimed its D-Bus name</text>
+  <text x="1016.0" y="1324.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">ioctl / line handle</tspan> — the system call and the held file descriptor the</text>
+  <text x="1026.0" y="1340.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">stand-in uses to drive the GPIO lines</text>
+  <text x="1016.0" y="1363.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">(y) (q) (s) (b)</tspan> — D-Bus type letters: byte, 16-bit unsigned, string,</text>
+  <text x="1026.0" y="1379.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">boolean</text>
+  <text x="1016.0" y="1402.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Redfish / bmcweb</tspan> — the standard web API for managing servers, and</text>
+  <text x="1026.0" y="1417.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">OpenBMC's server for it (port 443)</text>
+  </g><!-- /glossary -->
 </svg>

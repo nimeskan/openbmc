@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 440" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 663" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>SD card layout and boot sequence</title>
   <defs>
     <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
     </marker>
   </defs>
-  <rect width="1000" height="440" fill="#ffffff"/>
+  <rect width="1000" height="663" fill="#ffffff"/>
   <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">What's on the SD card, and how the board boots from it</text>
 
   <!-- card layout -->
@@ -27,7 +27,7 @@
   <text x="404" y="124" font-size="12" fill="#333">The whole Linux system: /usr/bin, /etc, /var …</text>
   <text x="404" y="140" font-size="12" fill="#333">systemd (starts everything), dropbear SSH server,</text>
   <text x="404" y="156" font-size="12" fill="#333">bmcweb (web UI + Redfish), phosphor-* D-Bus services,</text>
-  <text x="404" y="172" font-size="12" fill="#333">ipmid (IPMI over LAN), entity-manager, dbus-sensors …</text>
+  <text x="404" y="172" font-size="12" fill="#333">ipmid (IPMI over LAN), phosphor-hwmon, LED + state managers …</text>
 
   <!-- boot chain -->
   <text x="30" y="240" font-weight="bold" fill="#222">Boot sequence (power on with S2 held = boot from SD)</text>
@@ -73,12 +73,32 @@
   <path d="M220,190 C230,225 430,225 445,254" stroke="#d48a00" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#a)"/>
   <path d="M310,190 C320,228 600,225 620,254" stroke="#d48a00" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#a)"/>
   <path d="M680,190 C690,225 775,225 785,254" stroke="#4a6fd1" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#a)"/>
-  <text x="138" y="212" font-size="10" fill="#7a4d00">MLO</text>
-  <text x="232" y="212" font-size="10" fill="#7a4d00">u-boot.img</text>
-  <text x="322" y="212" font-size="10" fill="#7a4d00">zImage + .dtb</text>
-  <text x="694" y="212" font-size="10" fill="#1d3b8a">root filesystem</text>
+  <text x="126" y="203" font-size="10" fill="#7a4d00" text-anchor="end">MLO</text>
+  <text x="216" y="203" font-size="10" fill="#7a4d00" text-anchor="end">u-boot.img</text>
+  <text x="306" y="203" font-size="10" fill="#7a4d00" text-anchor="end">zImage + .dtb</text>
+  <text x="676" y="203" font-size="10" fill="#1d3b8a" text-anchor="end">root filesystem</text>
 
   <text x="30" y="380" font-size="12" fill="#555">Dashed arrows: which file on the card each boot stage loads.</text>
   <text x="30" y="400" font-size="12" fill="#555">Without S2 held, the Boot ROM tries the onboard eMMC first; once you copy the image to eMMC, the board boots on its own.</text>
   <text x="30" y="420" font-size="12" fill="#555">Serial console (header J1, 3.3 V, 115200 baud) shows every stage's messages.</text>
+
+  <g id="glossary" data-orig-h="440">
+  <rect x="20" y="446" width="960.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="468" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="490" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">partition table (MBR)</tspan> — the first sector of the card: says where each</text>
+  <text x="42.0" y="505.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">partition starts and ends</text>
+  <text x="32.0" y="528.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">FAT / ext4</tspan> — two file-system formats: FAT is simple (the boot ROM and</text>
+  <text x="42.0" y="544.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">U-Boot read it), ext4 is Linux's usual</text>
+  <text x="32.0" y="567.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Boot ROM</tspan> — code built into the AM335x chip; looks for MLO on the eMMC, or</text>
+  <text x="42.0" y="583.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">the SD card when S2 is held</text>
+  <text x="32.0" y="606.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">MLO (SPL)</tspan> — tiny first-stage loader: sets up RAM, then loads U-Boot</text>
+  <text x="520.0" y="490" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">U-Boot / extlinux.conf</tspan> — the boot loader, and its menu file naming the</text>
+  <text x="530.0" y="505.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">kernel, device tree and kernel options</text>
+  <text x="520.0" y="528.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">zImage / .dtb</tspan> — the compressed Linux kernel / the board's hardware</text>
+  <text x="530.0" y="544.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">description</text>
+  <text x="520.0" y="567.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">S2 button</tspan> — the "boot" button near the SD slot: hold it at power-on to</text>
+  <text x="530.0" y="583.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">boot from the SD card</text>
+  <text x="520.0" y="606.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">serial console</tspan> — text terminal over the 6-pin J1 header (3.3 V USB-serial</text>
+  <text x="530.0" y="621.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">adapter, 115200 baud)</text>
+  </g><!-- /glossary -->
 </svg>

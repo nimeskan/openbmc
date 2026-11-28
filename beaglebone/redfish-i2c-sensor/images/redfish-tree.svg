@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" font-family="Helvetica, Arial, sans-serif" font-size="12">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 550" font-family="Helvetica, Arial, sans-serif" font-size="12">
   <title>The Redfish resource tree on this BMC</title>
-  <rect width="1000" height="420" fill="#ffffff"/>
+  <rect width="1000" height="550" fill="#ffffff"/>
   <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Redfish is a tree of JSON resources, each with its own URL</text>
   <g stroke="#888" stroke-width="1.5" fill="none">
     <path d="M140,95 L140,375"/>
@@ -45,4 +45,14 @@
   <text x="460" y="330" fill="#555" font-size="11">Every resource has "@odata.id" (its own URL)</text>
   <text x="460" y="346" fill="#555" font-size="11">and links to its children, so a client can</text>
   <text x="460" y="362" fill="#555" font-size="11">start at /redfish/v1 and discover the rest.</text>
+
+  <g id="glossary" data-orig-h="420">
+  <rect x="20" y="426" width="960.0" height="110.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="448" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="470" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">resource</tspan> — one JSON document at one URL (a system, a sensor …)</text>
+  <text x="32.0" y="493.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">collection</tspan> — a resource listing links to its members (e.g. Sensors)</text>
+  <text x="520.0" y="470" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">@odata.id</tspan> — the URL of a resource, included in its own JSON so clients</text>
+  <text x="530.0" y="485.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">can follow links</text>
+  <text x="520.0" y="508.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">service root</tspan> — /redfish/v1: the starting point every client begins from</text>
+  </g><!-- /glossary -->
 </svg>

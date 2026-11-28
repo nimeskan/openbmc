@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1380" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1588" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>What D-Bus physically is</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1600" height="1380" fill="#ffffff"/>
+  <rect width="1600" height="1588" fill="#ffffff"/>
   <text x="800.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">What D-Bus physically is (and is not)</text>
   <text x="800.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">D-Bus is NOT a file of messages and NOT a database. It is one running program (dbus-broker) that ROUTES messages between other running programs.</text>
   <rect x="20" y="74" width="22" height="16" rx="3" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
@@ -148,4 +148,28 @@
   <text x="36" y="1315" font-size="12.8" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">so what IS it?</text>
   <text x="420" y="1315" font-size="12.8" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">A message ROUTER + a NAME registry + a SECURITY policy, run by dbus-broker, plus an agreed message format.</text>
   <text x="36" y="1348" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">On the board: </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">ls -l /run/dbus/system_bus_socket</tspan><tspan>   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl list</tspan><tspan> (names, owners, PIDs)   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl monitor</tspan><tspan> (watch messages live)   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl status xyz.openbmc_project.State.Host0</tspan></text>
+
+  <g id="glossary" data-orig-h="1380">
+  <rect x="20" y="1386" width="1560.0" height="187.5" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1408" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1430" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">process / PID</tspan> — a running program, and the number Linux gives it; each has its</text>
+  <text x="42.0" y="1445.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">own private memory</text>
+  <text x="32.0" y="1468.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">socket</tspan> — a two-way connection between programs; the socket FILE is only the</text>
+  <text x="42.0" y="1484.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">address used to open one</text>
+  <text x="32.0" y="1507.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">dbus-broker</tspan> — the program that implements the D-Bus system bus (OpenBMC uses it</text>
+  <text x="42.0" y="1523.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">instead of the older dbus-daemon)</text>
+  <text x="557.3333333333333" y="1430" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">well-known name</tspan> — a fixed name like xyz.openbmc_project.State.Host0 that a</text>
+  <text x="567.3333333333333" y="1445.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">program claims; it points to its unique name</text>
+  <text x="557.3333333333333" y="1468.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">unique name</tspan> — the ID the broker gives each connection: :1.17, :1.42 …</text>
+  <text x="557.3333333333333" y="1492.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">object / interface / property</tspan> — a thing a program publishes, a named set of</text>
+  <text x="567.3333333333333" y="1507.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">features on it, and a value in that set</text>
+  <text x="557.3333333333333" y="1530.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">event loop</tspan> — a program's main loop: it sleeps until a message, timer or signal</text>
+  <text x="567.3333333333333" y="1546.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">arrives, then handles it</text>
+  <text x="1082.6666666666665" y="1430" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">match rule</tspan> — a subscription telling the broker which signals a program wants to</text>
+  <text x="1092.6666666666665" y="1445.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">receive</text>
+  <text x="1082.6666666666665" y="1468.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">policy (.conf)</tspan> — XML rules saying who may own a name or call whom</text>
+  <text x="1092.6666666666665" y="1484.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(/usr/share/dbus-1/system.d/)</text>
+  <text x="1082.6666666666665" y="1507.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">busctl</tspan> — systemd's command-line D-Bus tool: list, tree, introspect,</text>
+  <text x="1092.6666666666665" y="1523.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">get-property, call, monitor</text>
+  </g><!-- /glossary -->
 </svg>

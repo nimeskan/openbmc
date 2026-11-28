@@ -80,3 +80,6 @@ class Svg:
         self.parts.append('</svg>')
         with open(path, 'w') as fh:
             fh.write('\n'.join(self.parts) + '\n')
+        # add the "Words on this sheet" strip, if glossary.py has one for this file
+        import glossary
+        glossary.apply(path)

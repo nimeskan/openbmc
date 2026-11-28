@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 445" font-family="Helvetica, Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 614" font-family="Helvetica, Arial, sans-serif" font-size="13">
   <title>Wiring an I2C sensor to the BeagleBone Black P9 header</title>
-  <rect width="1000" height="445" fill="#ffffff"/>
+  <rect width="1000" height="614" fill="#ffffff"/>
   <text x="500" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">Wiring: BeagleBone Black header P9 → I2C sensor (bus I2C2 = /dev/i2c-2)</text>
 
   <!-- board outline -->
@@ -41,8 +41,8 @@
   <rect x="700" y="150" width="240" height="190" rx="10" fill="#1b5e20"/>
   <text x="820" y="178" text-anchor="middle" fill="#fff" font-weight="bold">Sensor module</text>
   <text x="820" y="196" text-anchor="middle" fill="#cde" font-size="11">SIM3 (or TMP75 / LM75 breakout)</text>
-  <rect x="790" y="215" width="60" height="45" rx="4" fill="#111"/>
-  <text x="820" y="242" text-anchor="middle" fill="#ccc" font-size="10">chip</text>
+  <rect x="866" y="222" width="56" height="44" rx="4" fill="#111"/>
+  <text x="894" y="248" text-anchor="middle" fill="#ccc" font-size="10">chip</text>
   <g font-size="12">
     <circle cx="715" cy="225" r="7" fill="#e53935"/><text x="728" y="229" fill="#fff">VCC (3.3 V)</text>
     <circle cx="715" cy="255" r="7" fill="#4caf50"/><text x="728" y="259" fill="#fff">GND</text>
@@ -55,10 +55,25 @@
   <path d="M162,182 C300,182 520,225 708,225" stroke="#e53935" stroke-width="3" fill="none"/>
   <path d="M162,160 C300,160 520,255 708,255" stroke="#4caf50" stroke-width="3" fill="none"/>
   <path d="M105,282 C105,272 120,271 140,271 L420,271 C560,271 600,285 708,285" stroke="#fbc02d" stroke-width="3" fill="none"/>
-  <path d="M162,304 C300,304 520,315 708,315" stroke="#1e88e5" stroke-width="3" fill="none"/>
+  <path d="M162,282 C300,282 520,315 708,315" stroke="#1e88e5" stroke-width="3" fill="none"/>
 
   <text x="480" y="372" font-size="12" fill="#c43c3c" font-weight="bold">3.3 V logic only. Never connect a 5 V signal to these</text>
   <text x="480" y="390" font-size="12" fill="#c43c3c" font-weight="bold">pins. Wire with the board unpowered.</text>
   <text x="480" y="414" font-size="11" fill="#555">I2C2 already has pull-up resistors and the cape ID EEPROMs</text>
   <text x="480" y="430" font-size="11" fill="#555">at 0x54–0x57; give your sensor a different address.</text>
+
+  <g id="glossary" data-orig-h="445">
+  <rect x="20" y="451" width="960.0" height="148.75" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="473" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="495" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">SCL / SDA</tspan> — I2C's two wires: clock and data</text>
+  <text x="32.0" y="518.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">GND / VCC</tspan> — ground (0 V) and the supply voltage (3.3 V from the</text>
+  <text x="42.0" y="533.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">BeagleBone)</text>
+  <text x="32.0" y="557.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">pull-up resistor</tspan> — resistor that holds an I2C line high when nobody pulls</text>
+  <text x="42.0" y="572.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">it low (I2C needs them)</text>
+  <text x="520.0" y="495" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">I2C address (0x48)</tspan> — the 7-bit number a chip answers to on its bus; two</text>
+  <text x="530.0" y="510.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">chips on one bus need different addresses</text>
+  <text x="520.0" y="533.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">3.3 V logic</tspan> — the pins' signal level; 5 V signals can damage the AM335x</text>
+  <text x="520.0" y="557.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">cape EEPROM</tspan> — ID memory chip on BeagleBone add-on boards ("capes"), at</text>
+  <text x="530.0" y="572.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">0x54–0x57</text>
+  </g><!-- /glossary -->
 </svg>

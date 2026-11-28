@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1690" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1913" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>Inside the BMC: programs, D-Bus and bmcweb</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1600" height="1690" fill="#ffffff"/>
+  <rect width="1600" height="1913" fill="#ffffff"/>
   <text x="800.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Inside the BMC: the programs, the D-Bus that connects them, and bmcweb</text>
   <text x="800.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">The BMC is a small Linux computer running ~30 cooperating programs. They never call each other directly: everything goes as messages over D-Bus.</text>
   <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
@@ -220,4 +220,30 @@
   <rect x="20" y="1616" width="1560" height="60" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
   <text x="36" y="1640" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">See it on the board:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl list</tspan><tspan> (all names)   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl tree xyz.openbmc_project.State.Host0</tspan><tspan>   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl introspect &lt;name&gt; &lt;path&gt;</tspan><tspan>   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl get-property …</tspan></text>
   <text x="36" y="1662" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Watch it live:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl monitor</tspan><tspan> — then click the identify switch in the web UI and see bmcweb's Set, the LED manager's mapper call and the stand-in's property writes scroll past.</tspan></text>
+
+  <g id="glossary" data-orig-h="1690">
+  <rect x="20" y="1696" width="1560.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1718" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1740" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">daemon</tspan> — a program that runs in the background, waiting to do work</text>
+  <text x="32.0" y="1763.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">port</tspan> — number of a network service on a machine: 443 HTTPS, 22 SSH, 623 IPMI,</text>
+  <text x="42.0" y="1778.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">5353 mDNS</text>
+  <text x="32.0" y="1802.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Redfish</tspan> — the industry-standard (DMTF) web API for managing servers: URLs that</text>
+  <text x="42.0" y="1817.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">return JSON</text>
+  <text x="32.0" y="1840.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">IPMI</tspan> — an older management protocol, still common (the ipmitool command)</text>
+  <text x="557.3333333333333" y="1740" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">SSH</tspan> — secure remote shell: log in and type commands (dropbear is the SSH server</text>
+  <text x="567.3333333333333" y="1755.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">on our board)</text>
+  <text x="557.3333333333333" y="1778.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">mDNS</tspan> — lets machines on a local network find each other by name</text>
+  <text x="567.3333333333333" y="1794.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">("evb-beaglebone.local") without a DNS server</text>
+  <text x="557.3333333333333" y="1817.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">bus name / object path / interface</tspan> — who (which program), which thing (a path),</text>
+  <text x="567.3333333333333" y="1833.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">which set of features (see the D-Bus sheet)</text>
+  <text x="557.3333333333333" y="1856.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">unique name (:1.42)</tspan> — the ID D-Bus gives each connection; well-known names like</text>
+  <text x="567.3333333333333" y="1871.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">xyz.openbmc_project.… point to one</text>
+  <text x="1082.6666666666665" y="1740" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">FRU</tspan> — field-replaceable unit: a part you can swap (fan, power supply, board),</text>
+  <text x="1092.6666666666665" y="1755.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">listed in the inventory</text>
+  <text x="1082.6666666666665" y="1778.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">event log</tspan> — the BMC's list of notable events and errors, shown in the web UI</text>
+  <text x="1092.6666666666665" y="1794.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">and Redfish</text>
+  <text x="1082.6666666666665" y="1817.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">variant &lt;s …&gt;</tspan> — a D-Bus value that carries its own type letter (s = string)</text>
+  <text x="1082.6666666666665" y="1840.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">webui-vue</tspan> — OpenBMC's web UI: JavaScript files served by bmcweb that run in</text>
+  <text x="1092.6666666666665" y="1856.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">your browser and call Redfish</text>
+  </g><!-- /glossary -->
 </svg>

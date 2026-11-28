@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 330" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 514" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>From source code to a running BeagleBone</title>
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
     </marker>
   </defs>
-  <rect width="1000" height="330" fill="#ffffff"/>
+  <rect width="1000" height="514" fill="#ffffff"/>
   <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">From source code to a running BeagleBone</text>
 
   <!-- 1 source -->
@@ -60,4 +60,21 @@
 
   <text x="20" y="250" font-size="12" fill="#555">Steps 1–3 happen once per build.</text>
   <text x="20" y="268" font-size="12" fill="#555">Steps 4–6 happen on your desk.</text>
+
+  <g id="glossary" data-orig-h="330">
+  <rect x="20" y="336" width="960.0" height="164.25" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="358" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="380" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">BitBake / layers</tspan> — the build tool, and the folders of recipes and</text>
+  <text x="42.0" y="395.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">settings it combines into an image</text>
+  <text x="32.0" y="418.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">image (.wic.xz)</tspan> — one file containing the whole SD card (partitions and</text>
+  <text x="42.0" y="434.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">all), compressed with xz</text>
+  <text x="32.0" y="457.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">GitHub Actions / Releases</tspan> — GitHub's build servers, and the download page</text>
+  <text x="42.0" y="473.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">where the finished image is published</text>
+  <text x="520.0" y="380" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">balenaEtcher / dd / bmaptool</tspan> — programs that write an image file onto an</text>
+  <text x="530.0" y="395.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">SD card</text>
+  <text x="520.0" y="418.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">U-Boot / systemd</tspan> — the boot loader that starts Linux, and the first</text>
+  <text x="530.0" y="434.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">program that starts all others</text>
+  <text x="520.0" y="457.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">Redfish / IPMI / SSH</tspan> — standard web API for servers / older management</text>
+  <text x="530.0" y="473.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">protocol / remote command line</text>
+  </g><!-- /glossary -->
 </svg>

@@ -12,10 +12,19 @@ what each one is for, and what you can leave for later.
 >
 > **Cheat sheets:** [`cheatsheets/`](cheatsheets/README.md) has one-page
 > diagrams to keep open while you work:
+> * inside the BMC: its programs, D-Bus and bmcweb;
+> * what D-Bus physically is, and what each OpenBMC program watches and
+>   writes;
 > * where things live in Linux;
 > * kernel, drivers and modules;
 > * systemd (units, services, daemons);
-> * USB host, device and gadget.
+> * USB host, device and gadget;
+> * GPIO toggling layer by layer, in C and C++;
+> * how the identify and heartbeat LEDs are wired up;
+> * OpenBMC targets (host and chassis power).
+>
+> Every diagram ends with a **"Words on this sheet"** box that defines the
+> terms it uses.
 
 ### 1. Connecting from a Windows PC: [`connecting-from-a-windows-pc.md`](connecting-from-a-windows-pc.md)
 

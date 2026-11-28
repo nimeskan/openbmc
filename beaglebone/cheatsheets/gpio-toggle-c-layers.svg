@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1210" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1534 1433" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>GPIO toggle in C: every layer</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1534" height="1210" fill="#ffffff"/>
+  <rect width="1534" height="1433" fill="#ffffff"/>
   <text x="767.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">GPIO toggle in C: every layer</text>
   <text x="767.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">What gpio-blink-uapi.c (Path A) and gpio-blink-gpiod.c (Path B) do at each layer, down to the USR3 LED on our BeagleBone</text>
   <rect x="20" y="76" width="22" height="16" rx="3" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
@@ -221,4 +221,33 @@
   <text x="20" y="1110.0" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Both paths meet at the system call: </tspan><tspan>Path A speaks the kernel's v2 interface, libgpiod 1.6 the older v1; below that, everything is identical.</tspan></text>
   <text x="20" y="1130.0" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Only phase 4 turns the pin back into an input. </tspan><tspan>Holding the line handle open (phases 2→4) is what makes toggling glitch-free.</tspan></text>
   <text x="20" y="1150.0" font-size="13" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Errors: </tspan><tspan>a failing system call returns -1 and sets </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">errno</tspan><tspan> (e.g. EBUSY if someone else owns the line); C code checks every return value.</tspan></text>
+
+  <g id="glossary" data-orig-h="1210">
+  <rect x="20" y="1216" width="1494.0" height="203.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1238" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1260" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">file descriptor (fd)</tspan> — the number a program gets back from open(); later</text>
+  <text x="42.0" y="1275.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">calls (ioctl, close) use it</text>
+  <text x="32.0" y="1298.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">line handle</tspan> — a NEW fd the kernel returns when lines are reserved; holding</text>
+  <text x="42.0" y="1314.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">it open = owning the lines</text>
+  <text x="32.0" y="1337.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">ioctl request code</tspan> — number naming the request, e.g. 0xC250B407 = direction</text>
+  <text x="42.0" y="1353.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">+ structure size + type 0xB4 (GPIO) + command 7</text>
+  <text x="32.0" y="1376.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">syscall number</tspan> — number that tells the kernel which system call (ioctl =</text>
+  <text x="42.0" y="1391.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">#54); "svc #0" is the ARM instruction to enter the kernel</text>
+  <text x="535.3333333333333" y="1260" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">v1 / v2</tspan> — two generations of the kernel's GPIO interface; libgpiod 1.6 uses</text>
+  <text x="545.3333333333333" y="1275.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">v1, our Path A uses v2; both are enabled</text>
+  <text x="535.3333333333333" y="1298.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">gc-&gt;request() …</tspan> — a call through the table of functions the driver gave</text>
+  <text x="545.3333333333333" y="1314.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">gpiolib (struct gpio_chip)</text>
+  <text x="535.3333333333333" y="1337.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">pm_runtime</tspan> — kernel power management: turns a hardware block's clock on</text>
+  <text x="545.3333333333333" y="1353.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">while something uses it</text>
+  <text x="535.3333333333333" y="1376.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">spinlock</tspan> — a lock that stops two CPUs or an interrupt changing the same</text>
+  <text x="545.3333333333333" y="1391.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">register at the same time</text>
+  <text x="1038.6666666666665" y="1260" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">OE / DATAOUT</tspan> — GPIO1 registers: OE = direction (0 = output), DATAOUT =</text>
+  <text x="1048.6666666666665" y="1275.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">output values; SET/CLEARDATAOUT change single bits</text>
+  <text x="1038.6666666666665" y="1298.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">pad mux</tspan> — per-pin register choosing which job a pin has; mode 7 = GPIO</text>
+  <text x="1048.6666666666665" y="1314.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">(0x44E10860 for USR3)</text>
+  <text x="1038.6666666666665" y="1337.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">VFS</tspan> — the kernel's file layer: routes open/ioctl on /dev/gpiochip0 to the</text>
+  <text x="1048.6666666666665" y="1353.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">GPIO character-device code</text>
+  <text x="1038.6666666666665" y="1376.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">EBUSY</tspan> — error "device or resource busy": another program or driver already</text>
+  <text x="1048.6666666666665" y="1391.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">owns the line</text>
+  </g><!-- /glossary -->
 </svg>

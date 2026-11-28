@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1030" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1315" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>Kernel, drivers and modules cheat sheet</title>
   <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
-  <rect width="1240" height="1030" fill="#ffffff"/>
+  <rect width="1240" height="1315" fill="#ffffff"/>
   <text x="620.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Kernel, drivers and modules</text>
   <text x="620.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">How a program reaches the hardware, which parts are built in, and which are loadable modules. Examples from our BeagleBone.</text>
   <rect x="20" y="80" width="770" height="236" rx="12" fill="#e6f6ea" fill-opacity="0.45" stroke="#2e9a4b" stroke-width="1.5"/>
@@ -105,4 +105,30 @@
   <text x="1010" y="970" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">running kernel version</text>
   <text x="822" y="988" font-size="12.5" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">zcat /proc/config.gz</text>
   <text x="1010" y="988" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">how the kernel was built</text>
+
+  <g id="glossary" data-orig-h="1030">
+  <rect x="20" y="1036" width="1200.0" height="265.0" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="1058" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="1080" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">user space / kernel space</tspan> — two privilege levels of the CPU: programs run in user space and</text>
+  <text x="42.0" y="1095.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">must ask the kernel to touch hardware</text>
+  <text x="32.0" y="1118.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">system call</tspan> — a function call into the kernel (open, read, write, ioctl …); the CPU switches</text>
+  <text x="42.0" y="1134.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">into kernel mode to run it</text>
+  <text x="32.0" y="1157.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">ioctl</tspan> — "I/O control": a system call for device-specific requests, each identified by a</text>
+  <text x="42.0" y="1173.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">number (a "request code")</text>
+  <text x="32.0" y="1196.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">driver</tspan> — kernel code that knows how to operate one kind of hardware (registers, interrupts)</text>
+  <text x="32.0" y="1219.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">subsystem</tspan> — a generic kernel layer for one kind of device (gpiolib for GPIO, I2C core …)</text>
+  <text x="42.0" y="1235.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">that drivers plug into</text>
+  <text x="32.0" y="1258.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">device tree / compatible</tspan> — the board's hardware description (.dtb). Each node's "compatible"</text>
+  <text x="42.0" y="1273.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">string is how the kernel picks its driver</text>
+  <text x="640.0" y="1080" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">probe()</tspan> — the driver function the kernel calls when it matches a device; it sets the</text>
+  <text x="650.0" y="1095.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">hardware up and registers it</text>
+  <text x="640.0" y="1118.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">register</tspan> — a memory address inside a chip block that controls or reports hardware (e.g.</text>
+  <text x="650.0" y="1134.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">0x4804C194)</text>
+  <text x="640.0" y="1157.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">PMIC</tspan> — power-management chip: makes the board's supply voltages (the TPS65217 on the</text>
+  <text x="650.0" y="1173.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">BeagleBone)</text>
+  <text x="640.0" y="1196.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">hwmon</tspan> — the kernel's framework for monitoring sensors (temperatures, voltages …):</text>
+  <text x="650.0" y="1211.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">/sys/class/hwmon</text>
+  <text x="640.0" y="1235.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">cpsw / musb / MMC</tspan> — the AM335x's Ethernet, USB and SD/eMMC controllers (and their drivers)</text>
+  <text x="640.0" y="1258.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">struct gpio_chip</tspan> — the "table of functions" a GPIO driver fills in so gpiolib can call it</text>
+  </g><!-- /glossary -->
 </svg>

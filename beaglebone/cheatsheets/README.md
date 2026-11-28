@@ -228,3 +228,26 @@ to write. They need only Python 3, with no extra packages.
 | `dbus_programs.py` | `dbus-explained.svg` and `openbmc-programs.svg` (run as `python3 dbus_programs.py . ..`) |
 | `targets.py` | `openbmc-targets.svg` (run as `python3 targets.py . ..`) |
 | `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
+| `glossary.py` | The **"Words on this sheet"** strip at the bottom of every diagram (see below) |
+
+### The "Words on this sheet" strips
+
+Every diagram ends with a short glossary of the terms it uses. The
+glossaries cover these cheat sheets, the diagrams in
+[`../images/`](../images/) and those in
+[`../redfish-i2c-sensor/images/`](../redfish-i2c-sensor/images/). All of the
+definitions are in one place, the `G` table in `src/glossary.py`, keyed by
+the SVG's file name.
+
+* The generated sheets get their strip automatically: `lib.py` calls
+  `glossary.apply()` whenever it saves an SVG.
+* The hand-drawn diagrams (the `images/` folders) get it by running the
+  script on them:
+
+  ```sh
+  cd beaglebone/cheatsheets/src
+  python3 glossary.py ../../images/*.svg ../../redfish-i2c-sensor/images/*.svg
+  ```
+
+It is safe to run more than once: the script removes the old strip and puts
+the diagram back to its original height before adding the new one.

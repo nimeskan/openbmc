@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" font-family="Helvetica, Arial, sans-serif" font-size="14">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 584" font-family="Helvetica, Arial, sans-serif" font-size="14">
   <title>GitHub Actions build with automatic resume</title>
   <defs>
     <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
     </marker>
   </defs>
-  <rect width="1000" height="400" fill="#ffffff"/>
+  <rect width="1000" height="584" fill="#ffffff"/>
   <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#222">GitHub Actions: one run can last 6 hours, so the build resumes itself</text>
 
   <g font-size="12">
@@ -61,4 +61,21 @@
 
   <text x="20" y="360" font-size="12" fill="#555">A real error (not the time limit) stops the chain and uploads the build logs as an artifact.</text>
   <text x="20" y="380" font-size="12" fill="#555">Workflow file: .github/workflows/build-beaglebone.yml</text>
+
+  <g id="glossary" data-orig-h="400">
+  <rect x="20" y="406" width="960.0" height="164.25" rx="10" fill="#ffffff" stroke="#888" stroke-width="1.5"/>
+  <text x="32" y="428" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#333">Words on this sheet</text>
+  <text x="32.0" y="450" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">runner</tspan> — a fresh virtual machine GitHub gives each run (max 6 hours,</text>
+  <text x="42.0" y="465.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">limited disk)</text>
+  <text x="32.0" y="488.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">sstate-cache</tspan> — BitBake's store of already-built results; reusing it skips</text>
+  <text x="42.0" y="504.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">work on the next run</text>
+  <text x="32.0" y="527.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">cache storage</tspan> — GitHub's per-repository cache (actions/cache); unused</text>
+  <text x="42.0" y="543.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">entries are deleted after 7 days</text>
+  <text x="520.0" y="450" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">workflow / gh workflow run</tspan> — the build recipe file for GitHub Actions /</text>
+  <text x="530.0" y="465.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">the command that starts a new run</text>
+  <text x="520.0" y="488.75" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">artifact</tspan> — files a run uploads for download (here: build logs when</text>
+  <text x="530.0" y="504.25" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">something really failed)</text>
+  <text x="520.0" y="527.5" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve"><tspan font-weight="bold">release</tspan> — a GitHub download page with files (.wic.xz, .wic.bmap,</text>
+  <text x="530.0" y="543.0" font-family="Helvetica, Arial, sans-serif" font-size="12.0" fill="#333" xml:space="preserve">SHA256SUMS checksums)</text>
+  </g><!-- /glossary -->
 </svg>
