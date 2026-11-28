@@ -1,0 +1,223 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1690" font-family="Helvetica, Arial, sans-serif" font-size="14">
+  <title>Inside the BMC: programs, D-Bus and bmcweb</title>
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <rect width="1600" height="1690" fill="#ffffff"/>
+  <text x="800.0" y="34" font-size="24" font-weight="bold" fill="#222" text-anchor="middle" xml:space="preserve">Inside the BMC: the programs, the D-Bus that connects them, and bmcweb</text>
+  <text x="800.0" y="58" font-size="14" font-weight="normal" fill="#555" text-anchor="middle" xml:space="preserve">The BMC is a small Linux computer running ~30 cooperating programs. They never call each other directly: everything goes as messages over D-Bus.</text>
+  <rect x="20" y="74" width="22" height="16" rx="3" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="50" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">outside the board</text>
+  <rect x="191.3" y="74" width="22" height="16" rx="3" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="221.3" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">OpenBMC programs (in the image)</text>
+  <rect x="459.2" y="74" width="22" height="16" rx="3" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="489.2" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">added by us</text>
+  <rect x="589.1" y="74" width="22" height="16" rx="3" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="619.1" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">D-Bus itself</text>
+  <rect x="725.9000000000001" y="74" width="22" height="16" rx="3" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="755.9000000000001" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Linux kernel</text>
+  <rect x="862.7" y="74" width="22" height="16" rx="3" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="892.7" y="87" font-size="13" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">hardware / reference</text>
+  <text x="20" y="120" font-size="14" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">1. WHAT IS RUNNING ON THE BOARD</text>
+  <rect x="20" y="134" width="230" height="300" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="32" y="156" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="start" xml:space="preserve">Your PC / the network</text>
+  <text x="32" y="176" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Browser → web UI</text>
+  <text x="32" y="193" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   (HTTPS, port 443)</text>
+  <text x="32" y="210" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">curl / fleet tools → Redfish</text>
+  <text x="32" y="227" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   (HTTPS, port 443)</text>
+  <text x="32" y="244" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">ssh → a shell (port 22)</text>
+  <text x="32" y="261" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">ipmitool → IPMI</text>
+  <text x="32" y="278" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   (UDP port 623)</text>
+  <text x="32" y="295" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">mDNS: "evb-beaglebone.local"</text>
+  <text x="32" y="312" font-size="12.5" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   (avahi, port 5353)</text>
+  <rect x="270" y="134" width="1310" height="700" rx="14" fill="#fafafa" stroke="#333" stroke-width="2.5"/>
+  <text x="284" y="156" font-size="15" font-weight="bold" fill="#222" text-anchor="start" xml:space="preserve">The BeagleBone running OpenBMC (Linux)</text>
+  <rect x="284" y="170" width="300" height="70" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="296" y="192" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">bmcweb</text>
+  <text x="296" y="210" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">web server + Redfish API</text>
+  <text x="296" y="225" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">port 443</text>
+  <rect x="602" y="170" width="300" height="70" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="614" y="192" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">dropbear</text>
+  <text x="614" y="210" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">SSH server → shell</text>
+  <text x="614" y="225" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">port 22</text>
+  <rect x="920" y="170" width="300" height="70" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="932" y="192" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">netipmid (phosphor-ipmi-net)</text>
+  <text x="932" y="210" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">IPMI over the network</text>
+  <text x="932" y="225" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">UDP 623</text>
+  <rect x="1238" y="170" width="300" height="70" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1250" y="192" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">avahi-daemon</text>
+  <text x="1250" y="210" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">answers "….local" names</text>
+  <text x="1250" y="225" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">port 5353</text>
+  <line x1="250" y1="205" x2="282" y2="205" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="264" y="196" font-size="11.5" font-weight="normal" fill="#555" text-anchor="end" xml:space="preserve">network</text>
+  <text x="284" y="262" font-size="12.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">"Front doors": programs that talk to the outside world. bmcweb turns web/Redfish requests into D-Bus messages (part 3).</text>
+  <rect x="284" y="300" width="1282" height="54" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2.5"/>
+  <text x="925.0" y="322" font-size="14.5" font-weight="bold" fill="#7a4d00" text-anchor="middle" xml:space="preserve">D-Bus system bus  (the program dbus-broker; socket /run/dbus/system_bus_socket)</text>
+  <text x="925.0" y="342" font-size="12.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Every program connects to it once, claims a NAME, and from then on sends and receives messages by name. Like a switchboard: all traffic goes through it.</text>
+  <line x1="434" y1="240" x2="434" y2="300" stroke="#d48a00" stroke-width="3"/>
+  <line x1="752" y1="240" x2="752" y2="300" stroke="#d48a00" stroke-width="3"/>
+  <line x1="1070" y1="240" x2="1070" y2="300" stroke="#d48a00" stroke-width="3"/>
+  <line x1="1388" y1="240" x2="1388" y2="300" stroke="#d48a00" stroke-width="3"/>
+  <line x1="440.0" y1="354" x2="440.0" y2="706" stroke="#d48a00" stroke-width="2.5"/>
+  <line x1="758.0" y1="354" x2="758.0" y2="706" stroke="#d48a00" stroke-width="2.5"/>
+  <line x1="1076.0" y1="354" x2="1076.0" y2="706" stroke="#d48a00" stroke-width="2.5"/>
+  <line x1="1394.0" y1="354" x2="1394.0" y2="706" stroke="#d48a00" stroke-width="2.5"/>
+  <rect x="284" y="384" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="296" y="406" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-state-manager ×3</text>
+  <text x="296" y="425" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.State.Host0 …</tspan></text>
+  <text x="296" y="441" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">power states: Host0, Chassis0, BMC</text>
+  <rect x="602" y="384" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="614" y="406" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-objmgr (mapper)</text>
+  <text x="614" y="425" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.ObjectMapper</tspan></text>
+  <text x="614" y="441" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">directory: which program owns which object</text>
+  <rect x="920" y="384" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="932" y="406" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-ledmanager</text>
+  <text x="932" y="425" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.LED.GroupManager</tspan></text>
+  <text x="932" y="441" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">LED groups (identify, booted …)</text>
+  <rect x="1238" y="384" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1250" y="406" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-led-sysfs</text>
+  <text x="1250" y="425" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.LED.Controller</tspan></text>
+  <text x="1250" y="441" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">physical LEDs from /sys/class/leds (idle)</text>
+  <rect x="284" y="490" width="312" height="72" rx="10" fill="#e6f6ea" stroke="#2e9a4b" stroke-width="2"/>
+  <text x="296" y="512" font-size="13" font-weight="bold" fill="#1c5e2e" text-anchor="start" xml:space="preserve">bbb-led-standin</text>
+  <text x="296" y="531" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.LED.GpioStandIn</tspan></text>
+  <text x="296" y="547" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">our 4 physical LEDs via GPIO</text>
+  <rect x="602" y="490" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="614" y="512" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-log-manager</text>
+  <text x="614" y="531" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Logging</tspan></text>
+  <text x="614" y="547" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">event log entries</text>
+  <rect x="920" y="490" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="932" y="512" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-networkd</text>
+  <text x="932" y="531" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Network</tspan></text>
+  <text x="932" y="547" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">IP/DHCP settings for web UI + Redfish</text>
+  <rect x="1238" y="490" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1250" y="512" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-user-manager</text>
+  <text x="1250" y="531" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.User.Manager</tspan></text>
+  <text x="1250" y="547" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">BMC user accounts, roles</text>
+  <rect x="284" y="596" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="296" y="618" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-inventory-manager</text>
+  <text x="296" y="637" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Inventory.Manager</tspan></text>
+  <text x="296" y="653" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">parts list (FRUs)</text>
+  <rect x="602" y="596" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="614" y="618" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-settings-manager</text>
+  <text x="614" y="637" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Settings</tspan></text>
+  <text x="614" y="653" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">saved settings (power policy …)</text>
+  <rect x="920" y="596" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="932" y="618" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-time-manager</text>
+  <text x="932" y="637" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Time.Manager</tspan></text>
+  <text x="932" y="653" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">NTP or manual time</text>
+  <rect x="1238" y="596" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1250" y="618" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-software-manager</text>
+  <text x="1250" y="637" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Software.Manager</tspan></text>
+  <text x="1250" y="653" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">firmware versions + updates</text>
+  <rect x="284" y="702" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="296" y="724" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-debug-collector</text>
+  <text x="296" y="743" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Dump.Manager</tspan></text>
+  <text x="296" y="759" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">BMC dumps</text>
+  <rect x="602" y="702" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="614" y="724" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">telemetry</text>
+  <text x="614" y="743" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.Telemetry</tspan></text>
+  <text x="614" y="759" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Redfish metric reports</text>
+  <rect x="920" y="702" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="932" y="724" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">phosphor-health-monitor</text>
+  <text x="932" y="743" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">xyz.openbmc_project.HealthMon</tspan></text>
+  <text x="932" y="759" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">BMC CPU/memory/storage health</text>
+  <rect x="1238" y="702" width="312" height="72" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="1250" y="724" font-size="13" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">systemd (+ networkd, timedated …)</text>
+  <text x="1250" y="743" font-size="11.4" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">org.freedesktop.systemd1 …</tspan></text>
+  <text x="1250" y="759" font-size="11.4" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">starts/stops all programs; Linux services</text>
+  <text x="284" y="812" font-size="12.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">Orange lines = each program's connection to D-Bus, labelled in its box with the NAME it claimed. 26 programs in our image claim a name.</text>
+  <rect x="20" y="852" width="1560" height="54" rx="10" fill="#f3e8fd" stroke="#8a4ad1" stroke-width="2"/>
+  <text x="800" y="885" font-size="13.5" fill="#333" text-anchor="middle" xml:space="preserve"><tspan font-weight="bold">Linux kernel</tspan><tspan>  —  programs reach hardware only through it: /dev/gpiochip0, /dev/i2c-2, /sys, network sockets … (see the kernel cheat sheet)</tspan></text>
+  <rect x="20" y="914" width="1560" height="40" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="800" y="940" font-size="13.5" font-weight="normal" fill="#333" text-anchor="middle" xml:space="preserve">Hardware: AM335x processor, eMMC, Ethernet, GPIO pins + LEDs, I2C buses, USB …</text>
+  <text x="20" y="984" font-size="14" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">2. WHAT IS ON D-BUS: names → objects → interfaces → properties / methods / signals</text>
+  <rect x="20" y="996" width="770" height="378" rx="12" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="36" y="1026" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">BUS NAME</text>
+  <text x="132" y="1026" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Host0</text>
+  <text x="132" y="1041" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">which program (claimed by phosphor-host-state-manager)</text>
+  <text x="62" y="1059" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">OBJECT PATH</text>
+  <text x="158" y="1059" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/state/host0</text>
+  <text x="158" y="1074" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">which thing; paths form a tree like folders</text>
+  <text x="88" y="1092" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">INTERFACE</text>
+  <text x="184" y="1092" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Host</text>
+  <text x="184" y="1107" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">a named set of features (YAML in phosphor-dbus-interfaces)</text>
+  <text x="114" y="1125" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">PROPERTY</text>
+  <text x="210" y="1125" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">CurrentHostState  (s) = "…HostState.Off"</text>
+  <text x="210" y="1140" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">a value: read with Get, watch for changes</text>
+  <text x="114" y="1158" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">PROPERTY</text>
+  <text x="210" y="1158" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">RequestedHostTransition  (s)</text>
+  <text x="210" y="1173" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">writable: Set it to ask for power on/off</text>
+  <text x="114" y="1191" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">METHOD</text>
+  <text x="210" y="1191" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">(e.g. ObjectMapper: GetObject(path, ifaces))</text>
+  <text x="210" y="1206" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">an action you call; returns a reply</text>
+  <text x="114" y="1224" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">SIGNAL</text>
+  <text x="210" y="1224" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">PropertiesChanged</text>
+  <text x="210" y="1239" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">a broadcast: "this value just changed"</text>
+  <text x="88" y="1257" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">INTERFACE</text>
+  <text x="184" y="1257" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">org.freedesktop.DBus.Properties</text>
+  <text x="184" y="1272" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">standard on every object: Get / Set / GetAll</text>
+  <text x="88" y="1290" font-size="11.5" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">INTERFACE</text>
+  <text x="184" y="1290" font-size="12.2" font-weight="bold" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">org.freedesktop.DBus.Introspectable</text>
+  <text x="184" y="1305" font-size="11.5" font-weight="normal" fill="#555" text-anchor="start" font-style="italic" xml:space="preserve">standard: "describe yourself" (XML)</text>
+  <text x="36" y="1356" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Types are one letter: s string, b bool, y byte, q uint16, i int32, u uint32, x int64, d double, a… array, v variant.</text>
+  <rect x="810" y="996" width="770" height="378" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="822" y="1018" font-size="14" font-weight="bold" fill="#333333" text-anchor="start" xml:space="preserve">One message, as it travels over the bus</text>
+  <text x="830" y="1046" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">type</text>
+  <text x="960" y="1046" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">method_call</text>
+  <text x="830" y="1065" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">sender</text>
+  <text x="960" y="1065" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">:1.42   (e.g.: the unique ID D-Bus gave bmcweb)</text>
+  <text x="830" y="1084" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">destination</text>
+  <text x="960" y="1084" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">xyz.openbmc_project.State.Host0</text>
+  <text x="830" y="1103" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">path</text>
+  <text x="960" y="1103" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">/xyz/openbmc_project/state/host0</text>
+  <text x="830" y="1122" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">interface</text>
+  <text x="960" y="1122" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">org.freedesktop.DBus.Properties</text>
+  <text x="830" y="1141" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">member</text>
+  <text x="960" y="1141" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">Set</text>
+  <text x="830" y="1160" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">signature</text>
+  <text x="960" y="1160" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">ssv</text>
+  <text x="830" y="1179" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">body</text>
+  <text x="960" y="1179" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">"xyz.openbmc_project.State.Host",</text>
+  <text x="830" y="1198" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <text x="960" y="1198" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">"RequestedHostTransition",</text>
+  <text x="830" y="1217" font-size="12" font-weight="bold" fill="#7a4d00" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve"></text>
+  <text x="960" y="1217" font-size="12" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">&lt;s "xyz.openbmc_project.State.Host.Transition.On"&gt;</text>
+  <text x="830" y="1244" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">→ dbus-broker delivers it to the program that owns the destination name;</text>
+  <text x="830" y="1262" font-size="12" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">   that program replies (method_return, or error) to :1.42.</text>
+  <text x="830" y="1286" font-size="12" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">Same thing typed by hand:</text>
+  <text x="830" y="1304" font-size="11.5" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">busctl set-property xyz.openbmc_project.State.Host0 \</text>
+  <text x="830" y="1320" font-size="11.5" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  /xyz/openbmc_project/state/host0 xyz.openbmc_project.State.Host \</text>
+  <text x="830" y="1336" font-size="11.5" font-weight="normal" fill="#333" text-anchor="start" font-family="DejaVu Sans Mono, Menlo, Consolas, monospace" xml:space="preserve">  RequestedHostTransition s xyz.openbmc_project.State.Host.Transition.On</text>
+  <text x="20" y="1394" font-size="14" font-weight="bold" fill="#333" text-anchor="start" xml:space="preserve">3. BMCWEB: THE TRANSLATOR BETWEEN THE WEB AND D-BUS</text>
+  <rect x="20" y="1406" width="330" height="196" rx="10" fill="#e0f5f5" stroke="#2a9d9d" stroke-width="2"/>
+  <text x="32" y="1428" font-size="15" font-weight="bold" fill="#145a5a" text-anchor="start" xml:space="preserve">HTTPS request (JSON)</text>
+  <text x="32" y="1448" font-size="11.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">GET /redfish/v1/Systems/system</tspan></text>
+  <text x="32" y="1465" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve"></text>
+  <text x="32" y="1482" font-size="11.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">PATCH /redfish/v1/Systems/system</tspan></text>
+  <text x="32" y="1499" font-size="11.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">{"LocationIndicatorActive": true}</tspan></text>
+  <text x="32" y="1516" font-size="11.8" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve"></text>
+  <text x="32" y="1533" font-size="11.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">POST …/Actions/ComputerSystem.Reset</tspan></text>
+  <text x="32" y="1550" font-size="11.8" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">{"ResetType": "On"}</tspan></text>
+  <line x1="352" y1="1504" x2="392" y2="1504" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="394" y="1406" width="400" height="196" rx="10" fill="#e8f0fe" stroke="#4a6fd1" stroke-width="2"/>
+  <text x="406" y="1428" font-size="15" font-weight="bold" fill="#1d3b8a" text-anchor="start" xml:space="preserve">bmcweb</text>
+  <text x="406" y="1448" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">checks login + permissions (user roles),</text>
+  <text x="406" y="1465" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">finds the handler for that URL,</text>
+  <text x="406" y="1482" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">makes the D-Bus calls it needs (often several,</text>
+  <text x="406" y="1499" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">asking the mapper first who owns what),</text>
+  <text x="406" y="1516" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">waits for the replies, then builds the</text>
+  <text x="406" y="1533" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve">Redfish JSON answer.</text>
+  <text x="406" y="1550" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Redfish shape: DMTF standard. D-Bus side: OpenBMC.</tspan></text>
+  <line x1="796" y1="1504" x2="836" y2="1504" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="838" y="1406" width="742" height="196" rx="10" fill="#fff4e0" stroke="#d48a00" stroke-width="2"/>
+  <text x="850" y="1428" font-size="15" font-weight="bold" fill="#7a4d00" text-anchor="start" xml:space="preserve">D-Bus calls it makes (examples)</text>
+  <text x="850" y="1452" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">GET  → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Get CurrentHostState</tspan><tspan> on State.Host0  → "PowerState": "Off"</tspan></text>
+  <text x="850" y="1473" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan>       </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Get Asserted</tspan><tspan> on …/groups/enclosure_identify_blink  → "LocationIndicatorActive"</tspan></text>
+  <text x="850" y="1494" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan>       </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">GetSubTree</tspan><tspan> (mapper) + </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">GetAll</tspan><tspan> on inventory  → Model, SerialNumber …</tspan></text>
+  <text x="850" y="1515" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">PATCH → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Set Asserted = true</tspan><tspan> on …/groups/enclosure_identify_blink</tspan></text>
+  <text x="850" y="1536" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">POST  → </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">Set RequestedHostTransition = …Transition.On</tspan><tspan> on State.Host0</tspan></text>
+  <text x="850" y="1557" font-size="12.2" font-weight="normal" fill="#333" text-anchor="start" xml:space="preserve"></text>
+  <text x="850" y="1578" font-size="12.2" fill="#333" text-anchor="start" xml:space="preserve"><tspan>The web UI is just files bmcweb serves (webui-vue, in JavaScript); </tspan><tspan font-weight="bold">it</tspan><tspan> calls Redfish too.</tspan></text>
+  <rect x="20" y="1616" width="1560" height="60" rx="10" fill="#f2f2f2" stroke="#888888" stroke-width="2"/>
+  <text x="36" y="1640" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">See it on the board:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl list</tspan><tspan> (all names)   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl tree xyz.openbmc_project.State.Host0</tspan><tspan>   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl introspect &lt;name&gt; &lt;path&gt;</tspan><tspan>   </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl get-property …</tspan></text>
+  <text x="36" y="1662" font-size="12.5" fill="#333" text-anchor="start" xml:space="preserve"><tspan font-weight="bold">Watch it live:  </tspan><tspan font-family="DejaVu Sans Mono, Menlo, Consolas, monospace">busctl monitor</tspan><tspan> — then click the identify switch in the web UI and see bmcweb's Set, the LED manager's mapper call and the stand-in's property writes scroll past.</tspan></text>
+</svg>

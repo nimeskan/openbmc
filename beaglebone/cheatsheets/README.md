@@ -7,6 +7,23 @@ commands as they are on the board.
 Click an image to open it full size. They're SVG files, so they stay sharp
 when you zoom in, and they print well.
 
+## 0. Inside the BMC: programs, D-Bus and bmcweb (start here)
+
+[`openbmc-inside.svg`](openbmc-inside.svg): **what the running BMC looks
+like**:
+1. The board's "front door" programs (bmcweb, SSH, IPMI, avahi) and their
+   network ports.
+2. The D-Bus system bus in the middle, with 16 of the OpenBMC programs
+   plugged into it, each with the name it claims and what it does.
+3. The kernel and hardware underneath.
+4. What is *on* D-Bus: bus name → object path → interface → properties,
+   methods and signals, with a real example (host power state).
+5. What one message looks like as it travels over the bus.
+6. bmcweb as the translator: a Redfish request becomes D-Bus calls, and their
+   replies become the Redfish JSON answer.
+
+![Inside the BMC](openbmc-inside.svg)
+
 ## 1. Where things live in Linux
 
 [`linux-folders.svg`](linux-folders.svg): every important folder:
@@ -175,5 +192,6 @@ to write. They need only Python 3, with no extra packages.
 | `systemd.py` | `systemd-units-services.svg` |
 | `usb.py` | `usb-gadget.svg` |
 | `leds.py` | `leds-architecture.svg` and `leds-sequences.svg` (run as `python3 leds.py . ..`) |
+| `inside.py` | `openbmc-inside.svg` (run as `python3 inside.py . ..`) |
 | `targets.py` | `openbmc-targets.svg` (run as `python3 targets.py . ..`) |
 | `gpio_flow.py` | `gpio-toggle-c-layers.svg` and `gpio-toggle-cpp-layers.svg` (run as `python3 gpio_flow.py . ..`) |
